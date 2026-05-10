@@ -1,0 +1,73 @@
+; SPIR-V
+; Version: 1.3
+; Generator: Khronos; 0
+; Bound: 45
+; Schema: 0
+               OpCapability Shader
+          %4 = OpExtInstImport "GLSL.std.450"
+               OpMemoryModel Logical GLSL450
+               OpEntryPoint GLCompute %3 "MAIN"
+               OpExecutionMode %3 LocalSize 1 1 1
+       %void = OpTypeVoid
+          %6 = OpTypeFunction %void
+      %float = OpTypeFloat 32
+%_ptr_Private_float = OpTypePointer Private %float
+    %float_0 = OpConstant %float 0
+          %8 = OpVariable %_ptr_Private_float Private %float_0
+        %int = OpTypeInt 32 1
+%_ptr_Private_int = OpTypePointer Private %int
+      %int_5 = OpConstant %int 5
+         %12 = OpVariable %_ptr_Private_int Private %int_5
+          %1 = OpVariable %_ptr_Private_int Private
+          %2 = OpVariable %_ptr_Private_int Private
+ %_struct_15 = OpTypeStruct %float %int
+ %_struct_16 = OpTypeStruct %float %float
+     %int_10 = OpConstant %int 10
+      %int_0 = OpConstant %int 0
+       %bool = OpTypeBool
+    %float_1 = OpConstant %float 1
+      %int_1 = OpConstant %int 1
+    %float_2 = OpConstant %float 2
+          %3 = OpFunction %void None %6
+         %17 = OpLabel
+               OpStore %1 %int_0
+               OpBranch %20
+         %20 = OpLabel
+               OpLoopMerge %24 %23 None
+               OpBranch %21
+         %21 = OpLabel
+         %25 = OpLoad %int %1
+         %26 = OpSLessThan %bool %25 %int_10
+               OpBranchConditional %26 %22 %24
+         %22 = OpLabel
+         %28 = OpLoad %float %8
+         %30 = OpFAdd %float %28 %float_1
+               OpStore %8 %30
+               OpBranch %23
+         %23 = OpLabel
+         %31 = OpIAdd %int %25 %int_1
+               OpStore %1 %31
+               OpBranch %20
+         %24 = OpLabel
+         %33 = OpLoad %int %12
+               OpStore %2 %int_0
+               OpBranch %34
+         %34 = OpLabel
+               OpLoopMerge %38 %37 None
+               OpBranch %35
+         %35 = OpLabel
+         %39 = OpLoad %int %2
+         %40 = OpSLessThan %bool %39 %33
+               OpBranchConditional %40 %36 %38
+         %36 = OpLabel
+         %41 = OpLoad %float %8
+         %43 = OpFAdd %float %41 %float_2
+               OpStore %8 %43
+               OpBranch %37
+         %37 = OpLabel
+         %44 = OpIAdd %int %39 %int_1
+               OpStore %2 %44
+               OpBranch %34
+         %38 = OpLabel
+               OpReturn
+               OpFunctionEnd

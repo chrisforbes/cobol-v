@@ -1,0 +1,79 @@
+* This is a sketch used as the starting point for developing the COBOL-V language.
+* It is not intended to be a complete or correct program.* 
+
+IDENTIFICATION DIVISION.
+PROGRAM-ID. BRIGHTNESS-FILTER.
+
+ENVIRONMENT DIVISION.
+CONFIGURATION SECTION.
+SPECIAL-NAMES.
+    LOCAL-SIZE IS (256, 1, 1)
+    GPU-GLOBAL-ID IS THREAD-COORD.
+
+INPUT-OUTPUT SECTION.
+FILE-CONTROL.
+    * Input Image
+    SELECT SOURCE-IMAGE ASSIGN TO "GPU-IMAGE-0-0"
+        ORGANIZATION IS IMAGE-2D.
+    
+    * Output Buffer via Push Constant Address
+    SELECT SETTINGS-DRAWER ASSIGN TO "GPU-PUSH-CONSTANT"
+        ORGANIZATION IS ACCESS-PUSH.
+
+DATA DIVISION.
+FILE SECTION.
+FD  SETTINGS-DRAWER.
+01  PUSH-DATA.
+    05  DEST-BUFFER-PTR     USAGE IS POINTER TO RESULTS-RECORDS.
+    05  THRESHOLD           PIC FLOAT.
+
+LINKAGE SECTION.
+    * The BDA Buffer Layout
+    01  RESULTS-RECORDS     BASED.
+        05  TOTAL-BRIGHTNESS PIC FLOAT.
+        05  PIXEL-COUNT      PIC I.
+
+    * System Built-ins
+    01  THREAD-COORD        PIC V(3) IS BUILT-IN.
+
+WORKING-STORAGE SECTION.
+    01  UV-COORDS           PIC V(2).
+    01  RAW-PIXEL           PIC V(4).
+    01  LUMINANCE           PIC FLOAT.
+    01  COHORT-SUM          PIC FLOAT.
+
+PROCEDURE DIVISION.
+    MAIN-LOGIC.
+        * 1. Setup - Map the BDA pointer to our record
+        SET ADDRESS OF RESULTS-RECORDS TO DEST-BUFFER-PTR OF PUSH-DATA.
+
+        * 2. Calculate UV coordinates from Thread ID
+        ACCEPT THREAD-COORD FROM GPU-DEVICE.
+        COMPUTE UV-COORDS = (X OF THREAD-COORD, Y OF THREAD-COORD).
+
+        * 3. Sample the texture
+        READ SOURCE-IMAGE 
+            KEY IS UV-COORDS 
+            INTO RAW-PIXEL.
+
+        * 4. Standard COBOL math for Luminance
+        COMPUTE LUMINANCE = (0.2126 * RED OF RAW-PIXEL) 
+                          + (0.7152 * GREEN OF RAW-PIXEL) 
+                          + (0.0722 * BLUE OF RAW-PIXEL).
+
+        * 5. Cohort (Subgroup) operation for optimization
+        IF LUMINANCE IS GREATER THAN THRESHOLD OF PUSH-DATA
+            CONSULT COHORT FOR SUM OF LUMINANCE 
+                GIVING COHORT-SUM
+        ELSE
+            MOVE 0.0 TO COHORT-SUM
+        END-IF.
+
+        * 6. Atomic update to global results (First thread in cohort only)
+        IF COHORT-SUM IS NOT EQUAL TO 0.0
+            AND GPU-SUBGROUP-INVOCATION-ID IS 0
+                ATOMIC-ADD COHORT-SUM 
+                    TO TOTAL-BRIGHTNESS OF RESULTS-RECORDS
+        END-IF.
+
+        GOBACK.

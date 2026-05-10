@@ -1,0 +1,58 @@
+; SPIR-V
+; Version: 1.3
+; Generator: Khronos; 0
+; Bound: 34
+; Schema: 0
+               OpCapability Shader
+          %2 = OpExtInstImport "GLSL.std.450"
+               OpMemoryModel Logical GLSL450
+               OpEntryPoint GLCompute %1 "MAIN"
+               OpExecutionMode %1 LocalSize 1 1 1
+       %void = OpTypeVoid
+          %4 = OpTypeFunction %void
+      %float = OpTypeFloat 32
+%_ptr_Private_float = OpTypePointer Private %float
+    %float_1 = OpConstant %float 1
+          %6 = OpVariable %_ptr_Private_float Private %float_1
+    %float_2 = OpConstant %float 2
+          %9 = OpVariable %_ptr_Private_float Private %float_2
+         %11 = OpVariable %_ptr_Private_float Private
+        %int = OpTypeInt 32 1
+ %_struct_13 = OpTypeStruct %float %int
+ %_struct_14 = OpTypeStruct %float %float
+       %bool = OpTypeBool
+    %float_3 = OpConstant %float 3
+    %float_4 = OpConstant %float 4
+    %float_5 = OpConstant %float 5
+          %1 = OpFunction %void None %4
+         %15 = OpLabel
+         %17 = OpLoad %float %6
+         %18 = OpLoad %float %9
+         %19 = OpFOrdLessThan %bool %17 %18
+               OpSelectionMerge %21 None
+               OpBranchConditional %19 %20 %21
+         %20 = OpLabel
+               OpStore %11 %float_1
+               OpStore %11 %float_2
+               OpBranch %21
+         %21 = OpLabel
+               OpStore %11 %float_3
+         %23 = OpLoad %float %6
+         %24 = OpLoad %float %9
+         %25 = OpFOrdLessThan %bool %23 %24
+               OpSelectionMerge %27 None
+               OpBranchConditional %25 %26 %27
+         %26 = OpLabel
+         %28 = OpLoad %float %6
+         %29 = OpFOrdEqual %bool %28 %float_1
+               OpSelectionMerge %31 None
+               OpBranchConditional %29 %30 %31
+         %30 = OpLabel
+               OpStore %11 %float_4
+               OpBranch %31
+         %31 = OpLabel
+               OpBranch %27
+         %27 = OpLabel
+               OpStore %11 %float_5
+               OpReturn
+               OpFunctionEnd

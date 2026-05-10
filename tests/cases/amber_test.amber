@@ -1,0 +1,14 @@
+#!amber
+
+SHADER compute amber_test_shader SPIRV-BIN FILE amber_test.spv
+
+BUFFER output_buffer DATA_TYPE int32 SIZE 1 FILL 0
+
+PIPELINE compute pipeline
+  ATTACH amber_test_shader TYPE compute ENTRY_POINT MAIN
+  BIND BUFFER output_buffer AS storage DESCRIPTOR_SET 0 BINDING 0
+END
+
+RUN pipeline 1 1 1
+
+EXPECT output_buffer IDX 0 EQ 42

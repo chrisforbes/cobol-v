@@ -1,0 +1,78 @@
+; SPIR-V
+; Version: 1.3
+; Generator: Khronos; 0
+; Bound: 45
+; Schema: 0
+               OpCapability Shader
+               OpCapability GroupNonUniform
+               OpCapability GroupNonUniformBallot
+          %2 = OpExtInstImport "GLSL.std.450"
+               OpMemoryModel Logical GLSL450
+               OpEntryPoint GLCompute %1 "MAIN" %gl_GlobalInvocationID %gl_LocalInvocationID %gl_WorkGroupID %gl_NumWorkGroups %gl_LocalInvocationIndex %SubgroupId %SubgroupSize %SubgroupLocalInvocationId %NumSubgroups %SubgroupEqMaskKHR
+               OpExecutionMode %1 LocalSize 1 1 1
+               OpDecorate %gl_GlobalInvocationID BuiltIn GlobalInvocationId
+               OpDecorate %gl_LocalInvocationID BuiltIn LocalInvocationId
+               OpDecorate %gl_WorkGroupID BuiltIn WorkgroupId
+               OpDecorate %gl_NumWorkGroups BuiltIn NumWorkgroups
+               OpDecorate %gl_LocalInvocationIndex BuiltIn LocalInvocationIndex
+               OpDecorate %SubgroupId BuiltIn SubgroupId
+               OpDecorate %SubgroupSize BuiltIn SubgroupSize
+               OpDecorate %SubgroupLocalInvocationId BuiltIn SubgroupLocalInvocationId
+               OpDecorate %NumSubgroups BuiltIn NumSubgroups
+               OpDecorate %SubgroupEqMaskKHR BuiltIn SubgroupEqMask
+               OpDecorate %gl_WorkGroupSize BuiltIn WorkgroupSize
+       %void = OpTypeVoid
+         %15 = OpTypeFunction %void
+       %uint = OpTypeInt 32 0
+     %v3uint = OpTypeVector %uint 3
+%_ptr_Input_v3uint = OpTypePointer Input %v3uint
+%gl_GlobalInvocationID = OpVariable %_ptr_Input_v3uint Input
+%gl_LocalInvocationID = OpVariable %_ptr_Input_v3uint Input
+%gl_WorkGroupID = OpVariable %_ptr_Input_v3uint Input
+%gl_NumWorkGroups = OpVariable %_ptr_Input_v3uint Input
+%_ptr_Input_uint = OpTypePointer Input %uint
+%gl_LocalInvocationIndex = OpVariable %_ptr_Input_uint Input
+     %uint_1 = OpConstant %uint 1
+%gl_WorkGroupSize = OpConstantComposite %v3uint %uint_1 %uint_1 %uint_1
+ %SubgroupId = OpVariable %_ptr_Input_uint Input
+%SubgroupSize = OpVariable %_ptr_Input_uint Input
+%SubgroupLocalInvocationId = OpVariable %_ptr_Input_uint Input
+%NumSubgroups = OpVariable %_ptr_Input_uint Input
+     %v4uint = OpTypeVector %uint 4
+%_ptr_Input_v4uint = OpTypePointer Input %v4uint
+%SubgroupEqMaskKHR = OpVariable %_ptr_Input_v4uint Input
+%_ptr_Private_uint = OpTypePointer Private %uint
+         %24 = OpVariable %_ptr_Private_uint Private
+%_ptr_Private_v3uint = OpTypePointer Private %v3uint
+         %26 = OpVariable %_ptr_Private_v3uint Private
+%_ptr_Private_v4uint = OpTypePointer Private %v4uint
+         %28 = OpVariable %_ptr_Private_v4uint Private
+      %float = OpTypeFloat 32
+        %int = OpTypeInt 32 1
+ %_struct_32 = OpTypeStruct %float %int
+ %_struct_33 = OpTypeStruct %float %float
+          %1 = OpFunction %void None %15
+         %34 = OpLabel
+         %35 = OpLoad %v3uint %gl_GlobalInvocationID
+               OpStore %26 %35
+         %36 = OpLoad %v3uint %gl_LocalInvocationID
+               OpStore %26 %36
+         %37 = OpLoad %v3uint %gl_WorkGroupID
+               OpStore %26 %37
+         %38 = OpLoad %v3uint %gl_NumWorkGroups
+               OpStore %26 %38
+         %39 = OpLoad %uint %gl_LocalInvocationIndex
+               OpStore %24 %39
+               OpStore %26 %gl_WorkGroupSize
+         %40 = OpLoad %uint %SubgroupId
+               OpStore %24 %40
+         %41 = OpLoad %uint %SubgroupSize
+               OpStore %24 %41
+         %42 = OpLoad %uint %SubgroupLocalInvocationId
+               OpStore %24 %42
+         %43 = OpLoad %uint %NumSubgroups
+               OpStore %24 %43
+         %44 = OpLoad %v4uint %SubgroupEqMaskKHR
+               OpStore %28 %44
+               OpReturn
+               OpFunctionEnd

@@ -1,0 +1,43 @@
+; SPIR-V
+; Version: 1.3
+; Generator: Khronos; 0
+; Bound: 27
+; Schema: 0
+               OpCapability Shader
+          %2 = OpExtInstImport "GLSL.std.450"
+               OpMemoryModel Logical GLSL450
+               OpEntryPoint Vertex %1 "MAIN" %3 %4 %5 %gl_Position %gl_VertexIndex
+               OpDecorate %3 Location 0
+               OpDecorate %4 Location 1
+               OpDecorate %5 Location 0
+               OpDecorate %gl_Position BuiltIn Position
+               OpDecorate %gl_VertexIndex BuiltIn VertexIndex
+       %void = OpTypeVoid
+          %9 = OpTypeFunction %void
+      %float = OpTypeFloat 32
+    %v3float = OpTypeVector %float 3
+%_ptr_Input_v3float = OpTypePointer Input %v3float
+          %3 = OpVariable %_ptr_Input_v3float Input
+    %v4float = OpTypeVector %float 4
+%_ptr_Input_v4float = OpTypePointer Input %v4float
+          %4 = OpVariable %_ptr_Input_v4float Input
+%_ptr_Output_v4float = OpTypePointer Output %v4float
+          %5 = OpVariable %_ptr_Output_v4float Output
+%gl_Position = OpVariable %_ptr_Output_v4float Output
+        %int = OpTypeInt 32 1
+%_ptr_Input_int = OpTypePointer Input %int
+%gl_VertexIndex = OpVariable %_ptr_Input_int Input
+ %_struct_18 = OpTypeStruct %float %int
+ %_struct_19 = OpTypeStruct %float %float
+    %float_1 = OpConstant %float 1
+      %v2int = OpTypeVector %int 2
+          %1 = OpFunction %void None %9
+         %20 = OpLabel
+         %21 = OpLoad %v3float %3
+         %22 = OpVectorShuffle %v3float %21 %21 0 1 2
+         %24 = OpCompositeConstruct %v4float %22 %float_1
+               OpStore %gl_Position %24
+         %26 = OpLoad %v4float %4
+               OpStore %5 %26
+               OpReturn
+               OpFunctionEnd

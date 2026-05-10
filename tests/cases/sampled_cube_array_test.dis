@@ -1,0 +1,40 @@
+; SPIR-V
+; Version: 1.3
+; Generator: Khronos; 0
+; Bound: 24
+; Schema: 0
+               OpCapability Shader
+               OpCapability ImageCubeArray
+               OpCapability SampledCubeArray
+          %2 = OpExtInstImport "GLSL.std.450"
+               OpMemoryModel Logical GLSL450
+               OpEntryPoint GLCompute %1 "MAIN"
+               OpExecutionMode %1 LocalSize 1 1 1
+               OpDecorate %3 DescriptorSet 0
+               OpDecorate %3 Binding 0
+      %float = OpTypeFloat 32
+          %5 = OpTypeImage %float Cube 0 1 0 1 Unknown
+          %6 = OpTypeSampledImage %5
+%_ptr_UniformConstant_6 = OpTypePointer UniformConstant %6
+          %3 = OpVariable %_ptr_UniformConstant_6 UniformConstant
+       %void = OpTypeVoid
+          %9 = OpTypeFunction %void
+    %v4float = OpTypeVector %float 4
+%_ptr_Private_v4float = OpTypePointer Private %v4float
+         %11 = OpVariable %_ptr_Private_v4float Private
+         %13 = OpVariable %_ptr_Private_v4float Private
+        %int = OpTypeInt 32 1
+ %_struct_15 = OpTypeStruct %float %int
+ %_struct_16 = OpTypeStruct %float %float
+    %float_1 = OpConstant %float 1
+    %float_0 = OpConstant %float 0
+          %1 = OpFunction %void None %9
+         %17 = OpLabel
+         %20 = OpCompositeConstruct %v4float %float_1 %float_0 %float_0 %float_1
+               OpStore %11 %20
+         %21 = OpLoad %v4float %11
+         %22 = OpLoad %6 %3
+         %23 = OpImageSampleExplicitLod %v4float %22 %21 Lod %float_0
+               OpStore %13 %23
+               OpReturn
+               OpFunctionEnd

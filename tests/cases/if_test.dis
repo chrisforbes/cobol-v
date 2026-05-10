@@ -1,0 +1,62 @@
+; SPIR-V
+; Version: 1.3
+; Generator: Khronos; 0
+; Bound: 37
+; Schema: 0
+               OpCapability Shader
+          %2 = OpExtInstImport "GLSL.std.450"
+               OpMemoryModel Logical GLSL450
+               OpEntryPoint GLCompute %1 "MAIN"
+               OpExecutionMode %1 LocalSize 1 1 1
+       %void = OpTypeVoid
+          %4 = OpTypeFunction %void
+      %float = OpTypeFloat 32
+%_ptr_Private_float = OpTypePointer Private %float
+    %float_1 = OpConstant %float 1
+          %6 = OpVariable %_ptr_Private_float Private %float_1
+    %float_2 = OpConstant %float 2
+          %9 = OpVariable %_ptr_Private_float Private %float_2
+         %11 = OpVariable %_ptr_Private_float Private
+        %int = OpTypeInt 32 1
+ %_struct_13 = OpTypeStruct %float %int
+ %_struct_14 = OpTypeStruct %float %float
+       %bool = OpTypeBool
+   %float_10 = OpConstant %float 10
+   %float_20 = OpConstant %float 20
+   %float_40 = OpConstant %float 40
+   %float_30 = OpConstant %float 30
+          %1 = OpFunction %void None %4
+         %15 = OpLabel
+         %17 = OpLoad %float %6
+         %18 = OpLoad %float %9
+         %19 = OpFOrdLessThan %bool %17 %18
+               OpSelectionMerge %21 None
+               OpBranchConditional %19 %20 %21
+         %20 = OpLabel
+               OpStore %11 %float_10
+               OpBranch %21
+         %21 = OpLabel
+         %23 = OpLoad %float %6
+         %24 = OpLoad %float %9
+         %25 = OpFOrdGreaterThan %bool %23 %24
+               OpSelectionMerge %28 None
+               OpBranchConditional %25 %26 %27
+         %26 = OpLabel
+               OpStore %11 %float_20
+               OpBranch %28
+         %27 = OpLabel
+         %30 = OpLoad %float %6
+         %31 = OpFOrdEqual %bool %30 %float_1
+               OpSelectionMerge %34 None
+               OpBranchConditional %31 %32 %33
+         %32 = OpLabel
+               OpStore %11 %float_40
+               OpBranch %34
+         %33 = OpLabel
+               OpStore %11 %float_30
+               OpBranch %34
+         %34 = OpLabel
+               OpBranch %28
+         %28 = OpLabel
+               OpReturn
+               OpFunctionEnd

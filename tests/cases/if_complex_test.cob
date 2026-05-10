@@ -1,0 +1,20 @@
+IDENTIFICATION DIVISION.
+PROGRAM-ID. IF-COMPLEX.
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01  A PIC FLOAT VALUE 1.0.
+01  B PIC FLOAT VALUE 2.0.
+01  RES PIC FLOAT.
+PROCEDURE DIVISION.
+    MAIN.
+        IF A < B
+            COMPUTE RES = 1.0
+            MOVE 2.0 TO RES.
+        MOVE 3.0 TO RES.
+        
+        IF A < B
+            IF A = 1.0
+                MOVE 4.0 TO RES.
+        MOVE 5.0 TO RES.
+        
+        GOBACK.

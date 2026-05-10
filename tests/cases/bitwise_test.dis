@@ -1,0 +1,53 @@
+; SPIR-V
+; Version: 1.3
+; Generator: Khronos; 0
+; Bound: 37
+; Schema: 0
+               OpCapability Shader
+          %2 = OpExtInstImport "GLSL.std.450"
+               OpMemoryModel Logical GLSL450
+               OpEntryPoint GLCompute %1 "MAIN"
+               OpExecutionMode %1 LocalSize 1 1 1
+       %void = OpTypeVoid
+          %4 = OpTypeFunction %void
+        %int = OpTypeInt 32 1
+%_ptr_Private_int = OpTypePointer Private %int
+      %int_5 = OpConstant %int 5
+          %6 = OpVariable %_ptr_Private_int Private %int_5
+      %int_3 = OpConstant %int 3
+          %9 = OpVariable %_ptr_Private_int Private %int_3
+         %11 = OpVariable %_ptr_Private_int Private
+         %12 = OpVariable %_ptr_Private_int Private
+         %13 = OpVariable %_ptr_Private_int Private
+         %14 = OpVariable %_ptr_Private_int Private
+         %15 = OpVariable %_ptr_Private_int Private
+         %16 = OpVariable %_ptr_Private_int Private
+      %float = OpTypeFloat 32
+ %_struct_18 = OpTypeStruct %float %int
+ %_struct_19 = OpTypeStruct %float %float
+      %int_1 = OpConstant %int 1
+          %1 = OpFunction %void None %4
+         %20 = OpLabel
+         %21 = OpLoad %int %6
+         %22 = OpLoad %int %9
+         %23 = OpBitwiseAnd %int %21 %22
+               OpStore %11 %23
+         %24 = OpLoad %int %6
+         %25 = OpLoad %int %9
+         %26 = OpBitwiseOr %int %24 %25
+               OpStore %12 %26
+         %27 = OpLoad %int %6
+         %28 = OpLoad %int %9
+         %29 = OpBitwiseXor %int %27 %28
+               OpStore %13 %29
+         %30 = OpLoad %int %6
+         %31 = OpNot %int %30
+               OpStore %14 %31
+         %32 = OpLoad %int %6
+         %34 = OpShiftLeftLogical %int %32 %int_1
+               OpStore %15 %34
+         %35 = OpLoad %int %6
+         %36 = OpShiftRightArithmetic %int %35 %int_1
+               OpStore %16 %36
+               OpReturn
+               OpFunctionEnd
