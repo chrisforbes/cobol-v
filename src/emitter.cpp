@@ -990,6 +990,7 @@ void Emitter::emitStatement(const StatementNode& stmt) {
     else if (auto sync = dynamic_cast<const SyncStatementNode*>(&stmt)) emitSyncStatement(sync);
     else if (auto inquire = dynamic_cast<const InquireStatementNode*>(&stmt)) emitInquireStatement(inquire);
     else if (auto discard = dynamic_cast<const DiscardNode*>(&stmt)) emitOp(spirv::OpKill, {});
+    else if (auto interp = dynamic_cast<const InterpolateNode*>(&stmt)) emitInterpolate(interp);
 
 }
 
@@ -1591,6 +1592,41 @@ void Emitter::emitInquireStatement(const InquireStatementNode* inquire) {
     }
 
     uint32_t destPtr = emitExpression(*inquire->destination, 0, true);
+    emitOp(spirv::OpStore, {destPtr, resId});
+}
+
+void Emitter::emitInterpolate(const InterpolateNode* interp) {
+    currentCapabilities.insert(spirv::CapabilityInterpolationFunction);
+    
+    // 1. Get interpolant address (it MUST be an input variable)
+    uint32_t interpolantId = emitExpression(*interp->interpolant, 0, true);
+    uint32_t interpolantTypeId = getExpressionType(*interp->interpolant);
+    
+    uint32_t resId = allocateId();
+    uint32_t resTypeId = interpolantTypeId;
+    
+    switch (interp->type) {
+        case InterpolateType::CENTROID:
+            emitOp(spirv::OpExtInst, {resTypeId, resId, extInstSetId, 76, interpolantId});
+            break;
+        case InterpolateType::SAMPLE:
+            {
+                uint32_t intType = getOrCreateBaseType(BaseType::INT);
+                uint32_t sampleId = emitExpression(*interp->sampleIndex, intType);
+                emitOp(spirv::OpExtInst, {resTypeId, resId, extInstSetId, 77, interpolantId, sampleId});
+            }
+            break;
+        case InterpolateType::OFFSET:
+            {
+                uint32_t floatType = getOrCreateBaseType(BaseType::FLOAT);
+                uint32_t v2Type = getOrCreateType({BaseType::FLOAT, 2, 0, 0});
+                uint32_t offsetId = emitExpression(*interp->offset, v2Type);
+                emitOp(spirv::OpExtInst, {resTypeId, resId, extInstSetId, 78, interpolantId, offsetId});
+            }
+            break;
+    }
+    
+    uint32_t destPtr = emitExpression(*interp->destination, 0, true);
     emitOp(spirv::OpStore, {destPtr, resId});
 }
 

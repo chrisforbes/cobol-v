@@ -56,6 +56,7 @@ private:
     std::unique_ptr<StatementNode> parseCohortOpStatement();
     std::unique_ptr<StatementNode> parseInquireStatement();
     std::unique_ptr<StatementNode> parseSyncStatement();
+    std::unique_ptr<StatementNode> parseInterpolateStatement();
 
     std::unique_ptr<ExpressionNode> parseExpression();
     std::unique_ptr<ExpressionNode> parseLogicalOr();

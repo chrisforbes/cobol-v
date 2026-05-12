@@ -128,8 +128,7 @@ private:
     void emitCohortOp(const CohortOpNode* cohort);
     void emitSyncStatement(const SyncStatementNode* sync);
     void emitInquireStatement(const InquireStatementNode* inquire);
-
-
+    void emitInterpolate(const InterpolateNode* interp);
 
     void emitCapabilities();
     void emitMemoryModel();

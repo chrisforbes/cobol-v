@@ -191,6 +191,19 @@ public:
     std::unique_ptr<ExpressionNode> destination;
 };
 
+enum class InterpolateType {
+    CENTROID, SAMPLE, OFFSET
+};
+
+class InterpolateNode : public StatementNode {
+public:
+    std::unique_ptr<ExpressionNode> interpolant;
+    InterpolateType type;
+    std::unique_ptr<ExpressionNode> sampleIndex; // For AT SAMPLE
+    std::unique_ptr<ExpressionNode> offset;      // For AT OFFSET
+    std::unique_ptr<ExpressionNode> destination;
+};
+
 class IfStatementNode : public StatementNode {
 public:
     std::unique_ptr<ExpressionNode> condition;

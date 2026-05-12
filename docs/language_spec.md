@@ -349,7 +349,21 @@ Immediately terminates the current fragment invocation.
 - **Requirements**: Must be used in the `VULKAN-FRAGMENT-SHADER` stage.
 - **Effect**: The fragment is discarded; no values are written to the framebuffer. Maps to SPIR-V `OpKill`.
 
-### 3.6 SYNC Statement
+### 3.6 INTERPOLATE Statement
+Performs custom interpolation of fragment shader input variables. This statement maps to the GLSL `interpolateAt*` family of functions.
+
+- **Syntax**: `INTERPOLATE [interpolant] AT [CENTROID | SAMPLE [index] | OFFSET [vec2]] GIVING [target].`
+- **Variants**:
+  - **CENTROID**: Interpolates the variable at the centroid of the fragment.
+  - **SAMPLE**: Interpolates the variable at a specific sample location (`index` must be a scalar integer).
+  - **OFFSET**: Interpolates the variable with a sub-pixel offset (`vec2` must be a `FLOATV2`).
+- **Requirements**:
+  - Must be used in the `VULKAN-FRAGMENT-SHADER` stage.
+  - `interpolant` must be a variable declared in the `INPUT SECTION`.
+  - `target` must be compatible with the interpolant's type.
+- **Capability**: Automatically enables the `InterpolationFunction` SPIR-V capability.
+
+### 3.7 SYNC Statement
 Used for workgroup-level synchronization.
 - **SYNC WORKGROUP**: Emits a SPIR-V `OpControlBarrier` with workgroup scope and appropriate memory semantics to ensure all invocations in the workgroup reach the barrier and all memory accesses are visible.
 
@@ -507,6 +521,7 @@ The COBOL-V compiler currently supports:
 - **Architecture**: IDENTIFICATION, ENVIRONMENT, DATA, and PROCEDURE divisions.
 - **Resource Management**: Fully functional `FILE-CONTROL` and `FD` system for images, samplers, and buffers.
 - **I/O**: Procedural `READ` (with `FETCH` and `GATHER` extensions), `WRITE`, and full suite of **Image Atomic Operations**.
+- **Interpolation**: Support for custom fragment interpolation via the `INTERPOLATE` statement (`CENTROID`, `SAMPLE`, and `OFFSET`).
 - **Inquiry**: `INQUIRE ... FOR SIZE` and `INQUIRE ... FOR LEVELS` for resource metadata.
 - **Types**: Scalars, Vectors (V, IV, UV, BV), and Matrices (M).
 - **Logic**: `MOVE`, `COMPUTE`, `DISCARD`, **conditional branching** (`IF`), and **structured loops** (`PERFORM` with TIMES, UNTIL, and VARYING).

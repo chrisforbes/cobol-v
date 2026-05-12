@@ -204,6 +204,7 @@ void SemanticAnalyzer::visitStatement(const StatementNode& stmt) {
     else if (auto sync = dynamic_cast<const SyncStatementNode*>(&stmt)) validateSync(*sync);
     else if (auto inquire = dynamic_cast<const InquireStatementNode*>(&stmt)) validateInquire(*inquire);
     else if (auto discard = dynamic_cast<const DiscardNode*>(&stmt)) validateDiscard(*discard);
+    else if (auto interp = dynamic_cast<const InterpolateNode*>(&stmt)) validateInterpolate(*interp);
     else if (auto comp = dynamic_cast<const ComputeNode*>(&stmt)) {
         DataType src = getExpressionType(*comp->expression);
         DataType dst = getExpressionType(*comp->destination);
@@ -788,6 +789,49 @@ void SemanticAnalyzer::validateInquire(const InquireStatementNode& inquire) {
 void SemanticAnalyzer::validateDiscard(const DiscardNode& discard) {
     if (shaderStage != ShaderStage::FRAGMENT) {
         error("DISCARD statement is only valid in the FRAGMENT stage.", 0, 0);
+    }
+}
+
+void SemanticAnalyzer::validateInterpolate(const InterpolateNode& interp) {
+    if (shaderStage != ShaderStage::FRAGMENT) {
+        error("INTERPOLATE statement is only valid in the FRAGMENT stage.", 0, 0);
+    }
+
+    requiredCapabilities.insert(spirv::CapabilityInterpolationFunction);
+
+    // 1. Validate Interpolant
+    const ExpressionNode* expr = interp.interpolant.get();
+    const IdentifierNode* ident = dynamic_cast<const IdentifierNode*>(expr);
+    if (!ident) {
+        error("Interpolant must be a simple input variable.", 0, 0);
+    }
+
+    const auto& sym = getSymbol(ident->name);
+    if (sym.storageClass != spirv::StorageClassInput) {
+        error("Interpolant must be an INPUT variable: " + ident->name, 0, 0);
+    }
+    
+    if (sym.isBuiltIn) {
+         error("Interpolate instructions cannot be used with built-in variables: " + ident->name, 0, 0);
+    }
+
+    // 2. Validate AUX arguments
+    if (interp.type == InterpolateType::SAMPLE) {
+        DataType it = getExpressionType(*interp.sampleIndex);
+        if (it.baseType != BaseType::INT || it.vectorSize != 0) {
+            error("Interpolate AT SAMPLE requires a scalar integer index.", 0, 0);
+        }
+    } else if (interp.type == InterpolateType::OFFSET) {
+        DataType ot = getExpressionType(*interp.offset);
+        if (ot.baseType != BaseType::FLOAT || ot.vectorSize != 2) {
+            error("Interpolate AT OFFSET requires a vec2 (FLOATV2) offset.", 0, 0);
+        }
+    }
+
+    // 3. Validate Destination
+    DataType destType = getExpressionType(*interp.destination);
+    if (!areTypesCompatible(sym.type, destType)) {
+        error("Type mismatch in INTERPOLATE. Interpolant type does not match destination.", 0, 0);
     }
 }
 

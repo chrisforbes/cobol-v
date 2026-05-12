@@ -69,6 +69,7 @@ private:
     void validateSync(const SyncStatementNode& sync);
     void validateInquire(const InquireStatementNode& inquire);
     void validateDiscard(const DiscardNode& discard);
+    void validateInterpolate(const InterpolateNode& interpolate);
 
 
     

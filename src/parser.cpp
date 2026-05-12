@@ -564,6 +564,10 @@ std::unique_ptr<StatementNode> Parser::parseStatement() {
     if (check(TokenType::SYNC)) {
         return parseSyncStatement();
     }
+
+    if (check(TokenType::INTERPOLATE)) {
+        return parseInterpolateStatement();
+    }
     
     return nullptr;
 }
@@ -1107,6 +1111,31 @@ std::unique_ptr<StatementNode> Parser::parseSyncStatement() {
     consume(TokenType::SYNC, "Expected SYNC");
     consume(TokenType::WORKGROUP, "Expected WORKGROUP after SYNC");
     return std::make_unique<SyncStatementNode>(SyncStatementNode::Scope::WORKGROUP);
+}
+
+std::unique_ptr<StatementNode> Parser::parseInterpolateStatement() {
+    consume(TokenType::INTERPOLATE, "Expected INTERPOLATE");
+    auto node = std::make_unique<InterpolateNode>();
+    node->interpolant = parseExpression();
+    
+    consume(TokenType::AT, "Expected AT after interpolant");
+    
+    if (match(TokenType::CENTROID)) {
+        node->type = InterpolateType::CENTROID;
+    } else if (match(TokenType::SAMPLE)) {
+        node->type = InterpolateType::SAMPLE;
+        node->sampleIndex = parseExpression();
+    } else if (match(TokenType::OFFSET)) {
+        node->type = InterpolateType::OFFSET;
+        node->offset = parseExpression();
+    } else {
+        throw std::runtime_error("Expected CENTROID, SAMPLE, or OFFSET after AT at line " + std::to_string(peek().line));
+    }
+    
+    consume(TokenType::GIVING, "Expected GIVING");
+    node->destination = parseExpression();
+    
+    return node;
 }
 
 } // namespace cobolv
