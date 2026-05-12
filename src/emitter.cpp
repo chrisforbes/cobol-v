@@ -67,28 +67,14 @@ static bool isExtendedFormat(spirv::ImageFormat fmt) {
         case spirv::ImageFormatR32f:
         case spirv::ImageFormatRgba8:
         case spirv::ImageFormatRgba8Snorm:
-        case spirv::ImageFormatRg32f:
-        case spirv::ImageFormatRg16f:
-        case spirv::ImageFormatR16f:
         case spirv::ImageFormatRgba32i:
         case spirv::ImageFormatRgba16i:
         case spirv::ImageFormatRgba8i:
         case spirv::ImageFormatR32i:
-        case spirv::ImageFormatRg32i:
-        case spirv::ImageFormatRg16i:
-        case spirv::ImageFormatR16i:
-        case spirv::ImageFormatR8i:
         case spirv::ImageFormatRgba32ui:
         case spirv::ImageFormatRgba16ui:
         case spirv::ImageFormatRgba8ui:
         case spirv::ImageFormatR32ui:
-        case spirv::ImageFormatRg32ui:
-        case spirv::ImageFormatRg16ui:
-        case spirv::ImageFormatR16ui:
-        case spirv::ImageFormatR8ui:
-        case spirv::ImageFormatR16:
-        case spirv::ImageFormatRg16:
-        case spirv::ImageFormatRgba16:  
         case spirv::ImageFormatUnknown:
             return false;
         default:

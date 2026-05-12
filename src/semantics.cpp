@@ -106,9 +106,7 @@ void SemanticAnalyzer::visitFileDescription(const FileDescriptionNode& fd) {
         visitNode(*record);
     }
 
-    if (!fd.format.empty() && fd.format != "RGBA32F" && fd.format != "R32F" && fd.format != "R32I" && fd.format != "R32UI") {
-        requiredCapabilities.insert(spirv::CapabilityStorageImageExtendedFormats);
-    }
+
 
     if (fd.layout == LayoutType::SCALAR) {
         OrganizationType org = sym.resourceInfo.organization;
