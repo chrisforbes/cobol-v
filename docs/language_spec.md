@@ -145,9 +145,47 @@ FD  [file-name]
     [FORMAT IS [image-format]]
     [LAYOUT IS [STD140 | STD430 | SCALAR]]
     [USAGE IS [COHERENT | VOLATILE]].
-01  [record-name] PIC [sampled-type].
+01  [record-name] [PIC [sampled-type]].
+    [05 [field-name] PIC [type] [OCCURS [n] TIMES]. ...]
 ```
-- **FORMAT IS**: Required for `STORAGE-*` images if `Unknown` is not intended. Supports `RGBA32F`, `R32F`, `RGBA8`, `R32I`, `R32UI`, `RGBA16`, etc.
+
+#### 1.3.1 Resource Records
+The structure of the `01` record depends on the resource's organization:
+
+- **Images and Textures**: The record must include a `PIC` clause specifying the sampled type (e.g., `PIC V(4)`). It cannot have child fields.
+- **Buffers (Uniform/Storage/Push)**: The record serves as a block definition. It may contain multiple child data items (level 05, 10, etc.), each mapping to a member of the SPIR-V structure.
+  ```cobol
+  FD  DATA-BUFFER
+      LAYOUT IS STD430.
+  01  BUFFER-BLOCK.
+      05  CONFIG-VAL  PIC FLOAT.
+      05  POINT-DATA  PIC V(4) OCCURS 64 TIMES.
+  ```
+
+#### 1.3.2 Image Formats
+Required for `STORAGE-*` images. The following formats are supported:
+
+| Components | Bits | Unsigned Normalized | Signed Normalized | Float | Unsigned Integer | Signed Integer |
+|:---|:---|:---|:---|:---|:---|:---|
+| **R** | **8** | `R8` | `R8Snorm` | - | `R8UI` | `R8I` |
+| | **16** | `R16` | `R16Snorm` | `R16F` | `R16UI` | `R16I` |
+| | **32** | - | - | `R32F` | `R32UI` | `R32I` |
+| **RG** | **8** | `RG8` | `RG8Snorm` | - | `RG8UI` | `RG8I` |
+| | **16** | `RG16` | `RG16Snorm` | `RG16F` | `RG16UI` | `RG16I` |
+| | **32** | - | - | `RG32F` | `RG32UI` | `RG32I` |
+| **RGBA** | **8** | `RGBA8` | `RGBA8Snorm` | - | `RGBA8UI` | `RGBA8I` |
+| | **16** | `RGBA16` | `RGBA16Snorm` | `RGBA16F` | `RGBA16UI` | `RGBA16I` |
+| | **32** | - | - | `RGBA32F` | `RGBA32UI` | `RGBA32I` |
+
+**Packed Formats:**
+
+| Format | Components | Total Bits | Encoding |
+|:---|:---|:---|:---|
+| `RGB10A2` | RGBA | 32 | Unsigned Normalized (10-10-10-2) |
+| `RGB10A2UI` | RGBA | 32 | Unsigned Integer (10-10-10-2) |
+| `R11FG11FB10F` | RGB | 32 | Float (11-11-10) |
+
+- **FORMAT IS**: Required for `STORAGE-*` images if `Unknown` is not intended.
 - **LAYOUT IS**: Specifies the memory layout standard for buffer blocks (`ACCESS-UNIFORM` or `ACCESS-STORAGE`).
   - `STD140`: Mandated for `ACCESS-UNIFORM` blocks. Also valid for `ACCESS-STORAGE`. Scalars 4-byte aligned; `vec2` 8-byte; `vec3`/`vec4` 16-byte. **Note**: Array elements and nested structures are always rounded up to 16-byte alignment slots, and the compiler automatically emits the `ArrayStride 16` decoration for scalar/vector arrays.
   - `STD430`: Default for `ACCESS-STORAGE` blocks. More compact: `vec2` is 8-byte aligned, `vec3` is 16-byte aligned (size 12). Arrays of scalars are tightly packed (stride 4).

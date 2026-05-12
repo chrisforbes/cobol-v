@@ -56,6 +56,9 @@ static spirv::ImageFormat stringToFormat(const std::string& format) {
     if (format == "RG8UI") return spirv::ImageFormatRg8ui;
     if (format == "RGBA8I") return spirv::ImageFormatRgba8i;
     if (format == "RGBA8UI") return spirv::ImageFormatRgba8ui;
+    if (format == "RGB10A2") return spirv::ImageFormatRgb10A2;
+    if (format == "RGB10A2UI") return spirv::ImageFormatRgb10a2ui;
+    if (format == "R11FG11FB10F") return spirv::ImageFormatR11fG11fB10f;
     
     return spirv::ImageFormatUnknown;
 }

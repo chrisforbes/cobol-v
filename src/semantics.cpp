@@ -713,7 +713,12 @@ void SemanticAnalyzer::validateCall(const CallNode& call) {
 }
 
 bool SemanticAnalyzer::areTypesCompatible(const DataType& source, const DataType& target) {
-    if (source.baseType != target.baseType) return false;
+    if (source.baseType != target.baseType) {
+        // Allow INT and UINT to be compatible
+        bool isSourceInt = (source.baseType == BaseType::INT || source.baseType == BaseType::UINT);
+        bool isTargetInt = (target.baseType == BaseType::INT || target.baseType == BaseType::UINT);
+        if (!(isSourceInt && isTargetInt)) return false;
+    }
     if (source.matrixRows != target.matrixRows) return false;
     if (source.matrixCols != target.matrixCols) return false;
     if (source.vectorSize == target.vectorSize) return true;
