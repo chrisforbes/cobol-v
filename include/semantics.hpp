@@ -40,6 +40,7 @@ public:
     void analyze(const ProgramNode& program);
     std::set<spirv::Capability> getRequiredCapabilities() const { return requiredCapabilities; }
     ShaderStage getShaderStage() const { return shaderStage; }
+    const std::map<std::string, Symbol>& getSymbolTable() const { return symbolTable; }
     
     DataType getExpressionType(const ExpressionNode& expr);
 

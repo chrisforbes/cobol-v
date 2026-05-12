@@ -39,8 +39,11 @@ For more details of the full language supported, see `docs/language_spec.md`.
 
 ## Usage:
 ```bash
-./cobolv <input file> <output file>
+./cobolv [--dump-ast] [--dump-symbols] <input file> [output file]
 ```
+
+- `--dump-ast`: Prints the Abstract Syntax Tree (AST) to standard output after parsing.
+- `--dump-symbols`: Prints the symbol table (variables, resources, and types) to standard output after semantic analysis.
 
 The compiler writes binary .spv files, ready to be consumed by a Vulkan application. If the output file name is omitted, it defaults to `output.spv` in the current directory.
 

@@ -6,22 +6,25 @@
 #include "semantics.hpp"
 #include "emitter.hpp"
 #include "ast_dumper.hpp"
+#include "symbol_dumper.hpp"
 
 int main(int argc, char* argv[]) {
     try {
         std::string filename;
         std::string outFilename = "output.spv";
         bool dumpAst = false;
+        bool dumpSymbols = false;
 
         for (int i = 1; i < argc; ++i) {
             std::string arg = argv[i];
             if (arg == "--dump-ast") dumpAst = true;
+            else if (arg == "--dump-symbols") dumpSymbols = true;
             else if (filename.empty()) filename = arg;
             else outFilename = arg;
         }
 
         if (filename.empty()) {
-            std::cerr << "Usage: " << argv[0] << " [--dump-ast] <source.cob> [output.spv]" << std::endl;
+            std::cerr << "Usage: " << argv[0] << " [--dump-ast] [--dump-symbols] <source.cob> [output.spv]" << std::endl;
             return 1;
         }
 
@@ -49,6 +52,12 @@ int main(int argc, char* argv[]) {
 
         cobolv::SemanticAnalyzer analyzer;
         analyzer.analyze(*ast);
+ 
+        if (dumpSymbols) {
+            cobolv::SymbolDumper dumper;
+            dumper.dump(analyzer.getSymbolTable());
+            return 0;
+        }
 
         cobolv::Emitter emitter;
         auto binary = emitter.emit(*ast, analyzer.getRequiredCapabilities());
