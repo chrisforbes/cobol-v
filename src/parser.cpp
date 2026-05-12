@@ -908,7 +908,7 @@ std::unique_ptr<ExpressionNode> Parser::parseMultiplication() {
 }
 
 std::unique_ptr<ExpressionNode> Parser::parseUnary() {
-    if (match(TokenType::BIT_NOT)) {
+    if (match(TokenType::BIT_NOT) || match(TokenType::PLUS) || match(TokenType::MINUS)) {
         TokenType op = previous().type;
         auto right = parseUnary();
         return std::make_unique<UnaryExpressionNode>(op, std::move(right));
@@ -945,6 +945,16 @@ std::unique_ptr<ExpressionNode> Parser::parsePrimary() {
         consume(TokenType::OF, "Expected 'OF' after swizzle components");
         auto inner = parsePrimary();
         return std::make_unique<SwizzleNode>(components, std::move(inner));
+    }
+
+    if (match(TokenType::FLOAT_TO_INT) || match(TokenType::FLOAT_TO_UINT) || 
+        match(TokenType::INT_TO_FLOAT) || match(TokenType::UINT_TO_FLOAT) ||
+        match(TokenType::INT_TO_UINT) || match(TokenType::UINT_TO_INT)) {
+        TokenType convType = previous().type;
+        consume(TokenType::LPAREN, "Expected '(' after conversion operator");
+        auto inner = parseExpression();
+        consume(TokenType::RPAREN, "Expected ')' after conversion expression");
+        return std::make_unique<ConversionNode>(convType, std::move(inner));
     }
 
     if (checkIdentifier()) {

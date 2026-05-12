@@ -1,1 +1,1 @@
-Semantic Error: Type mismatch in MOVE/COMPUTE. Source not compatible with destination.
+Semantic Error: Type mismatch in MOVE. Source type 0v3 not compatible with destination type 0v0

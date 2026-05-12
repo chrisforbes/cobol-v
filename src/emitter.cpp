@@ -1724,6 +1724,7 @@ uint32_t Emitter::emitExpression(const ExpressionNode& expr, uint32_t expectedTy
     if (auto binary = dynamic_cast<const BinaryExpressionNode*>(&expr)) return emitBinaryExpression(*binary, expectedTypeId);
     if (auto unary = dynamic_cast<const UnaryExpressionNode*>(&expr)) return emitUnaryExpression(*unary, expectedTypeId);
     if (auto vec = dynamic_cast<const VectorLiteralNode*>(&expr)) return emitVectorLiteral(*vec, expectedTypeId);
+    if (auto conv = dynamic_cast<const ConversionNode*>(&expr)) return emitConversion(*conv);
     return 0;
 }
 
@@ -1821,6 +1822,22 @@ uint32_t Emitter::getExpressionType(const ExpressionNode& expr) {
     if (auto unary = dynamic_cast<const UnaryExpressionNode*>(&expr)) {
         if (unary->op == TokenType::NOT) return getOrCreateBaseType(BaseType::BOOL);
         return getExpressionType(*unary->expr);
+    }
+    if (auto conv = dynamic_cast<const ConversionNode*>(&expr)) {
+        uint32_t innerTypeId = getExpressionType(*conv->expr);
+        if (typeToDataType.count(innerTypeId)) {
+            DataType dt = typeToDataType.at(innerTypeId);
+            switch (conv->convType) {
+                case TokenType::FLOAT_TO_INT: dt.baseType = BaseType::INT; break;
+                case TokenType::FLOAT_TO_UINT: dt.baseType = BaseType::UINT; break;
+                case TokenType::INT_TO_FLOAT:
+                case TokenType::UINT_TO_FLOAT: dt.baseType = BaseType::FLOAT; break;
+                case TokenType::INT_TO_UINT: dt.baseType = BaseType::UINT; break;
+                case TokenType::UINT_TO_INT: dt.baseType = BaseType::INT; break;
+                default: break;
+            }
+            return getOrCreateType(dt);
+        }
     }
     return 0;
 }
@@ -1926,15 +1943,23 @@ uint32_t Emitter::emitUnaryExpression(const UnaryExpressionNode& unary, uint32_t
     uint32_t resTypeId = expectedTypeId ? expectedTypeId : getOrCreateBaseType(BaseType::BOOL);
     
     spirv::Op opCode = spirv::OpNop;
-    if (unary.op == TokenType::NOT) {
+    if (unary.op == TokenType::PLUS) return innerId;
+    if (unary.op == TokenType::MINUS) {
+        resTypeId = getExpressionType(*unary.expr);
+        DataType dt = typeToDataType.count(resTypeId) ? typeToDataType.at(resTypeId) : DataType{BaseType::FLOAT, 0, 0, 0};
+        opCode = (dt.baseType == BaseType::FLOAT) ? spirv::OpFNegate : spirv::OpSNegate;
+    } else if (unary.op == TokenType::NOT) {
         opCode = spirv::OpLogicalNot;
     } else if (unary.op == TokenType::BIT_NOT) {
         opCode = spirv::OpNot;
         resTypeId = getExpressionType(unary);
     }
     
-    emitOp(opCode, {resTypeId, resId, innerId});
-    return resId;
+    if (opCode != spirv::OpNop) {
+        emitOp(opCode, {resTypeId, resId, innerId});
+        return resId;
+    }
+    return innerId;
 }
 
 uint32_t Emitter::emitVectorLiteral(const VectorLiteralNode& vec, uint32_t expectedTypeId) {
@@ -2160,6 +2185,50 @@ void Emitter::calculateScalarLayout(const DataType& type, uint32_t& size, uint32
     
 bool Emitter::isConstant(uint32_t id) {
     return idStorageClasses.find(id) == idStorageClasses.end();
+}
+
+uint32_t Emitter::emitConversion(const ConversionNode& conv) {
+    uint32_t innerId = emitExpression(*conv.expr);
+    uint32_t innerTypeId = getExpressionType(*conv.expr);
+    uint32_t resTypeId = 0;
+    spirv::Op op = spirv::OpNop;
+
+    DataType innerDT = typeToDataType.at(innerTypeId);
+    DataType resDT = innerDT;
+
+    switch (conv.convType) {
+        case TokenType::FLOAT_TO_INT:
+            resDT.baseType = BaseType::INT;
+            op = spirv::OpConvertFToS;
+            break;
+        case TokenType::FLOAT_TO_UINT:
+            resDT.baseType = BaseType::UINT;
+            op = spirv::OpConvertFToU;
+            break;
+        case TokenType::INT_TO_FLOAT:
+            resDT.baseType = BaseType::FLOAT;
+            op = spirv::OpConvertSToF;
+            break;
+        case TokenType::UINT_TO_FLOAT:
+            resDT.baseType = BaseType::FLOAT;
+            op = spirv::OpConvertUToF;
+            break;
+        case TokenType::INT_TO_UINT:
+            resDT.baseType = BaseType::UINT;
+            op = spirv::OpBitcast;
+            break;
+        case TokenType::UINT_TO_INT:
+            resDT.baseType = BaseType::INT;
+            op = spirv::OpBitcast;
+            break;
+        default:
+            throw std::runtime_error("Unknown conversion type");
+    }
+
+    resTypeId = getOrCreateType(resDT);
+    uint32_t resId = allocateId();
+    emitOp(op, {resTypeId, resId, innerId});
+    return resId;
 }
 
 } // namespace cobolv

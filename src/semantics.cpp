@@ -224,7 +224,7 @@ void SemanticAnalyzer::visitStatement(const StatementNode& stmt) {
         }
 
         if (!areTypesCompatible(src, dst)) {
-            error("Type mismatch in COMPUTE. Source not compatible with destination.", 0, 0);
+            error("Type mismatch in COMPUTE. Source type " + std::to_string((int)src.baseType) + "v" + std::to_string(src.vectorSize) + " not compatible with destination type " + std::to_string((int)dst.baseType) + "v" + std::to_string(dst.vectorSize), 0, 0);
         }
     }
 }
@@ -486,7 +486,7 @@ void SemanticAnalyzer::validateMove(const MoveNode& move) {
     }
 
     if (!areTypesCompatible(src, dst)) {
-        error("Type mismatch in MOVE/COMPUTE. Source not compatible with destination.", 0, 0);
+        error("Type mismatch in MOVE. Source type " + std::to_string((int)src.baseType) + "v" + std::to_string(src.vectorSize) + " not compatible with destination type " + std::to_string((int)dst.baseType) + "v" + std::to_string(dst.vectorSize), 0, 0);
     }
 }
 
@@ -569,6 +569,39 @@ DataType SemanticAnalyzer::getExpressionType(const ExpressionNode& expr) {
             }
         }
         return inner;
+    }
+    if (auto conv = dynamic_cast<const ConversionNode*>(&expr)) {
+        DataType inner = getExpressionType(*conv->expr);
+        DataType res = inner;
+        switch (conv->convType) {
+            case TokenType::FLOAT_TO_INT:
+                if (inner.baseType != BaseType::FLOAT) error("FLOAT-TO-INT requires float operand.", 0, 0);
+                res.baseType = BaseType::INT;
+                break;
+            case TokenType::FLOAT_TO_UINT:
+                if (inner.baseType != BaseType::FLOAT) error("FLOAT-TO-UINT requires float operand.", 0, 0);
+                res.baseType = BaseType::UINT;
+                break;
+            case TokenType::INT_TO_FLOAT:
+                if (inner.baseType != BaseType::INT) error("INT-TO-FLOAT requires int operand.", 0, 0);
+                res.baseType = BaseType::FLOAT;
+                break;
+            case TokenType::UINT_TO_FLOAT:
+                if (inner.baseType != BaseType::UINT) error("UINT-TO-FLOAT requires uint operand.", 0, 0);
+                res.baseType = BaseType::FLOAT;
+                break;
+            case TokenType::INT_TO_UINT:
+                if (inner.baseType != BaseType::INT) error("INT-TO-UINT requires int operand.", 0, 0);
+                res.baseType = BaseType::UINT;
+                break;
+            case TokenType::UINT_TO_INT:
+                if (inner.baseType != BaseType::UINT) error("UINT-TO-INT requires uint operand.", 0, 0);
+                res.baseType = BaseType::INT;
+                break;
+            default:
+                break;
+        }
+        return res;
     }
     if (auto binary = dynamic_cast<const BinaryExpressionNode*>(&expr)) {
         if (isRelational(binary->op) || binary->op == TokenType::AND || binary->op == TokenType::OR) {

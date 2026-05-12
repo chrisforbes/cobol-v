@@ -145,6 +145,7 @@ private:
     uint32_t emitBinaryExpression(const BinaryExpressionNode& binary, uint32_t expectedTypeId);
     uint32_t emitUnaryExpression(const UnaryExpressionNode& unary, uint32_t expectedTypeId);
     uint32_t emitVectorLiteral(const VectorLiteralNode& vec, uint32_t expectedTypeId);
+    uint32_t emitConversion(const ConversionNode& conv);
     uint32_t emitSwizzle(const SwizzleNode& swizzle, bool asPointer);
     uint32_t splatScalar(uint32_t scalarId, uint32_t vectorTypeId, int size);
 

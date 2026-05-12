@@ -81,6 +81,13 @@ public:
     VectorLiteralNode(std::vector<std::unique_ptr<ExpressionNode>> e) : elements(std::move(e)) {}
 };
 
+class ConversionNode : public ExpressionNode {
+public:
+    TokenType convType;
+    std::unique_ptr<ExpressionNode> expr;
+    ConversionNode(TokenType t, std::unique_ptr<ExpressionNode> e) : convType(t), expr(std::move(e)) {}
+};
+
 class StatementNode : public AstNode {
 public:
     AstNodeType getType() const override { return AstNodeType::STATEMENT; }

@@ -273,6 +273,24 @@ COBOL-V supports standard relational and logical operators for use in `COMPUTE` 
 7.  **Logical AND**: `AND`
 8.  **Logical OR**: `OR`
 
+### 2.6 Explicit Type Conversions
+COBOL-V requires explicit conversion when assigning between incompatible base types (e.g., Float to Integer). These operators perform element-wise conversion for vector types.
+
+| Operator | Source | Target | Opcode |
+|:---|:---|:---|:---|
+| `FLOAT-TO-INT(x)` | Float | Int | `OpConvertFToS` |
+| `FLOAT-TO-UINT(x)` | Float | Uint | `OpConvertFToU` |
+| `INT-TO-FLOAT(x)` | Int | Float | `OpConvertSToF` |
+| `UINT-TO-FLOAT(x)` | Uint | Float | `OpConvertUToF` |
+| `INT-TO-UINT(x)` | Int | Uint | `OpBitcast` |
+| `UINT-TO-INT(x)` | Uint | Int | `OpBitcast` |
+
+**Example:**
+```cobol
+COMPUTE MY-INT = FLOAT-TO-INT(MY-FLOAT).
+COMPUTE MY-V3FLOAT = INT-TO-FLOAT(MY-V3INT).
+```
+
 ---
 
 ## 3. Core Statements
@@ -487,11 +505,11 @@ The COBOL-V compiler currently supports:
 - **Inquiry**: `INQUIRE ... FOR SIZE` and `INQUIRE ... FOR LEVELS` for resource metadata.
 - **Types**: Scalars, Vectors (V, IV, UV, BV), and Matrices (M).
 - **Logic**: `MOVE`, `COMPUTE`, `DISCARD`, **conditional branching** (`IF`), and **structured loops** (`PERFORM` with TIMES, UNTIL, and VARYING).
-- **Expressions**: Arithmetic, **Relational** (EQUAL, GREATER, etc.), **Logical** (AND, OR, NOT), and **Bitwise** (`BIT-AND`, `BIT-OR`, etc.).
+- **Expressions**: Arithmetic, **Relational** (EQUAL, GREATER, etc.), **Logical** (AND, OR, NOT), **Bitwise** (`BIT-AND`, `BIT-OR`, etc.), and **Explicit Conversions** (`FLOAT-TO-INT`, etc.).
 - **Qualification**: Support for `member OF parent` for record and push constant access.
 - **Meta**: Workgroup size configuration, Built-in mappings, and **Push Constants / Uniform Blocks / Storage Buffers**.
 - **Shared Memory**: `LOCAL-STORAGE SECTION` for workgroup-shared variables and `SYNC WORKGROUP` for barrier synchronization.
 - **Graphics Stages**: Support for **Vertex and Fragment Shaders** including `INPUT SECTION`, `OUTPUT SECTION`, and explicit `LOCATION` attributes.
 - **Arrays**: Full support for fixed-size arrays via the `OCCURS n TIMES` clause, including automatic SPIR-V type generation, ArrayStride decorations, and bounds checking.
-- **Diagnostics**: The compiler includes an integrated AST dumper reachable via the `--dump-ast` flag for debugging parse tree structure.
+- **Diagnostics**: The compiler includes an integrated AST dumper reachable via the `--dump-ast` flag and **detailed semantic type-mismatch reporting**.
 - **Descope**: Multisampled textures (MS) are not planned for implementation.
