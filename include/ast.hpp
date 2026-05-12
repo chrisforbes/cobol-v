@@ -118,6 +118,7 @@ public:
     std::unique_ptr<ExpressionNode> coordinates;
     std::unique_ptr<ExpressionNode> target;
     std::unique_ptr<ExpressionNode> lod; // Optional
+    std::unique_ptr<ExpressionNode> lodBias; // Optional
     bool isFetch = false;
     bool isGather = false;
     std::unique_ptr<ExpressionNode> component; // For GATHER

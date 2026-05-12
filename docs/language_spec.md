@@ -313,16 +313,21 @@ Used for texture sampling and storage image random-access reading.
 - **GATHER (textureGather)**: `READ [resource-name] GATHER [COMPONENT [comp-expr]] AT [coords] INTO [target].`
   - Gathers 4 texels from the specified component (default 0). Target must be a `vec4` (`PIC V(4)`).
 
-The optional clauses (`WITH PROJECTION`, `COMPARING WITH`, `WITH GRADIENTS`, `AT LOD`) may appear in any order after the coordinate.
+The optional clauses (`WITH PROJECTION`, `COMPARING WITH`, `WITH GRADIENTS`, `AT LOD`, `WITH BIAS`) may appear in any order after the coordinate.
 
 The `WITH PROJECTION` clause enables **projective texture sampling** (equivalent to `textureProj` in GLSL). The final component of the coordinate vector is used as the homogeneous divisor, enabling perspective-correct sampling from rasterized clip-space coordinates.
 - The coordinate vector must be one dimension larger than the image's base dimensionality: `vec3` for 2D images, `vec4` for 3D images.
 - `WITH PROJECTION` is **not supported** for `CUBE` images.
-- `WITH PROJECTION` is compatible with `COMPARING WITH` (emits `OpImageSampleProjDrefImplicitLod`/`ExplicitLod`), `AT LOD`, and `WITH GRADIENTS`.
+- `WITH PROJECTION` is compatible with `COMPARING WITH` (emits `OpImageSampleProjDrefImplicitLod`/`ExplicitLod`), `AT LOD`, `WITH BIAS`, and `WITH GRADIENTS`.
 
 The `COMPARING WITH` clause enables depth-reference sampling (shadow mapping). Unlike GLSL, COBOL-V does not use separate sampler types for comparison; it is specified at the call site. The reference value must be a scalar float, and the `INTO` target must also be a scalar float.
 
 The `WITH GRADIENTS` clause allows providing explicit x and y derivative vectors for LOD calculation (equivalent to `textureGrad` in GLSL). The dimensionality of the gradients must match the image's base dimensionality (e.g., `vec2` for 2D, `scalar` for 1D Array).
+
+The `WITH BIAS` clause allows specifying an LOD bias for implicit sampling operations.
+- **Requirements**: Must be used in the `VULKAN-FRAGMENT-SHADER` stage.
+- **Exclusivity**: Cannot be used with `AT LOD` or `WITH GRADIENTS`.
+- **Type**: Requires a scalar float expression.
 
 The `AT LOD` clause is optional. Its behavior when omitted depends on the shader stage:
 - **VULKAN-FRAGMENT-SHADER**: Uses **implicit LOD** selection based on screen-space derivatives.
@@ -330,7 +335,7 @@ The `AT LOD` clause is optional. Its behavior when omitted depends on the shader
 
 If the `AT LOD` clause is provided, it specifies an explicit Level of Detail. It requires a scalar float expression for sampled images (`READ`, `READ WITH`) or a scalar integer for storage images (`READ` on storage or `FETCH`).
 
-**Note**: The `WITH GRADIENTS` and `AT LOD` clauses are mutually exclusive and cannot be used in the same `READ` statement.
+**Note**: The `WITH GRADIENTS`, `AT LOD`, and `WITH BIAS` clauses are mutually exclusive and cannot be used in the same `READ` statement.
 
 ### 3.3 WRITE Statement
 Used for random-access writes to storage images.

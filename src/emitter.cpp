@@ -1259,7 +1259,12 @@ void Emitter::emitRead(const ReadNode* read) {
         if (read->compareValue) {
             uint32_t drefId = emitExpression(*read->compareValue);
             if (!read->lod && shaderStage == ShaderStage::FRAGMENT) {
-                emitOp(getProjectiveOp(spirv::OpImageSampleDrefImplicitLod, read->isProjective), {targetTypeId, sampledValId, imgValId, coordId, drefId});
+                if (read->lodBias) {
+                    uint32_t biasId = emitExpression(*read->lodBias);
+                    emitOp(getProjectiveOp(spirv::OpImageSampleDrefImplicitLod, read->isProjective), {targetTypeId, sampledValId, imgValId, coordId, drefId, (uint32_t)spirv::ImageOperandsBiasMask, biasId});
+                } else {
+                    emitOp(getProjectiveOp(spirv::OpImageSampleDrefImplicitLod, read->isProjective), {targetTypeId, sampledValId, imgValId, coordId, drefId});
+                }
             } else {
                 if (!lodId) {
                     Token t = {TokenType::NUMBER, "0.0", 0, 0};
@@ -1272,7 +1277,12 @@ void Emitter::emitRead(const ReadNode* read) {
             uint32_t gyId = emitExpression(*read->gradY);
             emitOp(getProjectiveOp(spirv::OpImageSampleExplicitLod, read->isProjective), {targetTypeId, sampledValId, imgValId, coordId, (uint32_t)spirv::ImageOperandsGradMask, gxId, gyId});
         } else if (!read->lod && shaderStage == ShaderStage::FRAGMENT) {
-            emitOp(getProjectiveOp(spirv::OpImageSampleImplicitLod, read->isProjective), {targetTypeId, sampledValId, imgValId, coordId});
+            if (read->lodBias) {
+                uint32_t biasId = emitExpression(*read->lodBias);
+                emitOp(getProjectiveOp(spirv::OpImageSampleImplicitLod, read->isProjective), {targetTypeId, sampledValId, imgValId, coordId, (uint32_t)spirv::ImageOperandsBiasMask, biasId});
+            } else {
+                emitOp(getProjectiveOp(spirv::OpImageSampleImplicitLod, read->isProjective), {targetTypeId, sampledValId, imgValId, coordId});
+            }
         } else {
             if (!lodId) {
                 Token t = {TokenType::NUMBER, "0.0", 0, 0};
@@ -1297,7 +1307,12 @@ void Emitter::emitRead(const ReadNode* read) {
         if (read->compareValue) {
             uint32_t drefId = emitExpression(*read->compareValue);
             if (!read->lod && shaderStage == ShaderStage::FRAGMENT) {
-                emitOp(getProjectiveOp(spirv::OpImageSampleDrefImplicitLod, read->isProjective), {targetTypeId, sampledValId, combinedId, coordId, drefId});
+                if (read->lodBias) {
+                    uint32_t biasId = emitExpression(*read->lodBias);
+                    emitOp(getProjectiveOp(spirv::OpImageSampleDrefImplicitLod, read->isProjective), {targetTypeId, sampledValId, combinedId, coordId, drefId, (uint32_t)spirv::ImageOperandsBiasMask, biasId});
+                } else {
+                    emitOp(getProjectiveOp(spirv::OpImageSampleDrefImplicitLod, read->isProjective), {targetTypeId, sampledValId, combinedId, coordId, drefId});
+                }
             } else {
                 if (!lodId) {
                     Token t = {TokenType::NUMBER, "0.0", 0, 0};
@@ -1310,7 +1325,12 @@ void Emitter::emitRead(const ReadNode* read) {
             uint32_t gyId = emitExpression(*read->gradY);
             emitOp(getProjectiveOp(spirv::OpImageSampleExplicitLod, read->isProjective), {targetTypeId, sampledValId, combinedId, coordId, (uint32_t)spirv::ImageOperandsGradMask, gxId, gyId});
         } else if (!read->lod && shaderStage == ShaderStage::FRAGMENT) {
-            emitOp(getProjectiveOp(spirv::OpImageSampleImplicitLod, read->isProjective), {targetTypeId, sampledValId, combinedId, coordId});
+            if (read->lodBias) {
+                uint32_t biasId = emitExpression(*read->lodBias);
+                emitOp(getProjectiveOp(spirv::OpImageSampleImplicitLod, read->isProjective), {targetTypeId, sampledValId, combinedId, coordId, (uint32_t)spirv::ImageOperandsBiasMask, biasId});
+            } else {
+                emitOp(getProjectiveOp(spirv::OpImageSampleImplicitLod, read->isProjective), {targetTypeId, sampledValId, combinedId, coordId});
+            }
         } else {
             if (!lodId) {
                 Token t = {TokenType::NUMBER, "0.0", 0, 0};

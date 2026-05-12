@@ -708,8 +708,10 @@ std::unique_ptr<StatementNode> Parser::parseReadStatement() {
                 consume(TokenType::COMMA, "Expected ',' between gradients");
                 node->gradY = parseExpression();
                 consume(TokenType::RPAREN, "Expected ')' after gradients");
+            } else if (match(TokenType::BIAS)) {
+                node->lodBias = parseExpression();
             } else {
-                throw std::runtime_error("Expected PROJECTION or GRADIENTS after WITH at line " + std::to_string(peek().line));
+                throw std::runtime_error("Expected PROJECTION, GRADIENTS, or BIAS after WITH at line " + std::to_string(peek().line));
             }
         } else if (match(TokenType::COMPARING)) {
             match(TokenType::WITH); // Optional WITH

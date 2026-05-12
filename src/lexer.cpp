@@ -72,6 +72,7 @@ const std::map<std::string, TokenType> Lexer::keywords = {
     {"GRADIENTS", TokenType::GRADIENTS},
     {"COMPARING", TokenType::COMPARING},
     {"PROJECTION", TokenType::PROJECTION},
+    {"BIAS", TokenType::BIAS},
     {"LEVELS", TokenType::LEVELS},
     {"GIVING", TokenType::GIVING},
     {"AND", TokenType::AND},

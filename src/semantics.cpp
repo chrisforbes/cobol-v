@@ -321,6 +321,19 @@ void SemanticAnalyzer::validateRead(const ReadNode& read) {
             error("Gradients must be of float type.", 0, 0);
         }
     }
+
+    if (read.lodBias) {
+        if (shaderStage != ShaderStage::FRAGMENT) {
+            error("WITH BIAS is only supported in the FRAGMENT stage.", 0, 0);
+        }
+        if (read.lod || read.gradX || read.gradY || read.isFetch) {
+            error("WITH BIAS cannot be used with explicit LOD, GRADIENTS, or FETCH.", 0, 0);
+        }
+        DataType biasType = getExpressionType(*read.lodBias);
+        if (biasType.baseType != BaseType::FLOAT || biasType.vectorSize != 0) {
+            error("LOD bias must be a scalar float.", 0, 0);
+        }
+    }
 }
 
 void SemanticAnalyzer::validateWrite(const WriteNode& write) {

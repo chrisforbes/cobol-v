@@ -1,0 +1,21 @@
+        IDENTIFICATION DIVISION.
+        PROGRAM-ID. INVALID-BIAS-STAGE.
+        ENVIRONMENT DIVISION.
+        CONFIGURATION SECTION.
+        OBJECT-COMPUTER. VULKAN-COMPUTE-SHADER.
+        INPUT-OUTPUT SECTION.
+        FILE-CONTROL.
+            SELECT MY-TEX ASSIGN TO "GPU-IMAGE-0-0"
+                ORGANIZATION IS IMAGE-2D.
+        DATA DIVISION.
+        FILE SECTION.
+        FD  MY-TEX.
+        01  TEX-REC PIC V(4).
+        WORKING-STORAGE SECTION.
+        01  MY-COORD PIC V(2).
+        01  MY-COLOR PIC V(4).
+        PROCEDURE DIVISION.
+        MAIN-PARAGRAPH.
+            *> Bias is only allowed in Fragment stage
+            READ MY-TEX AT MY-COORD WITH BIAS 0.5 INTO MY-COLOR.
+            GOBACK.
