@@ -106,13 +106,28 @@ Used for mapping GPU descriptors to COBOL "Files" via the **FILE-CONTROL** parag
 
 - **descriptor-target**: A string in the format `"GPU-[IMAGE|SAMPLER|BUFFER]-[SET]-[BINDING]"`.
 - **ORGANIZATION types**:
-  - `IMAGE-1D`, `IMAGE-2D`, `IMAGE-3D`, `IMAGE-CUBE`, `IMAGE-1D-ARRAY`, `IMAGE-2D-ARRAY`, `IMAGE-CUBE-ARRAY`: Combined Image Sampler (`VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER`).
-  - `TEXTURE-1D`, `TEXTURE-2D`, `TEXTURE-3D`, `TEXTURE-CUBE`, `TEXTURE-1D-ARRAY`, `TEXTURE-2D-ARRAY`, `TEXTURE-CUBE-ARRAY`: Pure Texture (`VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE`).
-  - `SAMPLER`: Pure Sampler (`VK_DESCRIPTOR_TYPE_SAMPLER`).
-  - `STORAGE-1D`, `STORAGE-2D`, `STORAGE-3D`, `STORAGE-CUBE`, `STORAGE-1D-ARRAY`, `STORAGE-2D-ARRAY`, `STORAGE-CUBE-ARRAY`: Random-access image (`VK_DESCRIPTOR_TYPE_STORAGE_IMAGE`).
-  - `ACCESS-PUSH`: Push Constants. Passes small amounts of data directly to the shader. All `FD` records are grouped into a single SPIR-V `PushConstant` block.
-  - `ACCESS-UNIFORM`: Uniform Buffer (`VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER`). Read-only structured data block. Always uses `STD140` layout. The compiler automatically enforces strict alignment (e.g., 16-byte alignment for arrays) and emits `ArrayStride` decorations.
-  - `ACCESS-STORAGE`: Storage Buffer (`VK_DESCRIPTOR_TYPE_STORAGE_BUFFER`). Read-write structured data block. Defaults to `STD430` layout; `STD140` and `SCALAR` are also valid.
+
+| Dimensionality | Combined Image Sampler | Pure Texture | Storage Image |
+|:---|:---|:---|:---|
+| **1D** | `IMAGE-1D` | `TEXTURE-1D` | `STORAGE-1D` |
+| **2D** | `IMAGE-2D` | `TEXTURE-2D` | `STORAGE-2D` |
+| **3D** | `IMAGE-3D` | `TEXTURE-3D` | `STORAGE-3D` |
+| **Cube** | `IMAGE-CUBE` | `TEXTURE-CUBE` | `STORAGE-CUBE` |
+| **1D Array** | `IMAGE-1D-ARRAY` | `TEXTURE-1D-ARRAY` | `STORAGE-1D-ARRAY` |
+| **2D Array** | `IMAGE-2D-ARRAY` | `TEXTURE-2D-ARRAY` | `STORAGE-2D-ARRAY` |
+| **Cube Array** | `IMAGE-CUBE-ARRAY` | `TEXTURE-CUBE-ARRAY` | `STORAGE-CUBE-ARRAY` |
+
+> [!NOTE]
+> Each column corresponds to a specific Vulkan descriptor type:
+> - **Combined Image Sampler**: `VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER`
+> - **Pure Texture**: `VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE`
+> - **Storage Image**: `VK_DESCRIPTOR_TYPE_STORAGE_IMAGE`
+
+**Specialized Organizations:**
+- `SAMPLER`: Pure Sampler (`VK_DESCRIPTOR_TYPE_SAMPLER`).
+- `ACCESS-PUSH`: Push Constants. Passes small amounts of data directly to the shader. All `FD` records are grouped into a single SPIR-V `PushConstant` block.
+- `ACCESS-UNIFORM`: Uniform Buffer (`VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER`). Read-only structured data block. Always uses `STD140` layout. The compiler automatically enforces strict alignment (e.g., 16-byte alignment for arrays) and emits `ArrayStride` decorations.
+- `ACCESS-STORAGE`: Storage Buffer (`VK_DESCRIPTOR_TYPE_STORAGE_BUFFER`). Read-write structured data block. Defaults to `STD430` layout; `STD140` and `SCALAR` are also valid.
 - **ACCESS MODE**:
   - `READ-ONLY`: Emits `NonWritable` decoration.
   - `WRITE-ONLY`: Emits `NonReadable` decoration.
