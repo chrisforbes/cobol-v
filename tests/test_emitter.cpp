@@ -59,7 +59,7 @@ PROCEDURE DIVISION.
     out.close();
 
     // 1. Validate with spirv-val
-    auto valResult = runCommand("spirv-val --target-env vulkan1.0 " + filename);
+    auto valResult = runCommand("spirv-val --target-env vulkan1.1 " + filename);
     EXPECT_EQ(valResult.exitCode, 0) << "spirv-val failed: " << valResult.output;
 
     // 2. Disassemble and check content
