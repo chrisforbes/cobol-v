@@ -1,38 +1,43 @@
-OpCapability Shader
-%2 = OpExtInstImport "GLSL.std.450"
-OpMemoryModel Logical GLSL450
-OpEntryPoint GLCompute %1 "MAIN"
-OpExecutionMode %1 LocalSize 1 1 1
-OpDecorate %3 DescriptorSet 0
-OpDecorate %3 Binding 0
-%float = OpTypeFloat 32
-%5 = OpTypeImage %float 2D 0 0 0 1 Unknown
-%6 = OpTypeSampledImage %5
+; SPIR-V
+; Version: 1.0
+; Generator: Khronos; 0
+; Bound: 29
+; Schema: 0
+               OpCapability Shader
+          %2 = OpExtInstImport "GLSL.std.450"
+               OpMemoryModel Logical GLSL450
+               OpEntryPoint GLCompute %1 "MAIN"
+               OpExecutionMode %1 LocalSize 1 1 1
+               OpDecorate %3 DescriptorSet 0
+               OpDecorate %3 Binding 0
+      %float = OpTypeFloat 32
+          %5 = OpTypeImage %float 2D 0 0 0 1 Unknown
+          %6 = OpTypeSampledImage %5
 %_ptr_UniformConstant_6 = OpTypePointer UniformConstant %6
-%3 = OpVariable %_ptr_UniformConstant_6 UniformConstant
-%void = OpTypeVoid
-%9 = OpTypeFunction %void
-%int = OpTypeInt 32 1
-%v2int = OpTypeVector %int 2
+          %3 = OpVariable %_ptr_UniformConstant_6 UniformConstant
+       %void = OpTypeVoid
+          %9 = OpTypeFunction %void
+        %int = OpTypeInt 32 1
+      %v2int = OpTypeVector %int 2
 %_ptr_Private_v2int = OpTypePointer Private %v2int
-%12 = OpVariable %_ptr_Private_v2int Private
-%v4float = OpTypeVector %float 4
+         %12 = OpVariable %_ptr_Private_v2int Private
+    %v4float = OpTypeVector %float 4
 %_ptr_Private_v4float = OpTypePointer Private %v4float
-%15 = OpVariable %_ptr_Private_v4float Private
+         %15 = OpVariable %_ptr_Private_v4float Private
 %_ptr_Private_int = OpTypePointer Private %int
-%int_0 = OpConstant %int 0
-%17 = OpVariable %_ptr_Private_int Private %int_0
-%int_10 = OpConstant %int 10
-%int_20 = OpConstant %int 20
-%1 = OpFunction %void None %9
-%20 = OpLabel
-%23 = OpCompositeConstruct %v2int %int_10 %int_20
-OpStore %12 %23
-%24 = OpLoad %v2int %12
-%25 = OpLoad %6 %3
-%26 = OpLoad %int %17
-%27 = OpImage %5 %25
-%28 = OpImageFetch %v4float %27 %24 Lod %26
-OpStore %15 %28
-OpReturn
-OpFunctionEnd
+      %int_0 = OpConstant %int 0
+         %17 = OpVariable %_ptr_Private_int Private %int_0
+     %int_10 = OpConstant %int 10
+     %int_20 = OpConstant %int 20
+          %1 = OpFunction %void None %9
+         %20 = OpLabel
+         %23 = OpCompositeConstruct %v2int %int_10 %int_20
+               OpStore %12 %23
+         %24 = OpLoad %v2int %12
+         %25 = OpLoad %6 %3
+         %26 = OpLoad %int %17
+         %27 = OpImage %5 %25
+         %28 = OpImageFetch %v4float %27 %24 Lod %26
+               OpStore %15 %28
+               OpReturn
+               OpFunctionEnd

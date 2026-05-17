@@ -1,51 +1,56 @@
-OpCapability Shader
-%2 = OpExtInstImport "GLSL.std.450"
-OpMemoryModel Logical GLSL450
-OpEntryPoint GLCompute %1 "MAIN"
-OpExecutionMode %1 LocalSize 1 1 1
-%void = OpTypeVoid
-%4 = OpTypeFunction %void
-%float = OpTypeFloat 32
+; SPIR-V
+; Version: 1.0
+; Generator: Khronos; 0
+; Bound: 32
+; Schema: 0
+               OpCapability Shader
+          %2 = OpExtInstImport "GLSL.std.450"
+               OpMemoryModel Logical GLSL450
+               OpEntryPoint GLCompute %1 "MAIN"
+               OpExecutionMode %1 LocalSize 1 1 1
+       %void = OpTypeVoid
+          %4 = OpTypeFunction %void
+      %float = OpTypeFloat 32
 %_ptr_Private_float = OpTypePointer Private %float
-%float_1 = OpConstant %float 1
-%6 = OpVariable %_ptr_Private_float Private %float_1
-%float_2 = OpConstant %float 2
-%9 = OpVariable %_ptr_Private_float Private %float_2
-%11 = OpVariable %_ptr_Private_float Private
-%bool = OpTypeBool
-%int = OpTypeInt 32 1
-%float_3 = OpConstant %float 3
-%float_4 = OpConstant %float 4
-%float_5 = OpConstant %float 5
-%1 = OpFunction %void None %4
-%12 = OpLabel
-%14 = OpLoad %float %6
-%15 = OpLoad %float %9
-%17 = OpFOrdLessThan %bool %14 %15
-OpSelectionMerge %19 None
-OpBranchConditional %17 %18 %19
-%18 = OpLabel
-OpStore %11 %float_1
-OpStore %11 %float_2
-OpBranch %19
-%19 = OpLabel
-OpStore %11 %float_3
-%21 = OpLoad %float %6
-%22 = OpLoad %float %9
-%23 = OpFOrdLessThan %bool %21 %22
-OpSelectionMerge %25 None
-OpBranchConditional %23 %24 %25
-%24 = OpLabel
-%26 = OpLoad %float %6
-%27 = OpFOrdEqual %bool %26 %float_1
-OpSelectionMerge %29 None
-OpBranchConditional %27 %28 %29
-%28 = OpLabel
-OpStore %11 %float_4
-OpBranch %29
-%29 = OpLabel
-OpBranch %25
-%25 = OpLabel
-OpStore %11 %float_5
-OpReturn
-OpFunctionEnd
+    %float_1 = OpConstant %float 1
+          %6 = OpVariable %_ptr_Private_float Private %float_1
+    %float_2 = OpConstant %float 2
+          %9 = OpVariable %_ptr_Private_float Private %float_2
+         %11 = OpVariable %_ptr_Private_float Private
+       %bool = OpTypeBool
+        %int = OpTypeInt 32 1
+    %float_3 = OpConstant %float 3
+    %float_4 = OpConstant %float 4
+    %float_5 = OpConstant %float 5
+          %1 = OpFunction %void None %4
+         %12 = OpLabel
+         %14 = OpLoad %float %6
+         %15 = OpLoad %float %9
+         %17 = OpFOrdLessThan %bool %14 %15
+               OpSelectionMerge %19 None
+               OpBranchConditional %17 %18 %19
+         %18 = OpLabel
+               OpStore %11 %float_1
+               OpStore %11 %float_2
+               OpBranch %19
+         %19 = OpLabel
+               OpStore %11 %float_3
+         %21 = OpLoad %float %6
+         %22 = OpLoad %float %9
+         %23 = OpFOrdLessThan %bool %21 %22
+               OpSelectionMerge %25 None
+               OpBranchConditional %23 %24 %25
+         %24 = OpLabel
+         %26 = OpLoad %float %6
+         %27 = OpFOrdEqual %bool %26 %float_1
+               OpSelectionMerge %29 None
+               OpBranchConditional %27 %28 %29
+         %28 = OpLabel
+               OpStore %11 %float_4
+               OpBranch %29
+         %29 = OpLabel
+               OpBranch %25
+         %25 = OpLabel
+               OpStore %11 %float_5
+               OpReturn
+               OpFunctionEnd

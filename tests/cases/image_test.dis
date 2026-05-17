@@ -1,18 +1,23 @@
-OpCapability Shader
-%2 = OpExtInstImport "GLSL.std.450"
-OpMemoryModel Logical GLSL450
-OpEntryPoint GLCompute %1 "MAIN"
-OpExecutionMode %1 LocalSize 1 1 1
-OpDecorate %3 DescriptorSet 0
-OpDecorate %3 Binding 0
-%float = OpTypeFloat 32
-%5 = OpTypeImage %float 2D 0 0 0 1 Unknown
-%6 = OpTypeSampledImage %5
+; SPIR-V
+; Version: 1.0
+; Generator: Khronos; 0
+; Bound: 11
+; Schema: 0
+               OpCapability Shader
+          %2 = OpExtInstImport "GLSL.std.450"
+               OpMemoryModel Logical GLSL450
+               OpEntryPoint GLCompute %1 "MAIN"
+               OpExecutionMode %1 LocalSize 1 1 1
+               OpDecorate %3 DescriptorSet 0
+               OpDecorate %3 Binding 0
+      %float = OpTypeFloat 32
+          %5 = OpTypeImage %float 2D 0 0 0 1 Unknown
+          %6 = OpTypeSampledImage %5
 %_ptr_UniformConstant_6 = OpTypePointer UniformConstant %6
-%3 = OpVariable %_ptr_UniformConstant_6 UniformConstant
-%void = OpTypeVoid
-%9 = OpTypeFunction %void
-%1 = OpFunction %void None %9
-%10 = OpLabel
-OpReturn
-OpFunctionEnd
+          %3 = OpVariable %_ptr_UniformConstant_6 UniformConstant
+       %void = OpTypeVoid
+          %9 = OpTypeFunction %void
+          %1 = OpFunction %void None %9
+         %10 = OpLabel
+               OpReturn
+               OpFunctionEnd

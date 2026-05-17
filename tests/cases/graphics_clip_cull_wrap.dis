@@ -1,24 +1,29 @@
-OpCapability Shader
-OpCapability ClipDistance
-%2 = OpExtInstImport "GLSL.std.450"
-OpMemoryModel Logical GLSL450
-OpEntryPoint Vertex %1 "MAIN" %gl_ClipDistance
-OpDecorate %gl_ClipDistance BuiltIn ClipDistance
-%void = OpTypeVoid
-%5 = OpTypeFunction %void
-%float = OpTypeFloat 32
-%uint = OpTypeInt 32 0
-%uint_1 = OpConstant %uint 1
+; SPIR-V
+; Version: 1.0
+; Generator: Khronos; 0
+; Bound: 17
+; Schema: 0
+               OpCapability Shader
+               OpCapability ClipDistance
+          %2 = OpExtInstImport "GLSL.std.450"
+               OpMemoryModel Logical GLSL450
+               OpEntryPoint Vertex %1 "MAIN" %gl_ClipDistance
+               OpDecorate %gl_ClipDistance BuiltIn ClipDistance
+       %void = OpTypeVoid
+          %5 = OpTypeFunction %void
+      %float = OpTypeFloat 32
+       %uint = OpTypeInt 32 0
+     %uint_1 = OpConstant %uint 1
 %_arr_float_uint_1 = OpTypeArray %float %uint_1
 %_ptr_Output__arr_float_uint_1 = OpTypePointer Output %_arr_float_uint_1
 %gl_ClipDistance = OpVariable %_ptr_Output__arr_float_uint_1 Output
-%float_1 = OpConstant %float 1
-%int = OpTypeInt 32 1
-%int_0 = OpConstant %int 0
+    %float_1 = OpConstant %float 1
+        %int = OpTypeInt 32 1
+      %int_0 = OpConstant %int 0
 %_ptr_Output_float = OpTypePointer Output %float
-%1 = OpFunction %void None %5
-%11 = OpLabel
-%16 = OpAccessChain %_ptr_Output_float %gl_ClipDistance %int_0
-OpStore %16 %float_1
-OpReturn
-OpFunctionEnd
+          %1 = OpFunction %void None %5
+         %11 = OpLabel
+         %16 = OpAccessChain %_ptr_Output_float %gl_ClipDistance %int_0
+               OpStore %16 %float_1
+               OpReturn
+               OpFunctionEnd

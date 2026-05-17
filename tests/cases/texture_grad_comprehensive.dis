@@ -1,129 +1,134 @@
-OpCapability Shader
-OpCapability ImageCubeArray
-OpCapability Sampled1D
-OpCapability Image1D
-OpCapability SampledCubeArray
-%2 = OpExtInstImport "GLSL.std.450"
-OpMemoryModel Logical GLSL450
-OpEntryPoint GLCompute %1 "MAIN"
-OpExecutionMode %1 LocalSize 1 1 1
-OpDecorate %3 DescriptorSet 0
-OpDecorate %3 Binding 0
-OpDecorate %4 DescriptorSet 0
-OpDecorate %4 Binding 1
-OpDecorate %5 DescriptorSet 0
-OpDecorate %5 Binding 2
-OpDecorate %6 DescriptorSet 0
-OpDecorate %6 Binding 3
-OpDecorate %7 DescriptorSet 0
-OpDecorate %7 Binding 4
-OpDecorate %8 DescriptorSet 0
-OpDecorate %8 Binding 5
-OpDecorate %9 DescriptorSet 0
-OpDecorate %9 Binding 6
-%float = OpTypeFloat 32
-%11 = OpTypeImage %float 1D 0 0 0 1 Unknown
-%12 = OpTypeSampledImage %11
+; SPIR-V
+; Version: 1.0
+; Generator: Khronos; 0
+; Bound: 99
+; Schema: 0
+               OpCapability Shader
+               OpCapability ImageCubeArray
+               OpCapability Sampled1D
+               OpCapability Image1D
+               OpCapability SampledCubeArray
+          %2 = OpExtInstImport "GLSL.std.450"
+               OpMemoryModel Logical GLSL450
+               OpEntryPoint GLCompute %1 "MAIN"
+               OpExecutionMode %1 LocalSize 1 1 1
+               OpDecorate %3 DescriptorSet 0
+               OpDecorate %3 Binding 0
+               OpDecorate %4 DescriptorSet 0
+               OpDecorate %4 Binding 1
+               OpDecorate %5 DescriptorSet 0
+               OpDecorate %5 Binding 2
+               OpDecorate %6 DescriptorSet 0
+               OpDecorate %6 Binding 3
+               OpDecorate %7 DescriptorSet 0
+               OpDecorate %7 Binding 4
+               OpDecorate %8 DescriptorSet 0
+               OpDecorate %8 Binding 5
+               OpDecorate %9 DescriptorSet 0
+               OpDecorate %9 Binding 6
+      %float = OpTypeFloat 32
+         %11 = OpTypeImage %float 1D 0 0 0 1 Unknown
+         %12 = OpTypeSampledImage %11
 %_ptr_UniformConstant_12 = OpTypePointer UniformConstant %12
-%3 = OpVariable %_ptr_UniformConstant_12 UniformConstant
-%14 = OpTypeImage %float 2D 0 0 0 1 Unknown
-%15 = OpTypeSampledImage %14
+          %3 = OpVariable %_ptr_UniformConstant_12 UniformConstant
+         %14 = OpTypeImage %float 2D 0 0 0 1 Unknown
+         %15 = OpTypeSampledImage %14
 %_ptr_UniformConstant_15 = OpTypePointer UniformConstant %15
-%4 = OpVariable %_ptr_UniformConstant_15 UniformConstant
-%17 = OpTypeImage %float 3D 0 0 0 1 Unknown
-%18 = OpTypeSampledImage %17
+          %4 = OpVariable %_ptr_UniformConstant_15 UniformConstant
+         %17 = OpTypeImage %float 3D 0 0 0 1 Unknown
+         %18 = OpTypeSampledImage %17
 %_ptr_UniformConstant_18 = OpTypePointer UniformConstant %18
-%5 = OpVariable %_ptr_UniformConstant_18 UniformConstant
-%20 = OpTypeImage %float Cube 0 0 0 1 Unknown
-%21 = OpTypeSampledImage %20
+          %5 = OpVariable %_ptr_UniformConstant_18 UniformConstant
+         %20 = OpTypeImage %float Cube 0 0 0 1 Unknown
+         %21 = OpTypeSampledImage %20
 %_ptr_UniformConstant_21 = OpTypePointer UniformConstant %21
-%6 = OpVariable %_ptr_UniformConstant_21 UniformConstant
-%23 = OpTypeImage %float 1D 0 1 0 1 Unknown
-%24 = OpTypeSampledImage %23
+          %6 = OpVariable %_ptr_UniformConstant_21 UniformConstant
+         %23 = OpTypeImage %float 1D 0 1 0 1 Unknown
+         %24 = OpTypeSampledImage %23
 %_ptr_UniformConstant_24 = OpTypePointer UniformConstant %24
-%7 = OpVariable %_ptr_UniformConstant_24 UniformConstant
-%26 = OpTypeImage %float 2D 0 1 0 1 Unknown
-%27 = OpTypeSampledImage %26
+          %7 = OpVariable %_ptr_UniformConstant_24 UniformConstant
+         %26 = OpTypeImage %float 2D 0 1 0 1 Unknown
+         %27 = OpTypeSampledImage %26
 %_ptr_UniformConstant_27 = OpTypePointer UniformConstant %27
-%8 = OpVariable %_ptr_UniformConstant_27 UniformConstant
-%29 = OpTypeImage %float Cube 0 1 0 1 Unknown
-%30 = OpTypeSampledImage %29
+          %8 = OpVariable %_ptr_UniformConstant_27 UniformConstant
+         %29 = OpTypeImage %float Cube 0 1 0 1 Unknown
+         %30 = OpTypeSampledImage %29
 %_ptr_UniformConstant_30 = OpTypePointer UniformConstant %30
-%9 = OpVariable %_ptr_UniformConstant_30 UniformConstant
-%void = OpTypeVoid
-%33 = OpTypeFunction %void
+          %9 = OpVariable %_ptr_UniformConstant_30 UniformConstant
+       %void = OpTypeVoid
+         %33 = OpTypeFunction %void
 %_ptr_Private_float = OpTypePointer Private %float
-%34 = OpVariable %_ptr_Private_float Private
-%36 = OpVariable %_ptr_Private_float Private
-%37 = OpVariable %_ptr_Private_float Private
-%v2float = OpTypeVector %float 2
+         %34 = OpVariable %_ptr_Private_float Private
+         %36 = OpVariable %_ptr_Private_float Private
+         %37 = OpVariable %_ptr_Private_float Private
+    %v2float = OpTypeVector %float 2
 %_ptr_Private_v2float = OpTypePointer Private %v2float
-%39 = OpVariable %_ptr_Private_v2float Private
-%41 = OpVariable %_ptr_Private_v2float Private
-%42 = OpVariable %_ptr_Private_v2float Private
-%v3float = OpTypeVector %float 3
+         %39 = OpVariable %_ptr_Private_v2float Private
+         %41 = OpVariable %_ptr_Private_v2float Private
+         %42 = OpVariable %_ptr_Private_v2float Private
+    %v3float = OpTypeVector %float 3
 %_ptr_Private_v3float = OpTypePointer Private %v3float
-%44 = OpVariable %_ptr_Private_v3float Private
-%46 = OpVariable %_ptr_Private_v3float Private
-%47 = OpVariable %_ptr_Private_v3float Private
-%48 = OpVariable %_ptr_Private_v3float Private
-%49 = OpVariable %_ptr_Private_v3float Private
-%50 = OpVariable %_ptr_Private_v3float Private
-%51 = OpVariable %_ptr_Private_v2float Private
-%52 = OpVariable %_ptr_Private_float Private
-%53 = OpVariable %_ptr_Private_float Private
-%54 = OpVariable %_ptr_Private_v3float Private
-%55 = OpVariable %_ptr_Private_v2float Private
-%56 = OpVariable %_ptr_Private_v2float Private
-%v4float = OpTypeVector %float 4
+         %44 = OpVariable %_ptr_Private_v3float Private
+         %46 = OpVariable %_ptr_Private_v3float Private
+         %47 = OpVariable %_ptr_Private_v3float Private
+         %48 = OpVariable %_ptr_Private_v3float Private
+         %49 = OpVariable %_ptr_Private_v3float Private
+         %50 = OpVariable %_ptr_Private_v3float Private
+         %51 = OpVariable %_ptr_Private_v2float Private
+         %52 = OpVariable %_ptr_Private_float Private
+         %53 = OpVariable %_ptr_Private_float Private
+         %54 = OpVariable %_ptr_Private_v3float Private
+         %55 = OpVariable %_ptr_Private_v2float Private
+         %56 = OpVariable %_ptr_Private_v2float Private
+    %v4float = OpTypeVector %float 4
 %_ptr_Private_v4float = OpTypePointer Private %v4float
-%58 = OpVariable %_ptr_Private_v4float Private
-%60 = OpVariable %_ptr_Private_v3float Private
-%61 = OpVariable %_ptr_Private_v3float Private
-%62 = OpVariable %_ptr_Private_v4float Private
-%1 = OpFunction %void None %33
-%63 = OpLabel
-%64 = OpLoad %float %34
-%65 = OpLoad %12 %3
-%67 = OpLoad %float %36
-%68 = OpLoad %float %37
-%66 = OpImageSampleExplicitLod %v4float %65 %64 Grad %67 %68
-OpStore %62 %66
-%69 = OpLoad %v2float %39
-%70 = OpLoad %15 %4
-%72 = OpLoad %v2float %41
-%73 = OpLoad %v2float %42
-%71 = OpImageSampleExplicitLod %v4float %70 %69 Grad %72 %73
-OpStore %62 %71
-%74 = OpLoad %v3float %44
-%75 = OpLoad %18 %5
-%77 = OpLoad %v3float %46
-%78 = OpLoad %v3float %47
-%76 = OpImageSampleExplicitLod %v4float %75 %74 Grad %77 %78
-OpStore %62 %76
-%79 = OpLoad %v3float %48
-%80 = OpLoad %21 %6
-%82 = OpLoad %v3float %49
-%83 = OpLoad %v3float %50
-%81 = OpImageSampleExplicitLod %v4float %80 %79 Grad %82 %83
-OpStore %62 %81
-%84 = OpLoad %v2float %51
-%85 = OpLoad %24 %7
-%87 = OpLoad %float %52
-%88 = OpLoad %float %53
-%86 = OpImageSampleExplicitLod %v4float %85 %84 Grad %87 %88
-OpStore %62 %86
-%89 = OpLoad %v3float %54
-%90 = OpLoad %27 %8
-%92 = OpLoad %v2float %55
-%93 = OpLoad %v2float %56
-%91 = OpImageSampleExplicitLod %v4float %90 %89 Grad %92 %93
-OpStore %62 %91
-%94 = OpLoad %v4float %58
-%95 = OpLoad %30 %9
-%97 = OpLoad %v3float %60
-%98 = OpLoad %v3float %61
-%96 = OpImageSampleExplicitLod %v4float %95 %94 Grad %97 %98
-OpStore %62 %96
-OpReturn
-OpFunctionEnd
+         %58 = OpVariable %_ptr_Private_v4float Private
+         %60 = OpVariable %_ptr_Private_v3float Private
+         %61 = OpVariable %_ptr_Private_v3float Private
+         %62 = OpVariable %_ptr_Private_v4float Private
+          %1 = OpFunction %void None %33
+         %63 = OpLabel
+         %64 = OpLoad %float %34
+         %65 = OpLoad %12 %3
+         %67 = OpLoad %float %36
+         %68 = OpLoad %float %37
+         %66 = OpImageSampleExplicitLod %v4float %65 %64 Grad %67 %68
+               OpStore %62 %66
+         %69 = OpLoad %v2float %39
+         %70 = OpLoad %15 %4
+         %72 = OpLoad %v2float %41
+         %73 = OpLoad %v2float %42
+         %71 = OpImageSampleExplicitLod %v4float %70 %69 Grad %72 %73
+               OpStore %62 %71
+         %74 = OpLoad %v3float %44
+         %75 = OpLoad %18 %5
+         %77 = OpLoad %v3float %46
+         %78 = OpLoad %v3float %47
+         %76 = OpImageSampleExplicitLod %v4float %75 %74 Grad %77 %78
+               OpStore %62 %76
+         %79 = OpLoad %v3float %48
+         %80 = OpLoad %21 %6
+         %82 = OpLoad %v3float %49
+         %83 = OpLoad %v3float %50
+         %81 = OpImageSampleExplicitLod %v4float %80 %79 Grad %82 %83
+               OpStore %62 %81
+         %84 = OpLoad %v2float %51
+         %85 = OpLoad %24 %7
+         %87 = OpLoad %float %52
+         %88 = OpLoad %float %53
+         %86 = OpImageSampleExplicitLod %v4float %85 %84 Grad %87 %88
+               OpStore %62 %86
+         %89 = OpLoad %v3float %54
+         %90 = OpLoad %27 %8
+         %92 = OpLoad %v2float %55
+         %93 = OpLoad %v2float %56
+         %91 = OpImageSampleExplicitLod %v4float %90 %89 Grad %92 %93
+               OpStore %62 %91
+         %94 = OpLoad %v4float %58
+         %95 = OpLoad %30 %9
+         %97 = OpLoad %v3float %60
+         %98 = OpLoad %v3float %61
+         %96 = OpImageSampleExplicitLod %v4float %95 %94 Grad %97 %98
+               OpStore %62 %96
+               OpReturn
+               OpFunctionEnd

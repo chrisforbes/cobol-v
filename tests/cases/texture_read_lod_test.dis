@@ -1,28 +1,33 @@
-OpCapability Shader
-%2 = OpExtInstImport "GLSL.std.450"
-OpMemoryModel Logical GLSL450
-OpEntryPoint GLCompute %1 "MAIN"
-OpExecutionMode %1 LocalSize 64 1 1
-OpDecorate %3 DescriptorSet 0
-OpDecorate %3 Binding 0
-%float = OpTypeFloat 32
-%5 = OpTypeImage %float 2D 0 0 0 1 Unknown
-%6 = OpTypeSampledImage %5
+; SPIR-V
+; Version: 1.0
+; Generator: Khronos; 0
+; Bound: 20
+; Schema: 0
+               OpCapability Shader
+          %2 = OpExtInstImport "GLSL.std.450"
+               OpMemoryModel Logical GLSL450
+               OpEntryPoint GLCompute %1 "MAIN"
+               OpExecutionMode %1 LocalSize 64 1 1
+               OpDecorate %3 DescriptorSet 0
+               OpDecorate %3 Binding 0
+      %float = OpTypeFloat 32
+          %5 = OpTypeImage %float 2D 0 0 0 1 Unknown
+          %6 = OpTypeSampledImage %5
 %_ptr_UniformConstant_6 = OpTypePointer UniformConstant %6
-%3 = OpVariable %_ptr_UniformConstant_6 UniformConstant
-%void = OpTypeVoid
-%9 = OpTypeFunction %void
-%v4float = OpTypeVector %float 4
+          %3 = OpVariable %_ptr_UniformConstant_6 UniformConstant
+       %void = OpTypeVoid
+          %9 = OpTypeFunction %void
+    %v4float = OpTypeVector %float 4
 %_ptr_Private_v4float = OpTypePointer Private %v4float
-%11 = OpVariable %_ptr_Private_v4float Private
-%v2float = OpTypeVector %float 2
-%float_0_5 = OpConstant %float 0.5
-%float_2 = OpConstant %float 2
-%1 = OpFunction %void None %9
-%13 = OpLabel
-%16 = OpCompositeConstruct %v2float %float_0_5 %float_0_5
-%17 = OpLoad %6 %3
-%19 = OpImageSampleExplicitLod %v4float %17 %16 Lod %float_2
-OpStore %11 %19
-OpReturn
-OpFunctionEnd
+         %11 = OpVariable %_ptr_Private_v4float Private
+    %v2float = OpTypeVector %float 2
+  %float_0_5 = OpConstant %float 0.5
+    %float_2 = OpConstant %float 2
+          %1 = OpFunction %void None %9
+         %13 = OpLabel
+         %16 = OpCompositeConstruct %v2float %float_0_5 %float_0_5
+         %17 = OpLoad %6 %3
+         %19 = OpImageSampleExplicitLod %v4float %17 %16 Lod %float_2
+               OpStore %11 %19
+               OpReturn
+               OpFunctionEnd

@@ -1,24 +1,29 @@
-OpCapability Shader
-%2 = OpExtInstImport "GLSL.std.450"
-OpMemoryModel Logical GLSL450
-OpEntryPoint GLCompute %1 "MAIN"
-OpExecutionMode %1 LocalSize 1 1 1
-%void = OpTypeVoid
-%4 = OpTypeFunction %void
-%float = OpTypeFloat 32
+; SPIR-V
+; Version: 1.0
+; Generator: Khronos; 0
+; Bound: 17
+; Schema: 0
+               OpCapability Shader
+          %2 = OpExtInstImport "GLSL.std.450"
+               OpMemoryModel Logical GLSL450
+               OpEntryPoint GLCompute %1 "MAIN"
+               OpExecutionMode %1 LocalSize 1 1 1
+       %void = OpTypeVoid
+          %4 = OpTypeFunction %void
+      %float = OpTypeFloat 32
 %_ptr_Private_float = OpTypePointer Private %float
-%float_2_5 = OpConstant %float 2.5
-%6 = OpVariable %_ptr_Private_float Private %float_2_5
-%9 = OpVariable %_ptr_Private_float Private
-%10 = OpVariable %_ptr_Private_float Private
-%_struct_13 = OpTypeStruct %float %float
-%1 = OpFunction %void None %4
-%11 = OpLabel
-%12 = OpLoad %float %6
-%14 = OpExtInst %_struct_13 %2 ModfStruct %12
-%15 = OpCompositeExtract %float %14 0
-OpStore %9 %15
-%16 = OpCompositeExtract %float %14 1
-OpStore %10 %16
-OpReturn
-OpFunctionEnd
+  %float_2_5 = OpConstant %float 2.5
+          %6 = OpVariable %_ptr_Private_float Private %float_2_5
+          %9 = OpVariable %_ptr_Private_float Private
+         %10 = OpVariable %_ptr_Private_float Private
+ %_struct_13 = OpTypeStruct %float %float
+          %1 = OpFunction %void None %4
+         %11 = OpLabel
+         %12 = OpLoad %float %6
+         %14 = OpExtInst %_struct_13 %2 ModfStruct %12
+         %15 = OpCompositeExtract %float %14 0
+               OpStore %9 %15
+         %16 = OpCompositeExtract %float %14 1
+               OpStore %10 %16
+               OpReturn
+               OpFunctionEnd

@@ -1,42 +1,47 @@
-OpCapability Shader
-%2 = OpExtInstImport "GLSL.std.450"
-OpMemoryModel Logical GLSL450
-OpEntryPoint GLCompute %1 "MAIN"
-OpExecutionMode %1 LocalSize 1 1 1
-%void = OpTypeVoid
-%4 = OpTypeFunction %void
-%int = OpTypeInt 32 1
+; SPIR-V
+; Version: 1.0
+; Generator: Khronos; 0
+; Bound: 29
+; Schema: 0
+               OpCapability Shader
+          %2 = OpExtInstImport "GLSL.std.450"
+               OpMemoryModel Logical GLSL450
+               OpEntryPoint GLCompute %1 "MAIN"
+               OpExecutionMode %1 LocalSize 1 1 1
+       %void = OpTypeVoid
+          %4 = OpTypeFunction %void
+        %int = OpTypeInt 32 1
 %_ptr_Private_int = OpTypePointer Private %int
-%int_0 = OpConstant %int 0
-%6 = OpVariable %_ptr_Private_int Private %int_0
-%float = OpTypeFloat 32
+      %int_0 = OpConstant %int 0
+          %6 = OpVariable %_ptr_Private_int Private %int_0
+      %float = OpTypeFloat 32
 %_ptr_Private_float = OpTypePointer Private %float
-%float_0 = OpConstant %float 0
-%10 = OpVariable %_ptr_Private_float Private %float_0
-%bool = OpTypeBool
-%int_10 = OpConstant %int 10
-%int_1 = OpConstant %int 1
-%float_1 = OpConstant %float 1
-%1 = OpFunction %void None %4
-%13 = OpLabel
-OpBranch %14
-%14 = OpLabel
-OpLoopMerge %18 %17 None
-OpBranch %15
-%15 = OpLabel
-%20 = OpLoad %int %6
-%22 = OpIEqual %bool %20 %int_10
-OpBranchConditional %22 %18 %16
-%16 = OpLabel
-%23 = OpLoad %int %6
-%25 = OpIAdd %int %23 %int_1
-OpStore %6 %25
-%26 = OpLoad %float %10
-%28 = OpFAdd %float %26 %float_1
-OpStore %10 %28
-OpBranch %17
-%17 = OpLabel
-OpBranch %14
-%18 = OpLabel
-OpReturn
-OpFunctionEnd
+    %float_0 = OpConstant %float 0
+         %10 = OpVariable %_ptr_Private_float Private %float_0
+       %bool = OpTypeBool
+     %int_10 = OpConstant %int 10
+      %int_1 = OpConstant %int 1
+    %float_1 = OpConstant %float 1
+          %1 = OpFunction %void None %4
+         %13 = OpLabel
+               OpBranch %14
+         %14 = OpLabel
+               OpLoopMerge %18 %17 None
+               OpBranch %15
+         %15 = OpLabel
+         %20 = OpLoad %int %6
+         %22 = OpIEqual %bool %20 %int_10
+               OpBranchConditional %22 %18 %16
+         %16 = OpLabel
+         %23 = OpLoad %int %6
+         %25 = OpIAdd %int %23 %int_1
+               OpStore %6 %25
+         %26 = OpLoad %float %10
+         %28 = OpFAdd %float %26 %float_1
+               OpStore %10 %28
+               OpBranch %17
+         %17 = OpLabel
+               OpBranch %14
+         %18 = OpLabel
+               OpReturn
+               OpFunctionEnd

@@ -1,33 +1,38 @@
-OpCapability Shader
-%2 = OpExtInstImport "GLSL.std.450"
-OpMemoryModel Logical GLSL450
-OpEntryPoint GLCompute %1 "MAIN"
-OpExecutionMode %1 LocalSize 1 1 1
-OpDecorate %3 DescriptorSet 0
-OpDecorate %3 Binding 0
-%int = OpTypeInt 32 1
-%5 = OpTypeImage %int 2D 0 0 0 2 R32i
+; SPIR-V
+; Version: 1.0
+; Generator: Khronos; 0
+; Bound: 24
+; Schema: 0
+               OpCapability Shader
+          %2 = OpExtInstImport "GLSL.std.450"
+               OpMemoryModel Logical GLSL450
+               OpEntryPoint GLCompute %1 "MAIN"
+               OpExecutionMode %1 LocalSize 1 1 1
+               OpDecorate %3 DescriptorSet 0
+               OpDecorate %3 Binding 0
+        %int = OpTypeInt 32 1
+          %5 = OpTypeImage %int 2D 0 0 0 2 R32i
 %_ptr_UniformConstant_5 = OpTypePointer UniformConstant %5
-%3 = OpVariable %_ptr_UniformConstant_5 UniformConstant
-%void = OpTypeVoid
-%8 = OpTypeFunction %void
-%v2int = OpTypeVector %int 2
+          %3 = OpVariable %_ptr_UniformConstant_5 UniformConstant
+       %void = OpTypeVoid
+          %8 = OpTypeFunction %void
+      %v2int = OpTypeVector %int 2
 %_ptr_Private_v2int = OpTypePointer Private %v2int
-%10 = OpVariable %_ptr_Private_v2int Private
+         %10 = OpVariable %_ptr_Private_v2int Private
 %_ptr_Private_int = OpTypePointer Private %int
-%12 = OpVariable %_ptr_Private_int Private
-%int_0 = OpConstant %int 0
-%float = OpTypeFloat 32
+         %12 = OpVariable %_ptr_Private_int Private
+      %int_0 = OpConstant %int 0
+      %float = OpTypeFloat 32
 %_ptr_Image_int = OpTypePointer Image %int
-%int_5 = OpConstant %int 5
-%int_1 = OpConstant %int 1
-%1 = OpFunction %void None %8
-%14 = OpLabel
-%16 = OpCompositeConstruct %v2int %int_0 %int_0
-OpStore %10 %16
-%18 = OpLoad %v2int %10
-%20 = OpImageTexelPointer %_ptr_Image_int %3 %18 %int_0
-%23 = OpAtomicISub %int %20 %int_1 %int_0 %int_5
-OpStore %12 %23
-OpReturn
-OpFunctionEnd
+      %int_5 = OpConstant %int 5
+      %int_1 = OpConstant %int 1
+          %1 = OpFunction %void None %8
+         %14 = OpLabel
+         %16 = OpCompositeConstruct %v2int %int_0 %int_0
+               OpStore %10 %16
+         %18 = OpLoad %v2int %10
+         %20 = OpImageTexelPointer %_ptr_Image_int %3 %18 %int_0
+         %23 = OpAtomicISub %int %20 %int_1 %int_0 %int_5
+               OpStore %12 %23
+               OpReturn
+               OpFunctionEnd

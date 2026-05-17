@@ -48,6 +48,12 @@ std::string trim(const std::string& s) {
     return s.substr(start, end - start + 1);
 }
 
+std::string rtrim(const std::string& s) {
+    auto end = s.find_last_not_of(" \t\n\r");
+    if (end == std::string::npos) return "";
+    return s.substr(0, end + 1);
+}
+
 class E2ETest : public ::testing::TestWithParam<fs::path> {};
 
 TEST_P(E2ETest, RunTestCase) {
@@ -102,9 +108,7 @@ TEST_P(E2ETest, RunTestCase) {
         std::stringstream ss(disResult.output);
         std::string line;
         while (std::getline(ss, line)) {
-            line = trim(line);
-            if (line.empty() || line[0] == ';') continue; // Skip comments/empty
-            actualLines.push_back(line);
+            actualLines.push_back(rtrim(line));
         }
         
         bool writeExpected = (std::getenv("COBOLV_REWRITE_GOLDENS") != nullptr);
@@ -115,13 +119,11 @@ TEST_P(E2ETest, RunTestCase) {
             std::stringstream expectedSs(expectedDis);
             std::vector<std::string> expectedLines;
             while (std::getline(expectedSs, line)) {
-                line = trim(line);
-                if (line.empty() || line[0] == ';') continue;
-                expectedLines.push_back(line);
+                expectedLines.push_back(rtrim(line));
             }
             ASSERT_EQ(actualLines.size(), expectedLines.size()) << "Disassembly line count mismatch";
             for (size_t i = 0; i < actualLines.size(); ++i) {
-                EXPECT_EQ(actualLines[i], expectedLines[i]) << "Mismatch at valid instruction line " << i;
+                EXPECT_EQ(actualLines[i], expectedLines[i]) << "Mismatch at line " << i;
             }
         }
 

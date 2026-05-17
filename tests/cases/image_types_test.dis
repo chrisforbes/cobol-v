@@ -1,32 +1,37 @@
-OpCapability Shader
-%2 = OpExtInstImport "GLSL.std.450"
-OpMemoryModel Logical GLSL450
-OpEntryPoint GLCompute %1 "MAIN"
-OpExecutionMode %1 LocalSize 1 1 1
-OpDecorate %3 DescriptorSet 0
-OpDecorate %3 Binding 0
-OpDecorate %4 DescriptorSet 0
-OpDecorate %4 Binding 1
-OpDecorate %5 DescriptorSet 0
-OpDecorate %5 Binding 2
-%float = OpTypeFloat 32
-%7 = OpTypeImage %float 2D 0 0 0 1 Unknown
-%8 = OpTypeSampledImage %7
+; SPIR-V
+; Version: 1.0
+; Generator: Khronos; 0
+; Bound: 21
+; Schema: 0
+               OpCapability Shader
+          %2 = OpExtInstImport "GLSL.std.450"
+               OpMemoryModel Logical GLSL450
+               OpEntryPoint GLCompute %1 "MAIN"
+               OpExecutionMode %1 LocalSize 1 1 1
+               OpDecorate %3 DescriptorSet 0
+               OpDecorate %3 Binding 0
+               OpDecorate %4 DescriptorSet 0
+               OpDecorate %4 Binding 1
+               OpDecorate %5 DescriptorSet 0
+               OpDecorate %5 Binding 2
+      %float = OpTypeFloat 32
+          %7 = OpTypeImage %float 2D 0 0 0 1 Unknown
+          %8 = OpTypeSampledImage %7
 %_ptr_UniformConstant_8 = OpTypePointer UniformConstant %8
-%3 = OpVariable %_ptr_UniformConstant_8 UniformConstant
-%int = OpTypeInt 32 1
-%11 = OpTypeImage %int 2D 0 0 0 1 Unknown
-%12 = OpTypeSampledImage %11
+          %3 = OpVariable %_ptr_UniformConstant_8 UniformConstant
+        %int = OpTypeInt 32 1
+         %11 = OpTypeImage %int 2D 0 0 0 1 Unknown
+         %12 = OpTypeSampledImage %11
 %_ptr_UniformConstant_12 = OpTypePointer UniformConstant %12
-%4 = OpVariable %_ptr_UniformConstant_12 UniformConstant
-%uint = OpTypeInt 32 0
-%15 = OpTypeImage %uint 2D 0 0 0 1 Unknown
-%16 = OpTypeSampledImage %15
+          %4 = OpVariable %_ptr_UniformConstant_12 UniformConstant
+       %uint = OpTypeInt 32 0
+         %15 = OpTypeImage %uint 2D 0 0 0 1 Unknown
+         %16 = OpTypeSampledImage %15
 %_ptr_UniformConstant_16 = OpTypePointer UniformConstant %16
-%5 = OpVariable %_ptr_UniformConstant_16 UniformConstant
-%void = OpTypeVoid
-%19 = OpTypeFunction %void
-%1 = OpFunction %void None %19
-%20 = OpLabel
-OpReturn
-OpFunctionEnd
+          %5 = OpVariable %_ptr_UniformConstant_16 UniformConstant
+       %void = OpTypeVoid
+         %19 = OpTypeFunction %void
+          %1 = OpFunction %void None %19
+         %20 = OpLabel
+               OpReturn
+               OpFunctionEnd

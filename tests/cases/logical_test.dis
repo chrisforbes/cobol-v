@@ -1,39 +1,44 @@
-OpCapability Shader
-%2 = OpExtInstImport "GLSL.std.450"
-OpMemoryModel Logical GLSL450
-OpEntryPoint GLCompute %1 "MAIN"
-OpExecutionMode %1 LocalSize 1 1 1
-%void = OpTypeVoid
-%4 = OpTypeFunction %void
-%float = OpTypeFloat 32
+; SPIR-V
+; Version: 1.0
+; Generator: Khronos; 0
+; Bound: 32
+; Schema: 0
+               OpCapability Shader
+          %2 = OpExtInstImport "GLSL.std.450"
+               OpMemoryModel Logical GLSL450
+               OpEntryPoint GLCompute %1 "MAIN"
+               OpExecutionMode %1 LocalSize 1 1 1
+       %void = OpTypeVoid
+          %4 = OpTypeFunction %void
+      %float = OpTypeFloat 32
 %_ptr_Private_float = OpTypePointer Private %float
-%float_1 = OpConstant %float 1
-%6 = OpVariable %_ptr_Private_float Private %float_1
-%float_2 = OpConstant %float 2
-%9 = OpVariable %_ptr_Private_float Private %float_2
-%float_3 = OpConstant %float 3
-%11 = OpVariable %_ptr_Private_float Private %float_3
-%bool = OpTypeBool
+    %float_1 = OpConstant %float 1
+          %6 = OpVariable %_ptr_Private_float Private %float_1
+    %float_2 = OpConstant %float 2
+          %9 = OpVariable %_ptr_Private_float Private %float_2
+    %float_3 = OpConstant %float 3
+         %11 = OpVariable %_ptr_Private_float Private %float_3
+       %bool = OpTypeBool
 %_ptr_Private_bool = OpTypePointer Private %bool
-%14 = OpVariable %_ptr_Private_bool Private
-%int = OpTypeInt 32 1
-%1 = OpFunction %void None %4
-%16 = OpLabel
-%17 = OpLoad %float %6
-%18 = OpLoad %float %9
-%20 = OpFOrdLessThan %bool %17 %18
-%21 = OpLoad %float %9
-%22 = OpLoad %float %11
-%23 = OpFOrdLessThan %bool %21 %22
-%24 = OpLogicalAnd %bool %20 %23
-OpStore %14 %24
-%25 = OpLoad %float %6
-%26 = OpLoad %float %9
-%27 = OpFOrdGreaterThan %bool %25 %26
-%28 = OpLoad %float %9
-%29 = OpLoad %float %11
-%30 = OpFOrdLessThan %bool %28 %29
-%31 = OpLogicalOr %bool %27 %30
-OpStore %14 %31
-OpReturn
-OpFunctionEnd
+         %14 = OpVariable %_ptr_Private_bool Private
+        %int = OpTypeInt 32 1
+          %1 = OpFunction %void None %4
+         %16 = OpLabel
+         %17 = OpLoad %float %6
+         %18 = OpLoad %float %9
+         %20 = OpFOrdLessThan %bool %17 %18
+         %21 = OpLoad %float %9
+         %22 = OpLoad %float %11
+         %23 = OpFOrdLessThan %bool %21 %22
+         %24 = OpLogicalAnd %bool %20 %23
+               OpStore %14 %24
+         %25 = OpLoad %float %6
+         %26 = OpLoad %float %9
+         %27 = OpFOrdGreaterThan %bool %25 %26
+         %28 = OpLoad %float %9
+         %29 = OpLoad %float %11
+         %30 = OpFOrdLessThan %bool %28 %29
+         %31 = OpLogicalOr %bool %27 %30
+               OpStore %14 %31
+               OpReturn
+               OpFunctionEnd

@@ -1,21 +1,26 @@
-OpCapability Shader
-%2 = OpExtInstImport "GLSL.std.450"
-OpMemoryModel Logical GLSL450
-OpEntryPoint GLCompute %1 "MAIN" %gl_GlobalInvocationID
-OpExecutionMode %1 LocalSize 64 1 1
-OpDecorate %gl_GlobalInvocationID BuiltIn GlobalInvocationId
-%void = OpTypeVoid
-%5 = OpTypeFunction %void
-%int = OpTypeInt 32 1
-%v3int = OpTypeVector %int 3
+; SPIR-V
+; Version: 1.0
+; Generator: Khronos; 0
+; Bound: 14
+; Schema: 0
+               OpCapability Shader
+          %2 = OpExtInstImport "GLSL.std.450"
+               OpMemoryModel Logical GLSL450
+               OpEntryPoint GLCompute %1 "MAIN" %gl_GlobalInvocationID
+               OpExecutionMode %1 LocalSize 64 1 1
+               OpDecorate %gl_GlobalInvocationID BuiltIn GlobalInvocationId
+       %void = OpTypeVoid
+          %5 = OpTypeFunction %void
+        %int = OpTypeInt 32 1
+      %v3int = OpTypeVector %int 3
 %_ptr_Input_v3int = OpTypePointer Input %v3int
 %gl_GlobalInvocationID = OpVariable %_ptr_Input_v3int Input
 %_ptr_Private_int = OpTypePointer Private %int
-%9 = OpVariable %_ptr_Private_int Private
-%1 = OpFunction %void None %5
-%11 = OpLabel
-%12 = OpLoad %v3int %gl_GlobalInvocationID
-%13 = OpCompositeExtract %int %12 0
-OpStore %9 %13
-OpReturn
-OpFunctionEnd
+          %9 = OpVariable %_ptr_Private_int Private
+          %1 = OpFunction %void None %5
+         %11 = OpLabel
+         %12 = OpLoad %v3int %gl_GlobalInvocationID
+         %13 = OpCompositeExtract %int %12 0
+               OpStore %9 %13
+               OpReturn
+               OpFunctionEnd

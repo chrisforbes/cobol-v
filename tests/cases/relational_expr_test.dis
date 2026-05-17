@@ -1,40 +1,45 @@
-OpCapability Shader
-%2 = OpExtInstImport "GLSL.std.450"
-OpMemoryModel Logical GLSL450
-OpEntryPoint GLCompute %1 "MAIN"
-OpExecutionMode %1 LocalSize 1 1 1
-%void = OpTypeVoid
-%4 = OpTypeFunction %void
-%float = OpTypeFloat 32
+; SPIR-V
+; Version: 1.0
+; Generator: Khronos; 0
+; Bound: 31
+; Schema: 0
+               OpCapability Shader
+          %2 = OpExtInstImport "GLSL.std.450"
+               OpMemoryModel Logical GLSL450
+               OpEntryPoint GLCompute %1 "MAIN"
+               OpExecutionMode %1 LocalSize 1 1 1
+       %void = OpTypeVoid
+          %4 = OpTypeFunction %void
+      %float = OpTypeFloat 32
 %_ptr_Private_float = OpTypePointer Private %float
-%float_1 = OpConstant %float 1
-%6 = OpVariable %_ptr_Private_float Private %float_1
-%float_2 = OpConstant %float 2
-%9 = OpVariable %_ptr_Private_float Private %float_2
-%bool = OpTypeBool
+    %float_1 = OpConstant %float 1
+          %6 = OpVariable %_ptr_Private_float Private %float_1
+    %float_2 = OpConstant %float 2
+          %9 = OpVariable %_ptr_Private_float Private %float_2
+       %bool = OpTypeBool
 %_ptr_Private_bool = OpTypePointer Private %bool
-%12 = OpVariable %_ptr_Private_bool Private
-%14 = OpVariable %_ptr_Private_bool Private
-%15 = OpVariable %_ptr_Private_bool Private
-%16 = OpVariable %_ptr_Private_bool Private
-%int = OpTypeInt 32 1
-%1 = OpFunction %void None %4
-%17 = OpLabel
-%18 = OpLoad %float %6
-%19 = OpLoad %float %9
-%21 = OpFOrdEqual %bool %18 %19
-OpStore %12 %21
-%22 = OpLoad %float %6
-%23 = OpLoad %float %9
-%24 = OpFOrdGreaterThan %bool %22 %23
-OpStore %14 %24
-%25 = OpLoad %float %6
-%26 = OpLoad %float %9
-%27 = OpFOrdLessThan %bool %25 %26
-OpStore %15 %27
-%28 = OpLoad %float %6
-%29 = OpLoad %float %9
-%30 = OpFOrdGreaterThan %bool %28 %29
-OpStore %16 %30
-OpReturn
-OpFunctionEnd
+         %12 = OpVariable %_ptr_Private_bool Private
+         %14 = OpVariable %_ptr_Private_bool Private
+         %15 = OpVariable %_ptr_Private_bool Private
+         %16 = OpVariable %_ptr_Private_bool Private
+        %int = OpTypeInt 32 1
+          %1 = OpFunction %void None %4
+         %17 = OpLabel
+         %18 = OpLoad %float %6
+         %19 = OpLoad %float %9
+         %21 = OpFOrdEqual %bool %18 %19
+               OpStore %12 %21
+         %22 = OpLoad %float %6
+         %23 = OpLoad %float %9
+         %24 = OpFOrdGreaterThan %bool %22 %23
+               OpStore %14 %24
+         %25 = OpLoad %float %6
+         %26 = OpLoad %float %9
+         %27 = OpFOrdLessThan %bool %25 %26
+               OpStore %15 %27
+         %28 = OpLoad %float %6
+         %29 = OpLoad %float %9
+         %30 = OpFOrdGreaterThan %bool %28 %29
+               OpStore %16 %30
+               OpReturn
+               OpFunctionEnd

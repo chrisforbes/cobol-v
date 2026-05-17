@@ -1,33 +1,38 @@
-OpCapability Shader
-%2 = OpExtInstImport "GLSL.std.450"
-OpMemoryModel Logical GLSL450
-OpEntryPoint GLCompute %1 "MAIN"
-OpExecutionMode %1 LocalSize 1 1 1
-OpDecorate %3 DescriptorSet 0
-OpDecorate %3 Binding 0
-OpDecorate %4 DescriptorSet 0
-OpDecorate %4 Binding 1
-OpDecorate %5 DescriptorSet 0
-OpDecorate %5 Binding 2
-OpDecorate %6 DescriptorSet 0
-OpDecorate %6 Binding 3
-OpDecorate %6 NonWritable
-%float = OpTypeFloat 32
-%8 = OpTypeImage %float 2D 0 0 0 1 Unknown
-%9 = OpTypeSampledImage %8
+; SPIR-V
+; Version: 1.0
+; Generator: Khronos; 0
+; Bound: 19
+; Schema: 0
+               OpCapability Shader
+          %2 = OpExtInstImport "GLSL.std.450"
+               OpMemoryModel Logical GLSL450
+               OpEntryPoint GLCompute %1 "MAIN"
+               OpExecutionMode %1 LocalSize 1 1 1
+               OpDecorate %3 DescriptorSet 0
+               OpDecorate %3 Binding 0
+               OpDecorate %4 DescriptorSet 0
+               OpDecorate %4 Binding 1
+               OpDecorate %5 DescriptorSet 0
+               OpDecorate %5 Binding 2
+               OpDecorate %6 DescriptorSet 0
+               OpDecorate %6 Binding 3
+               OpDecorate %6 NonWritable
+      %float = OpTypeFloat 32
+          %8 = OpTypeImage %float 2D 0 0 0 1 Unknown
+          %9 = OpTypeSampledImage %8
 %_ptr_UniformConstant_9 = OpTypePointer UniformConstant %9
-%3 = OpVariable %_ptr_UniformConstant_9 UniformConstant
+          %3 = OpVariable %_ptr_UniformConstant_9 UniformConstant
 %_ptr_UniformConstant_8 = OpTypePointer UniformConstant %8
-%4 = OpVariable %_ptr_UniformConstant_8 UniformConstant
-%12 = OpTypeSampler
+          %4 = OpVariable %_ptr_UniformConstant_8 UniformConstant
+         %12 = OpTypeSampler
 %_ptr_UniformConstant_12 = OpTypePointer UniformConstant %12
-%5 = OpVariable %_ptr_UniformConstant_12 UniformConstant
-%14 = OpTypeImage %float 2D 0 0 0 2 R32f
+          %5 = OpVariable %_ptr_UniformConstant_12 UniformConstant
+         %14 = OpTypeImage %float 2D 0 0 0 2 R32f
 %_ptr_UniformConstant_14 = OpTypePointer UniformConstant %14
-%6 = OpVariable %_ptr_UniformConstant_14 UniformConstant
-%void = OpTypeVoid
-%17 = OpTypeFunction %void
-%1 = OpFunction %void None %17
-%18 = OpLabel
-OpReturn
-OpFunctionEnd
+          %6 = OpVariable %_ptr_UniformConstant_14 UniformConstant
+       %void = OpTypeVoid
+         %17 = OpTypeFunction %void
+          %1 = OpFunction %void None %17
+         %18 = OpLabel
+               OpReturn
+               OpFunctionEnd

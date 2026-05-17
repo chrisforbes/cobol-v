@@ -1,25 +1,30 @@
-OpCapability Shader
-OpCapability Matrix
-%2 = OpExtInstImport "GLSL.std.450"
-OpMemoryModel Logical GLSL450
-OpEntryPoint GLCompute %1 "MAIN"
-OpExecutionMode %1 LocalSize 1 1 1
-%void = OpTypeVoid
-%4 = OpTypeFunction %void
-%int = OpTypeInt 32 1
+; SPIR-V
+; Version: 1.0
+; Generator: Khronos; 0
+; Bound: 19
+; Schema: 0
+               OpCapability Shader
+               OpCapability Matrix
+          %2 = OpExtInstImport "GLSL.std.450"
+               OpMemoryModel Logical GLSL450
+               OpEntryPoint GLCompute %1 "MAIN"
+               OpExecutionMode %1 LocalSize 1 1 1
+       %void = OpTypeVoid
+          %4 = OpTypeFunction %void
+        %int = OpTypeInt 32 1
 %_ptr_Private_int = OpTypePointer Private %int
-%6 = OpVariable %_ptr_Private_int Private
-%float = OpTypeFloat 32
+          %6 = OpVariable %_ptr_Private_int Private
+      %float = OpTypeFloat 32
 %_ptr_Private_float = OpTypePointer Private %float
-%9 = OpVariable %_ptr_Private_float Private
-%v3int = OpTypeVector %int 3
+          %9 = OpVariable %_ptr_Private_float Private
+      %v3int = OpTypeVector %int 3
 %_ptr_Private_v3int = OpTypePointer Private %v3int
-%12 = OpVariable %_ptr_Private_v3int Private
-%v2float = OpTypeVector %float 2
+         %12 = OpVariable %_ptr_Private_v3int Private
+    %v2float = OpTypeVector %float 2
 %mat2v2float = OpTypeMatrix %v2float 2
 %_ptr_Private_mat2v2float = OpTypePointer Private %mat2v2float
-%16 = OpVariable %_ptr_Private_mat2v2float Private
-%1 = OpFunction %void None %4
-%18 = OpLabel
-OpReturn
-OpFunctionEnd
+         %16 = OpVariable %_ptr_Private_mat2v2float Private
+          %1 = OpFunction %void None %4
+         %18 = OpLabel
+               OpReturn
+               OpFunctionEnd

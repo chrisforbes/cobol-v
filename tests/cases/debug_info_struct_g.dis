@@ -1,24 +1,29 @@
-OpCapability Shader
-OpExtension "SPV_KHR_non_semantic_info"
-%4 = OpExtInstImport "NonSemantic.Shader.DebugInfo.100"
-%5 = OpExtInstImport "GLSL.std.450"
-OpMemoryModel Logical GLSL450
-OpEntryPoint GLCompute %MAIN "MAIN"
-OpExecutionMode %MAIN LocalSize 1 1 1
-%2 = OpString "tests/cases/debug_info_struct_g.cob"
-%3 = OpString "IDENTIFICATION DIVISION.
+; SPIR-V
+; Version: 1.0
+; Generator: Khronos; 0
+; Bound: 72
+; Schema: 0
+               OpCapability Shader
+               OpExtension "SPV_KHR_non_semantic_info"
+          %4 = OpExtInstImport "NonSemantic.Shader.DebugInfo.100"
+          %5 = OpExtInstImport "GLSL.std.450"
+               OpMemoryModel Logical GLSL450
+               OpEntryPoint GLCompute %MAIN "MAIN"
+               OpExecutionMode %MAIN LocalSize 1 1 1
+          %2 = OpString "tests/cases/debug_info_struct_g.cob"
+          %3 = OpString "IDENTIFICATION DIVISION.
 PROGRAM-ID. DEBUG-STRUCT-TEST.
 ENVIRONMENT DIVISION.
 CONFIGURATION SECTION.
 OBJECT-COMPUTER. VULKAN-COMPUTE-SHADER.
 SPECIAL-NAMES.
-LOCAL-SIZE IS (1, 1, 1).
+    LOCAL-SIZE IS (1, 1, 1).
 INPUT-OUTPUT SECTION.
 FILE-CONTROL.
-SELECT BLOCK-DATA ASSIGN TO \"GPU-BUFFER-0-0\"
-ORGANIZATION IS ACCESS-STORAGE.
-SELECT SETTINGS ASSIGN TO \"GPU-BUFFER-0-1\"
-ORGANIZATION IS ACCESS-UNIFORM.
+    SELECT BLOCK-DATA ASSIGN TO \"GPU-BUFFER-0-0\"
+        ORGANIZATION IS ACCESS-STORAGE.
+    SELECT SETTINGS ASSIGN TO \"GPU-BUFFER-0-1\"
+        ORGANIZATION IS ACCESS-UNIFORM.
 DATA DIVISION.
 FILE SECTION.
 FD BLOCK-DATA LAYOUT IS STD430.
@@ -26,107 +31,107 @@ FD BLOCK-DATA LAYOUT IS STD430.
 01 FIELD-B PIC I.
 FD SETTINGS LAYOUT IS STD140.
 01 UNIFORM-DATA.
-05 SCALAR-F PIC FLOAT.
-05 SCALAR-I PIC I.
+    05 SCALAR-F PIC FLOAT.
+    05 SCALAR-I PIC I.
 PROCEDURE DIVISION.
-MAIN-LOGIC.
-MOVE 1.5 TO FIELD-A.
-MOVE 42 TO FIELD-B.
-MOVE SCALAR-F OF UNIFORM-DATA TO FIELD-A.
-MOVE SCALAR-I OF UNIFORM-DATA TO FIELD-B.
-GOBACK.
+    MAIN-LOGIC.
+        MOVE 1.5 TO FIELD-A.
+        MOVE 42 TO FIELD-B.
+        MOVE SCALAR-F OF UNIFORM-DATA TO FIELD-A.
+        MOVE SCALAR-I OF UNIFORM-DATA TO FIELD-B.
+        GOBACK.
 "
-%24 = OpString "MAIN"
-%28 = OpString "cobolv"
-%29 = OpString "-g"
-%30 = OpString "structure"
-%32 = OpString "BLOCK-DATA"
-%35 = OpString "structure"
-%37 = OpString "SETTINGS"
-%39 = OpString "BLOCK-DATA"
-%41 = OpString "SETTINGS"
-OpName %MAIN "MAIN"
-OpName %BLOCK_DATA "BLOCK-DATA"
-OpName %SETTINGS "SETTINGS"
-OpName %_SETTINGSBlock "_SETTINGSBlock"
-OpMemberName %_SETTINGSBlock 0 "SCALAR-F"
-OpMemberName %_SETTINGSBlock 1 "SCALAR-I"
-OpName %SETTINGS "SETTINGS"
-OpName %_BLOCK_DATABlock "_BLOCK-DATABlock"
-OpMemberName %_BLOCK_DATABlock 0 "FIELD-A"
-OpMemberName %_BLOCK_DATABlock 1 "FIELD-B"
-OpName %BLOCK_DATA "BLOCK-DATA"
-OpDecorate %BLOCK_DATA DescriptorSet 0
-OpDecorate %BLOCK_DATA Binding 0
-OpDecorate %SETTINGS DescriptorSet 0
-OpDecorate %SETTINGS Binding 1
-OpDecorate %_SETTINGSBlock Block
-OpMemberDecorate %_SETTINGSBlock 0 Offset 0
-OpMemberDecorate %_SETTINGSBlock 1 Offset 4
-OpDecorate %_BLOCK_DATABlock BufferBlock
-OpMemberDecorate %_BLOCK_DATABlock 0 Offset 0
-OpMemberDecorate %_BLOCK_DATABlock 1 Offset 4
-%void = OpTypeVoid
-%9 = OpTypeFunction %void
-%float = OpTypeFloat 32
-%int = OpTypeInt 32 1
+         %24 = OpString "MAIN"
+         %28 = OpString "cobolv"
+         %29 = OpString "-g"
+         %30 = OpString "structure"
+         %32 = OpString "BLOCK-DATA"
+         %35 = OpString "structure"
+         %37 = OpString "SETTINGS"
+         %39 = OpString "BLOCK-DATA"
+         %41 = OpString "SETTINGS"
+               OpName %MAIN "MAIN"
+               OpName %BLOCK_DATA "BLOCK-DATA"
+               OpName %SETTINGS "SETTINGS"
+               OpName %_SETTINGSBlock "_SETTINGSBlock"
+               OpMemberName %_SETTINGSBlock 0 "SCALAR-F"
+               OpMemberName %_SETTINGSBlock 1 "SCALAR-I"
+               OpName %SETTINGS "SETTINGS"
+               OpName %_BLOCK_DATABlock "_BLOCK-DATABlock"
+               OpMemberName %_BLOCK_DATABlock 0 "FIELD-A"
+               OpMemberName %_BLOCK_DATABlock 1 "FIELD-B"
+               OpName %BLOCK_DATA "BLOCK-DATA"
+               OpDecorate %BLOCK_DATA DescriptorSet 0
+               OpDecorate %BLOCK_DATA Binding 0
+               OpDecorate %SETTINGS DescriptorSet 0
+               OpDecorate %SETTINGS Binding 1
+               OpDecorate %_SETTINGSBlock Block
+               OpMemberDecorate %_SETTINGSBlock 0 Offset 0
+               OpMemberDecorate %_SETTINGSBlock 1 Offset 4
+               OpDecorate %_BLOCK_DATABlock BufferBlock
+               OpMemberDecorate %_BLOCK_DATABlock 0 Offset 0
+               OpMemberDecorate %_BLOCK_DATABlock 1 Offset 4
+       %void = OpTypeVoid
+          %9 = OpTypeFunction %void
+      %float = OpTypeFloat 32
+        %int = OpTypeInt 32 1
 %_SETTINGSBlock = OpTypeStruct %float %int
 %_ptr_Uniform__SETTINGSBlock = OpTypePointer Uniform %_SETTINGSBlock
-%SETTINGS = OpVariable %_ptr_Uniform__SETTINGSBlock Uniform
+   %SETTINGS = OpVariable %_ptr_Uniform__SETTINGSBlock Uniform
 %_BLOCK_DATABlock = OpTypeStruct %float %int
 %_ptr_Uniform__BLOCK_DATABlock = OpTypePointer Uniform %_BLOCK_DATABlock
-%BLOCK_DATA = OpVariable %_ptr_Uniform__BLOCK_DATABlock Uniform
-%uint = OpTypeInt 32 0
-%17 = OpExtInst %void %4 DebugInfoNone
-%18 = OpExtInst %void %4 DebugSource %2 %3
-%uint_1 = OpConstant %uint 1
-%uint_4 = OpConstant %uint 4
-%uint_0 = OpConstant %uint 0
-%22 = OpExtInst %void %4 DebugCompilationUnit %uint_1 %uint_4 %18 %uint_0
-%23 = OpExtInst %void %4 DebugTypeFunction %uint_0 %void
-%uint_23 = OpConstant %uint 23
-%uint_3 = OpConstant %uint 3
-%27 = OpExtInst %void %4 DebugFunction %24 %23 %18 %uint_23 %uint_1 %22 %24 %uint_3 %uint_23
-%31 = OpExtInst %void %4 DebugTypeComposite %30 %uint_1 %18 %uint_1 %uint_1 %22 %30 %uint_0 %uint_0
-%uint_8 = OpConstant %uint 8
-%34 = OpExtInst %void %4 DebugGlobalVariable %32 %31 %18 %uint_1 %uint_1 %22 %32 %BLOCK_DATA %uint_8
-%36 = OpExtInst %void %4 DebugTypeComposite %35 %uint_1 %18 %uint_1 %uint_1 %22 %35 %uint_0 %uint_0
-%38 = OpExtInst %void %4 DebugGlobalVariable %37 %36 %18 %uint_1 %uint_1 %22 %37 %SETTINGS %uint_8
-%40 = OpExtInst %void %4 DebugGlobalVariable %39 %31 %18 %uint_1 %uint_1 %22 %39 %BLOCK_DATA %uint_8
-%42 = OpExtInst %void %4 DebugGlobalVariable %41 %36 %18 %uint_1 %uint_1 %22 %41 %SETTINGS %uint_8
-%uint_25 = OpConstant %uint 25
-%float_1_5 = OpConstant %float 1.5
-%int_0 = OpConstant %int 0
+ %BLOCK_DATA = OpVariable %_ptr_Uniform__BLOCK_DATABlock Uniform
+       %uint = OpTypeInt 32 0
+         %17 = OpExtInst %void %4 DebugInfoNone
+         %18 = OpExtInst %void %4 DebugSource %2 %3
+     %uint_1 = OpConstant %uint 1
+     %uint_4 = OpConstant %uint 4
+     %uint_0 = OpConstant %uint 0
+         %22 = OpExtInst %void %4 DebugCompilationUnit %uint_1 %uint_4 %18 %uint_0
+         %23 = OpExtInst %void %4 DebugTypeFunction %uint_0 %void
+    %uint_23 = OpConstant %uint 23
+     %uint_3 = OpConstant %uint 3
+         %27 = OpExtInst %void %4 DebugFunction %24 %23 %18 %uint_23 %uint_1 %22 %24 %uint_3 %uint_23
+         %31 = OpExtInst %void %4 DebugTypeComposite %30 %uint_1 %18 %uint_1 %uint_1 %22 %30 %uint_0 %uint_0
+     %uint_8 = OpConstant %uint 8
+         %34 = OpExtInst %void %4 DebugGlobalVariable %32 %31 %18 %uint_1 %uint_1 %22 %32 %BLOCK_DATA %uint_8
+         %36 = OpExtInst %void %4 DebugTypeComposite %35 %uint_1 %18 %uint_1 %uint_1 %22 %35 %uint_0 %uint_0
+         %38 = OpExtInst %void %4 DebugGlobalVariable %37 %36 %18 %uint_1 %uint_1 %22 %37 %SETTINGS %uint_8
+         %40 = OpExtInst %void %4 DebugGlobalVariable %39 %31 %18 %uint_1 %uint_1 %22 %39 %BLOCK_DATA %uint_8
+         %42 = OpExtInst %void %4 DebugGlobalVariable %41 %36 %18 %uint_1 %uint_1 %22 %41 %SETTINGS %uint_8
+    %uint_25 = OpConstant %uint 25
+  %float_1_5 = OpConstant %float 1.5
+      %int_0 = OpConstant %int 0
 %_ptr_Uniform_float = OpTypePointer Uniform %float
-%uint_26 = OpConstant %uint 26
-%int_42 = OpConstant %int 42
-%int_1 = OpConstant %int 1
+    %uint_26 = OpConstant %uint 26
+     %int_42 = OpConstant %int 42
+      %int_1 = OpConstant %int 1
 %_ptr_Uniform_int = OpTypePointer Uniform %int
-%uint_27 = OpConstant %uint 27
-%uint_28 = OpConstant %uint 28
-%uint_29 = OpConstant %uint 29
-%MAIN = OpFunction %void None %9
-%43 = OpLabel
-%44 = OpExtInst %void %4 DebugScope %27
-%45 = OpExtInst %void %4 DebugLine %18 %uint_23 %uint_23 %uint_0 %uint_0
-%46 = OpExtInst %void %4 DebugFunctionDefinition %27 %MAIN
-%48 = OpExtInst %void %4 DebugLine %18 %uint_25 %uint_25 %uint_0 %uint_0
-%52 = OpAccessChain %_ptr_Uniform_float %BLOCK_DATA %int_0
-OpStore %52 %float_1_5
-%54 = OpExtInst %void %4 DebugLine %18 %uint_26 %uint_26 %uint_0 %uint_0
-%58 = OpAccessChain %_ptr_Uniform_int %BLOCK_DATA %int_1
-OpStore %58 %int_42
-%60 = OpExtInst %void %4 DebugLine %18 %uint_27 %uint_27 %uint_0 %uint_0
-%61 = OpAccessChain %_ptr_Uniform_float %SETTINGS %int_0
-%62 = OpLoad %float %61
-%63 = OpAccessChain %_ptr_Uniform_float %BLOCK_DATA %int_0
-OpStore %63 %62
-%65 = OpExtInst %void %4 DebugLine %18 %uint_28 %uint_28 %uint_0 %uint_0
-%66 = OpAccessChain %_ptr_Uniform_int %SETTINGS %int_1
-%67 = OpLoad %int %66
-%68 = OpAccessChain %_ptr_Uniform_int %BLOCK_DATA %int_1
-OpStore %68 %67
-%70 = OpExtInst %void %4 DebugLine %18 %uint_29 %uint_29 %uint_0 %uint_0
-%71 = OpExtInst %void %4 DebugNoScope
-OpReturn
-OpFunctionEnd
+    %uint_27 = OpConstant %uint 27
+    %uint_28 = OpConstant %uint 28
+    %uint_29 = OpConstant %uint 29
+       %MAIN = OpFunction %void None %9
+         %43 = OpLabel
+         %44 = OpExtInst %void %4 DebugScope %27
+         %45 = OpExtInst %void %4 DebugLine %18 %uint_23 %uint_23 %uint_0 %uint_0
+         %46 = OpExtInst %void %4 DebugFunctionDefinition %27 %MAIN
+         %48 = OpExtInst %void %4 DebugLine %18 %uint_25 %uint_25 %uint_0 %uint_0
+         %52 = OpAccessChain %_ptr_Uniform_float %BLOCK_DATA %int_0
+               OpStore %52 %float_1_5
+         %54 = OpExtInst %void %4 DebugLine %18 %uint_26 %uint_26 %uint_0 %uint_0
+         %58 = OpAccessChain %_ptr_Uniform_int %BLOCK_DATA %int_1
+               OpStore %58 %int_42
+         %60 = OpExtInst %void %4 DebugLine %18 %uint_27 %uint_27 %uint_0 %uint_0
+         %61 = OpAccessChain %_ptr_Uniform_float %SETTINGS %int_0
+         %62 = OpLoad %float %61
+         %63 = OpAccessChain %_ptr_Uniform_float %BLOCK_DATA %int_0
+               OpStore %63 %62
+         %65 = OpExtInst %void %4 DebugLine %18 %uint_28 %uint_28 %uint_0 %uint_0
+         %66 = OpAccessChain %_ptr_Uniform_int %SETTINGS %int_1
+         %67 = OpLoad %int %66
+         %68 = OpAccessChain %_ptr_Uniform_int %BLOCK_DATA %int_1
+               OpStore %68 %67
+         %70 = OpExtInst %void %4 DebugLine %18 %uint_29 %uint_29 %uint_0 %uint_0
+         %71 = OpExtInst %void %4 DebugNoScope
+               OpReturn
+               OpFunctionEnd

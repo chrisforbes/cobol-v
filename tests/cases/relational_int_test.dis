@@ -1,30 +1,35 @@
-OpCapability Shader
-%2 = OpExtInstImport "GLSL.std.450"
-OpMemoryModel Logical GLSL450
-OpEntryPoint GLCompute %1 "MAIN"
-OpExecutionMode %1 LocalSize 1 1 1
-%void = OpTypeVoid
-%4 = OpTypeFunction %void
-%int = OpTypeInt 32 1
+; SPIR-V
+; Version: 1.0
+; Generator: Khronos; 0
+; Bound: 23
+; Schema: 0
+               OpCapability Shader
+          %2 = OpExtInstImport "GLSL.std.450"
+               OpMemoryModel Logical GLSL450
+               OpEntryPoint GLCompute %1 "MAIN"
+               OpExecutionMode %1 LocalSize 1 1 1
+       %void = OpTypeVoid
+          %4 = OpTypeFunction %void
+        %int = OpTypeInt 32 1
 %_ptr_Private_int = OpTypePointer Private %int
-%int_10 = OpConstant %int 10
-%6 = OpVariable %_ptr_Private_int Private %int_10
-%int_20 = OpConstant %int 20
-%9 = OpVariable %_ptr_Private_int Private %int_20
-%bool = OpTypeBool
+     %int_10 = OpConstant %int 10
+          %6 = OpVariable %_ptr_Private_int Private %int_10
+     %int_20 = OpConstant %int 20
+          %9 = OpVariable %_ptr_Private_int Private %int_20
+       %bool = OpTypeBool
 %_ptr_Private_bool = OpTypePointer Private %bool
-%12 = OpVariable %_ptr_Private_bool Private
-%14 = OpVariable %_ptr_Private_bool Private
-%float = OpTypeFloat 32
-%1 = OpFunction %void None %4
-%15 = OpLabel
-%16 = OpLoad %int %6
-%17 = OpLoad %int %9
-%19 = OpIEqual %bool %16 %17
-OpStore %12 %19
-%20 = OpLoad %int %6
-%21 = OpLoad %int %9
-%22 = OpSGreaterThan %bool %20 %21
-OpStore %14 %22
-OpReturn
-OpFunctionEnd
+         %12 = OpVariable %_ptr_Private_bool Private
+         %14 = OpVariable %_ptr_Private_bool Private
+      %float = OpTypeFloat 32
+          %1 = OpFunction %void None %4
+         %15 = OpLabel
+         %16 = OpLoad %int %6
+         %17 = OpLoad %int %9
+         %19 = OpIEqual %bool %16 %17
+               OpStore %12 %19
+         %20 = OpLoad %int %6
+         %21 = OpLoad %int %9
+         %22 = OpSGreaterThan %bool %20 %21
+               OpStore %14 %22
+               OpReturn
+               OpFunctionEnd

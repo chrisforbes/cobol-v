@@ -1,30 +1,35 @@
-OpCapability Shader
-%2 = OpExtInstImport "GLSL.std.450"
-OpMemoryModel Logical GLSL450
-OpEntryPoint GLCompute %1 "MAIN"
-OpExecutionMode %1 LocalSize 1 1 1
-%void = OpTypeVoid
-%4 = OpTypeFunction %void
-%float = OpTypeFloat 32
+; SPIR-V
+; Version: 1.0
+; Generator: Khronos; 0
+; Bound: 24
+; Schema: 0
+               OpCapability Shader
+          %2 = OpExtInstImport "GLSL.std.450"
+               OpMemoryModel Logical GLSL450
+               OpEntryPoint GLCompute %1 "MAIN"
+               OpExecutionMode %1 LocalSize 1 1 1
+       %void = OpTypeVoid
+          %4 = OpTypeFunction %void
+      %float = OpTypeFloat 32
 %_ptr_Private_float = OpTypePointer Private %float
-%float_1 = OpConstant %float 1
-%6 = OpVariable %_ptr_Private_float Private %float_1
-%v3float = OpTypeVector %float 3
+    %float_1 = OpConstant %float 1
+          %6 = OpVariable %_ptr_Private_float Private %float_1
+    %v3float = OpTypeVector %float 3
 %_ptr_Private_v3float = OpTypePointer Private %v3float
-%float_2 = OpConstant %float 2
-%float_3 = OpConstant %float 3
-%14 = OpConstantComposite %v3float %float_1 %float_2 %float_3
-%10 = OpVariable %_ptr_Private_v3float Private %14
-%15 = OpVariable %_ptr_Private_v3float Private
-%int = OpTypeInt 32 1
-%float_0_5 = OpConstant %float 0.5
-%1 = OpFunction %void None %4
-%16 = OpLabel
-%17 = OpLoad %v3float %10
-%19 = OpCompositeConstruct %v3float %float_2 %float_2 %float_2
-%20 = OpFMul %v3float %17 %19
-%22 = OpCompositeConstruct %v3float %float_0_5 %float_0_5 %float_0_5
-%23 = OpFAdd %v3float %20 %22
-OpStore %15 %23
-OpReturn
-OpFunctionEnd
+    %float_2 = OpConstant %float 2
+    %float_3 = OpConstant %float 3
+         %14 = OpConstantComposite %v3float %float_1 %float_2 %float_3
+         %10 = OpVariable %_ptr_Private_v3float Private %14
+         %15 = OpVariable %_ptr_Private_v3float Private
+        %int = OpTypeInt 32 1
+  %float_0_5 = OpConstant %float 0.5
+          %1 = OpFunction %void None %4
+         %16 = OpLabel
+         %17 = OpLoad %v3float %10
+         %19 = OpCompositeConstruct %v3float %float_2 %float_2 %float_2
+         %20 = OpFMul %v3float %17 %19
+         %22 = OpCompositeConstruct %v3float %float_0_5 %float_0_5 %float_0_5
+         %23 = OpFAdd %v3float %20 %22
+               OpStore %15 %23
+               OpReturn
+               OpFunctionEnd

@@ -1,33 +1,38 @@
-OpCapability Shader
-%2 = OpExtInstImport "GLSL.std.450"
-OpMemoryModel Logical GLSL450
-OpEntryPoint GLCompute %1 "MAIN"
-OpExecutionMode %1 LocalSize 1 1 1
-OpDecorate %3 DescriptorSet 0
-OpDecorate %3 Binding 0
-OpDecorate %_arr_float_uint_4 ArrayStride 16
-OpDecorate %_struct_13 BufferBlock
-OpMemberDecorate %_struct_13 0 Offset 0
-%void = OpTypeVoid
-%5 = OpTypeFunction %void
-%float = OpTypeFloat 32
+; SPIR-V
+; Version: 1.0
+; Generator: Khronos; 0
+; Bound: 22
+; Schema: 0
+               OpCapability Shader
+          %2 = OpExtInstImport "GLSL.std.450"
+               OpMemoryModel Logical GLSL450
+               OpEntryPoint GLCompute %1 "MAIN"
+               OpExecutionMode %1 LocalSize 1 1 1
+               OpDecorate %3 DescriptorSet 0
+               OpDecorate %3 Binding 0
+               OpDecorate %_arr_float_uint_4 ArrayStride 16
+               OpDecorate %_struct_13 BufferBlock
+               OpMemberDecorate %_struct_13 0 Offset 0
+       %void = OpTypeVoid
+          %5 = OpTypeFunction %void
+      %float = OpTypeFloat 32
 %_ptr_Private_float = OpTypePointer Private %float
 %float_1_23000002 = OpConstant %float 1.23000002
-%7 = OpVariable %_ptr_Private_float Private %float_1_23000002
-%uint = OpTypeInt 32 0
-%uint_4 = OpConstant %uint 4
+          %7 = OpVariable %_ptr_Private_float Private %float_1_23000002
+       %uint = OpTypeInt 32 0
+     %uint_4 = OpConstant %uint 4
 %_arr_float_uint_4 = OpTypeArray %float %uint_4
-%_struct_13 = OpTypeStruct %_arr_float_uint_4
+ %_struct_13 = OpTypeStruct %_arr_float_uint_4
 %_ptr_Uniform__struct_13 = OpTypePointer Uniform %_struct_13
-%3 = OpVariable %_ptr_Uniform__struct_13 Uniform
-%int = OpTypeInt 32 1
-%int_0 = OpConstant %int 0
-%int_3 = OpConstant %int 3
+          %3 = OpVariable %_ptr_Uniform__struct_13 Uniform
+        %int = OpTypeInt 32 1
+      %int_0 = OpConstant %int 0
+      %int_3 = OpConstant %int 3
 %_ptr_Uniform_float = OpTypePointer Uniform %float
-%1 = OpFunction %void None %5
-%15 = OpLabel
-%16 = OpLoad %float %7
-%21 = OpAccessChain %_ptr_Uniform_float %3 %int_0 %int_3
-OpStore %21 %16
-OpReturn
-OpFunctionEnd
+          %1 = OpFunction %void None %5
+         %15 = OpLabel
+         %16 = OpLoad %float %7
+         %21 = OpAccessChain %_ptr_Uniform_float %3 %int_0 %int_3
+               OpStore %21 %16
+               OpReturn
+               OpFunctionEnd

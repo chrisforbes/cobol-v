@@ -1,11 +1,16 @@
-OpCapability Shader
-%2 = OpExtInstImport "GLSL.std.450"
-OpMemoryModel Logical GLSL450
-OpEntryPoint GLCompute %1 "MAIN"
-OpExecutionMode %1 LocalSize 1 1 1
-%void = OpTypeVoid
-%4 = OpTypeFunction %void
-%1 = OpFunction %void None %4
-%5 = OpLabel
-OpReturn
-OpFunctionEnd
+; SPIR-V
+; Version: 1.0
+; Generator: Khronos; 0
+; Bound: 6
+; Schema: 0
+               OpCapability Shader
+          %2 = OpExtInstImport "GLSL.std.450"
+               OpMemoryModel Logical GLSL450
+               OpEntryPoint GLCompute %1 "MAIN"
+               OpExecutionMode %1 LocalSize 1 1 1
+       %void = OpTypeVoid
+          %4 = OpTypeFunction %void
+          %1 = OpFunction %void None %4
+          %5 = OpLabel
+               OpReturn
+               OpFunctionEnd
