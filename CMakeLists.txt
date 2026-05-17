@@ -92,3 +92,42 @@ gtest_discover_tests(test_e2e)
 
 add_executable(spirv_debug_dump src/spirv_debug_dump.cpp)
 
+# Demo Application Target: vkcube_cobol
+if (WIN32)
+    find_package(Vulkan REQUIRED)
+
+    if (Vulkan_FOUND)
+        # Custom commands to compile COBOL-V shaders to SPIR-V SPV binaries
+        # We use the generated cobolv compiler executable target to drive dependency tracking.
+        add_custom_command(
+            OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/cube_vs.spv"
+            COMMAND cobolv -g "${CMAKE_CURRENT_SOURCE_DIR}/demo/cube_vs.cob" "${CMAKE_CURRENT_BINARY_DIR}/cube_vs.spv"
+            DEPENDS cobolv "${CMAKE_CURRENT_SOURCE_DIR}/demo/cube_vs.cob"
+            COMMENT "Compiling COBOL-V Vertex Shader to SPIR-V"
+        )
+
+        add_custom_command(
+            OUTPUT "${CMAKE_CURRENT_BINARY_DIR}/cube_fs.spv"
+            COMMAND cobolv -g "${CMAKE_CURRENT_SOURCE_DIR}/demo/cube_fs.cob" "${CMAKE_CURRENT_BINARY_DIR}/cube_fs.spv"
+            DEPENDS cobolv "${CMAKE_CURRENT_SOURCE_DIR}/demo/cube_fs.cob"
+            COMMENT "Compiling COBOL-V Fragment Shader to SPIR-V"
+        )
+
+        # Executable Target using the custom generated .spv files
+        add_executable(vkcube_cobol 
+            demo/main.cpp 
+            "${CMAKE_CURRENT_BINARY_DIR}/cube_vs.spv"
+            "${CMAKE_CURRENT_BINARY_DIR}/cube_fs.spv"
+        )
+        
+        target_link_libraries(vkcube_cobol PRIVATE Vulkan::Vulkan)
+        
+        # Copy the compiled .spv files next to the output executable for portable runtime resolution
+        add_custom_command(
+            TARGET vkcube_cobol POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_BINARY_DIR}/cube_vs.spv" "$<TARGET_FILE_DIR:vkcube_cobol>/cube_vs.spv"
+            COMMAND ${CMAKE_COMMAND} -E copy "${CMAKE_CURRENT_BINARY_DIR}/cube_fs.spv" "$<TARGET_FILE_DIR:vkcube_cobol>/cube_fs.spv"
+            COMMENT "Copying compiled SPIR-V shaders next to vkcube_cobol executable"
+        )
+    endif()
+endif()
