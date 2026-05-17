@@ -107,7 +107,7 @@ TEST_P(E2ETest, RunTestCase) {
             actualLines.push_back(line);
         }
         
-        bool writeExpected = true;
+        bool writeExpected = (std::getenv("COBOLV_REWRITE_GOLDENS") != nullptr);
         if (writeExpected) {
             std::ofstream out(disFile);
             for (const auto& l : actualLines) out << l << "\n";
