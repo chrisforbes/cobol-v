@@ -1,7 +1,7 @@
 ; SPIR-V
 ; Version: 1.3
 ; Generator: Khronos; 0
-; Bound: 45
+; Bound: 43
 ; Schema: 0
                OpCapability Shader
           %2 = OpExtInstImport "GLSL.std.450"
@@ -25,8 +25,6 @@
     %v4float = OpTypeVector %float 4
 %_ptr_Output_v4float = OpTypePointer Output %v4float
           %3 = OpVariable %_ptr_Output_v4float Output
- %_struct_19 = OpTypeStruct %float %int
- %_struct_20 = OpTypeStruct %float %float
       %int_0 = OpConstant %int 0
     %float_1 = OpConstant %float 1
       %int_1 = OpConstant %int 1
@@ -35,33 +33,33 @@
     %float_3 = OpConstant %float 3
     %float_0 = OpConstant %float 0
           %1 = OpFunction %void None %5
-         %21 = OpLabel
+         %19 = OpLabel
                OpStore %13 %int_0
-         %24 = OpLoad %int %13
-         %25 = OpAccessChain %_ptr_Private_float %7 %24
-               OpStore %25 %float_1
+         %22 = OpLoad %int %13
+         %23 = OpAccessChain %_ptr_Private_float %7 %22
+               OpStore %23 %float_1
                OpStore %13 %int_1
-         %28 = OpLoad %int %13
-         %29 = OpAccessChain %_ptr_Private_float %7 %28
-               OpStore %29 %float_2
-         %30 = OpAccessChain %_ptr_Private_float %7 %int_0
+         %26 = OpLoad %int %13
+         %27 = OpAccessChain %_ptr_Private_float %7 %26
+               OpStore %27 %float_2
+         %28 = OpAccessChain %_ptr_Private_float %7 %int_0
+         %29 = OpLoad %float %28
+         %30 = OpAccessChain %_ptr_Private_float %7 %int_1
          %31 = OpLoad %float %30
-         %32 = OpAccessChain %_ptr_Private_float %7 %int_1
-         %33 = OpLoad %float %32
-         %34 = OpFAdd %float %31 %33
-               OpStore %15 %34
-         %36 = OpLoad %float %15
-         %38 = OpFOrdEqual %bool %36 %float_3
-               OpSelectionMerge %41 None
-               OpBranchConditional %38 %39 %40
+         %32 = OpFAdd %float %29 %31
+               OpStore %15 %32
+         %34 = OpLoad %float %15
+         %36 = OpFOrdEqual %bool %34 %float_3
+               OpSelectionMerge %39 None
+               OpBranchConditional %36 %37 %38
+         %37 = OpLabel
+         %41 = OpCompositeConstruct %v4float %float_0 %float_1 %float_0 %float_1
+               OpStore %3 %41
+               OpBranch %39
+         %38 = OpLabel
+         %42 = OpCompositeConstruct %v4float %float_1 %float_0 %float_0 %float_1
+               OpStore %3 %42
+               OpBranch %39
          %39 = OpLabel
-         %43 = OpCompositeConstruct %v4float %float_0 %float_1 %float_0 %float_1
-               OpStore %3 %43
-               OpBranch %41
-         %40 = OpLabel
-         %44 = OpCompositeConstruct %v4float %float_1 %float_0 %float_0 %float_1
-               OpStore %3 %44
-               OpBranch %41
-         %41 = OpLabel
                OpReturn
                OpFunctionEnd

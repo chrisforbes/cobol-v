@@ -1,7 +1,7 @@
 ; SPIR-V
 ; Version: 1.3
 ; Generator: Khronos; 0
-; Bound: 26
+; Bound: 24
 ; Schema: 0
                OpCapability Shader
           %2 = OpExtInstImport "GLSL.std.450"
@@ -24,20 +24,18 @@
  %_struct_11 = OpTypeStruct %float %v3float %int
 %_ptr_Uniform__struct_11 = OpTypePointer Uniform %_struct_11
           %3 = OpVariable %_ptr_Uniform__struct_11 Uniform
- %_struct_13 = OpTypeStruct %float %int
- %_struct_14 = OpTypeStruct %float %float
       %int_0 = OpConstant %int 0
 %_ptr_Uniform_float = OpTypePointer Uniform %float
       %int_1 = OpConstant %int 1
 %_ptr_Uniform_v3float = OpTypePointer Uniform %v3float
           %1 = OpFunction %void None %5
-         %15 = OpLabel
-         %18 = OpAccessChain %_ptr_Uniform_float %3 %int_0
-         %19 = OpLoad %float %18
-         %22 = OpAccessChain %_ptr_Uniform_v3float %3 %int_1
-         %23 = OpLoad %v3float %22
-         %24 = OpCompositeExtract %float %23 0
-         %25 = OpFAdd %float %19 %24
-               OpStore %7 %25
+         %13 = OpLabel
+         %16 = OpAccessChain %_ptr_Uniform_float %3 %int_0
+         %17 = OpLoad %float %16
+         %20 = OpAccessChain %_ptr_Uniform_v3float %3 %int_1
+         %21 = OpLoad %v3float %20
+         %22 = OpCompositeExtract %float %21 0
+         %23 = OpFAdd %float %17 %22
+               OpStore %7 %23
                OpReturn
                OpFunctionEnd

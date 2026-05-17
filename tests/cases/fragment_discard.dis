@@ -1,7 +1,7 @@
 ; SPIR-V
 ; Version: 1.3
 ; Generator: Khronos; 0
-; Bound: 23
+; Bound: 21
 ; Schema: 0
                OpCapability Shader
           %2 = OpExtInstImport "GLSL.std.450"
@@ -18,22 +18,20 @@
           %3 = OpVariable %_ptr_Input_v4float Input
 %_ptr_Output_v4float = OpTypePointer Output %v4float
           %4 = OpVariable %_ptr_Output_v4float Output
-        %int = OpTypeInt 32 1
- %_struct_12 = OpTypeStruct %float %int
- %_struct_13 = OpTypeStruct %float %float
        %bool = OpTypeBool
   %float_0_5 = OpConstant %float 0.5
+        %int = OpTypeInt 32 1
           %1 = OpFunction %void None %6
-         %14 = OpLabel
-         %16 = OpLoad %v4float %3
-         %17 = OpCompositeExtract %float %16 0
-         %19 = OpFOrdGreaterThan %bool %17 %float_0_5
-               OpSelectionMerge %21 None
-               OpBranchConditional %19 %20 %21
-         %20 = OpLabel
+         %11 = OpLabel
+         %13 = OpLoad %v4float %3
+         %14 = OpCompositeExtract %float %13 0
+         %17 = OpFOrdGreaterThan %bool %14 %float_0_5
+               OpSelectionMerge %19 None
+               OpBranchConditional %17 %18 %19
+         %18 = OpLabel
                OpKill
-         %21 = OpLabel
-         %22 = OpLoad %v4float %3
-               OpStore %4 %22
+         %19 = OpLabel
+         %20 = OpLoad %v4float %3
+               OpStore %4 %20
                OpReturn
                OpFunctionEnd

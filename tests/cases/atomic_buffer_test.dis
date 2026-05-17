@@ -1,7 +1,7 @@
 ; SPIR-V
 ; Version: 1.3
 ; Generator: Khronos; 0
-; Bound: 47
+; Bound: 44
 ; Schema: 0
                OpCapability Shader
           %2 = OpExtInstImport "GLSL.std.450"
@@ -24,9 +24,6 @@
  %_struct_12 = OpTypeStruct %int %uint
 %_ptr_Uniform__struct_12 = OpTypePointer Uniform %_struct_12
           %3 = OpVariable %_ptr_Uniform__struct_12 Uniform
-      %float = OpTypeFloat 32
- %_struct_15 = OpTypeStruct %float %int
- %_struct_16 = OpTypeStruct %float %float
       %int_0 = OpConstant %int 0
 %_ptr_Uniform_int = OpTypePointer Uniform %int
      %int_10 = OpConstant %int 10
@@ -39,26 +36,26 @@
    %uint_100 = OpConstant %uint 100
     %uint_42 = OpConstant %uint 42
           %1 = OpFunction %void None %5
-         %17 = OpLabel
-         %20 = OpAccessChain %_ptr_Uniform_int %3 %int_0
-         %23 = OpAtomicIAdd %int %20 %int_1 %int_0 %int_10
-               OpStore %7 %23
-         %25 = OpAccessChain %_ptr_Uniform_uint %3 %int_1
-         %27 = OpAtomicISub %uint %25 %int_1 %int_0 %uint_5
-               OpStore %10 %27
-         %28 = OpAccessChain %_ptr_Uniform_int %3 %int_0
-         %30 = OpAtomicAnd %int %28 %int_1 %int_0 %int_255
-         %31 = OpAccessChain %_ptr_Uniform_uint %3 %int_1
-         %33 = OpAtomicOr %uint %31 %int_1 %int_0 %uint_1
-         %34 = OpAccessChain %_ptr_Uniform_int %3 %int_0
-         %36 = OpAtomicXor %int %34 %int_1 %int_0 %int_2
-         %37 = OpAccessChain %_ptr_Uniform_uint %3 %int_1
-         %39 = OpAtomicUMin %uint %37 %int_1 %int_0 %uint_100
-         %40 = OpAccessChain %_ptr_Uniform_int %3 %int_0
-         %41 = OpAtomicSMax %int %40 %int_1 %int_0 %int_0
+         %14 = OpLabel
+         %17 = OpAccessChain %_ptr_Uniform_int %3 %int_0
+         %20 = OpAtomicIAdd %int %17 %int_1 %int_0 %int_10
+               OpStore %7 %20
+         %22 = OpAccessChain %_ptr_Uniform_uint %3 %int_1
+         %24 = OpAtomicISub %uint %22 %int_1 %int_0 %uint_5
+               OpStore %10 %24
+         %25 = OpAccessChain %_ptr_Uniform_int %3 %int_0
+         %27 = OpAtomicAnd %int %25 %int_1 %int_0 %int_255
+         %28 = OpAccessChain %_ptr_Uniform_uint %3 %int_1
+         %30 = OpAtomicOr %uint %28 %int_1 %int_0 %uint_1
+         %31 = OpAccessChain %_ptr_Uniform_int %3 %int_0
+         %33 = OpAtomicXor %int %31 %int_1 %int_0 %int_2
+         %34 = OpAccessChain %_ptr_Uniform_uint %3 %int_1
+         %36 = OpAtomicUMin %uint %34 %int_1 %int_0 %uint_100
+         %37 = OpAccessChain %_ptr_Uniform_int %3 %int_0
+         %38 = OpAtomicSMax %int %37 %int_1 %int_0 %int_0
+         %39 = OpAccessChain %_ptr_Uniform_uint %3 %int_1
+         %41 = OpAtomicExchange %uint %39 %int_1 %int_0 %uint_42
          %42 = OpAccessChain %_ptr_Uniform_uint %3 %int_1
-         %44 = OpAtomicExchange %uint %42 %int_1 %int_0 %uint_42
-         %45 = OpAccessChain %_ptr_Uniform_uint %3 %int_1
-         %46 = OpAtomicCompareExchange %uint %45 %int_1 %int_0 %int_0 %uint_100 %uint_42
+         %43 = OpAtomicCompareExchange %uint %42 %int_1 %int_0 %int_0 %uint_100 %uint_42
                OpReturn
                OpFunctionEnd

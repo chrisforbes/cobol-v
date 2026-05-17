@@ -1,7 +1,7 @@
 ; SPIR-V
 ; Version: 1.3
 ; Generator: Khronos; 0
-; Bound: 45
+; Bound: 41
 ; Schema: 0
                OpCapability Shader
                OpCapability GroupNonUniform
@@ -47,32 +47,28 @@
          %26 = OpVariable %_ptr_Private_v3uint Private
 %_ptr_Private_v4uint = OpTypePointer Private %v4uint
          %28 = OpVariable %_ptr_Private_v4uint Private
-      %float = OpTypeFloat 32
-        %int = OpTypeInt 32 1
- %_struct_32 = OpTypeStruct %float %int
- %_struct_33 = OpTypeStruct %float %float
           %1 = OpFunction %void None %15
-         %34 = OpLabel
-         %35 = OpLoad %v3uint %gl_GlobalInvocationID
-               OpStore %26 %35
-         %36 = OpLoad %v3uint %gl_LocalInvocationID
-               OpStore %26 %36
-         %37 = OpLoad %v3uint %gl_WorkGroupID
-               OpStore %26 %37
-         %38 = OpLoad %v3uint %gl_NumWorkGroups
-               OpStore %26 %38
-         %39 = OpLoad %uint %gl_LocalInvocationIndex
-               OpStore %24 %39
+         %30 = OpLabel
+         %31 = OpLoad %v3uint %gl_GlobalInvocationID
+               OpStore %26 %31
+         %32 = OpLoad %v3uint %gl_LocalInvocationID
+               OpStore %26 %32
+         %33 = OpLoad %v3uint %gl_WorkGroupID
+               OpStore %26 %33
+         %34 = OpLoad %v3uint %gl_NumWorkGroups
+               OpStore %26 %34
+         %35 = OpLoad %uint %gl_LocalInvocationIndex
+               OpStore %24 %35
                OpStore %26 %gl_WorkGroupSize
-         %40 = OpLoad %uint %SubgroupId
-               OpStore %24 %40
-         %41 = OpLoad %uint %SubgroupSize
-               OpStore %24 %41
-         %42 = OpLoad %uint %SubgroupLocalInvocationId
-               OpStore %24 %42
-         %43 = OpLoad %uint %NumSubgroups
-               OpStore %24 %43
-         %44 = OpLoad %v4uint %SubgroupEqMaskKHR
-               OpStore %28 %44
+         %36 = OpLoad %uint %SubgroupId
+               OpStore %24 %36
+         %37 = OpLoad %uint %SubgroupSize
+               OpStore %24 %37
+         %38 = OpLoad %uint %SubgroupLocalInvocationId
+               OpStore %24 %38
+         %39 = OpLoad %uint %NumSubgroups
+               OpStore %24 %39
+         %40 = OpLoad %v4uint %SubgroupEqMaskKHR
+               OpStore %28 %40
                OpReturn
                OpFunctionEnd

@@ -1,7 +1,7 @@
 ; SPIR-V
 ; Version: 1.3
 ; Generator: Khronos; 0
-; Bound: 17
+; Bound: 14
 ; Schema: 0
                OpCapability Shader
                OpCapability GroupNonUniform
@@ -17,14 +17,11 @@
       %int_1 = OpConstant %int 1
           %6 = OpVariable %_ptr_Private_int Private %int_1
           %9 = OpVariable %_ptr_Private_int Private
-      %float = OpTypeFloat 32
- %_struct_11 = OpTypeStruct %float %int
- %_struct_12 = OpTypeStruct %float %float
       %int_3 = OpConstant %int 3
           %1 = OpFunction %void None %4
-         %13 = OpLabel
-         %15 = OpLoad %int %6
-         %16 = OpGroupNonUniformIAdd %int %int_3 InclusiveScan %15
-               OpStore %9 %16
+         %10 = OpLabel
+         %12 = OpLoad %int %6
+         %13 = OpGroupNonUniformIAdd %int %int_3 InclusiveScan %12
+               OpStore %9 %13
                OpReturn
                OpFunctionEnd

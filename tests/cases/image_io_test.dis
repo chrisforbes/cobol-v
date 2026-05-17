@@ -1,7 +1,7 @@
 ; SPIR-V
 ; Version: 1.3
 ; Generator: Khronos; 0
-; Bound: 45
+; Bound: 42
 ; Schema: 0
                OpCapability Shader
           %2 = OpExtInstImport "GLSL.std.450"
@@ -39,29 +39,26 @@
     %v4float = OpTypeVector %float 4
 %_ptr_Private_v4float = OpTypePointer Private %v4float
          %24 = OpVariable %_ptr_Private_v4float Private
-        %int = OpTypeInt 32 1
- %_struct_27 = OpTypeStruct %float %int
- %_struct_28 = OpTypeStruct %float %float
     %float_0 = OpConstant %float 0
           %1 = OpFunction %void None %17
-         %29 = OpLabel
-         %30 = OpLoad %v2float %19
-         %31 = OpLoad %9 %3
-         %32 = OpImageSampleExplicitLod %v4float %31 %30 Lod %float_0
-               OpStore %24 %32
-         %34 = OpLoad %v2float %19
-         %35 = OpLoad %8 %4
-         %36 = OpLoad %12 %5
-         %37 = OpSampledImage %9 %35 %36
-         %38 = OpImageSampleExplicitLod %v4float %37 %34 Lod %float_0
+         %26 = OpLabel
+         %27 = OpLoad %v2float %19
+         %28 = OpLoad %9 %3
+         %29 = OpImageSampleExplicitLod %v4float %28 %27 Lod %float_0
+               OpStore %24 %29
+         %31 = OpLoad %v2float %19
+         %32 = OpLoad %8 %4
+         %33 = OpLoad %12 %5
+         %34 = OpSampledImage %9 %32 %33
+         %35 = OpImageSampleExplicitLod %v4float %34 %31 Lod %float_0
+               OpStore %24 %35
+         %36 = OpLoad %v2float %19
+         %37 = OpLoad %14 %6
+         %38 = OpImageRead %v4float %37 %36
                OpStore %24 %38
          %39 = OpLoad %v2float %19
-         %40 = OpLoad %14 %6
-         %41 = OpImageRead %v4float %40 %39
-               OpStore %24 %41
-         %42 = OpLoad %v2float %19
-         %43 = OpLoad %v4float %24
-         %44 = OpLoad %14 %6
-               OpImageWrite %44 %42 %43
+         %40 = OpLoad %v4float %24
+         %41 = OpLoad %14 %6
+               OpImageWrite %41 %39 %40
                OpReturn
                OpFunctionEnd

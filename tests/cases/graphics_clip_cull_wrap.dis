@@ -1,7 +1,7 @@
 ; SPIR-V
 ; Version: 1.3
 ; Generator: Khronos; 0
-; Bound: 19
+; Bound: 17
 ; Schema: 0
                OpCapability Shader
                OpCapability ClipDistance
@@ -17,15 +17,13 @@
 %_arr_float_uint_1 = OpTypeArray %float %uint_1
 %_ptr_Output__arr_float_uint_1 = OpTypePointer Output %_arr_float_uint_1
 %gl_ClipDistance = OpVariable %_ptr_Output__arr_float_uint_1 Output
-        %int = OpTypeInt 32 1
- %_struct_12 = OpTypeStruct %float %int
- %_struct_13 = OpTypeStruct %float %float
     %float_1 = OpConstant %float 1
+        %int = OpTypeInt 32 1
       %int_0 = OpConstant %int 0
 %_ptr_Output_float = OpTypePointer Output %float
           %1 = OpFunction %void None %5
-         %14 = OpLabel
-         %18 = OpAccessChain %_ptr_Output_float %gl_ClipDistance %int_0
-               OpStore %18 %float_1
+         %11 = OpLabel
+         %16 = OpAccessChain %_ptr_Output_float %gl_ClipDistance %int_0
+               OpStore %16 %float_1
                OpReturn
                OpFunctionEnd

@@ -194,10 +194,6 @@ std::vector<uint32_t> Emitter::emit(const ProgramNode& program, const std::set<s
     emitExecutionModes(program);
     emitTypesAndConstants(program);
 
-    // Pre-declare common GLSL structs
-    getOrCreateStructType({getOrCreateBaseType(BaseType::FLOAT), getOrCreateBaseType(BaseType::INT)}); // Frexp
-    getOrCreateStructType({getOrCreateBaseType(BaseType::FLOAT), getOrCreateBaseType(BaseType::FLOAT)}); // Modf
-
     currentStream = &bodyStream;
     emitFunctions(program);
     currentStream = &capabilityStream; // Just in case

@@ -1,7 +1,7 @@
 ; SPIR-V
 ; Version: 1.3
 ; Generator: Khronos; 0
-; Bound: 21
+; Bound: 19
 ; Schema: 0
                OpCapability Shader
                OpCapability ImageQuery
@@ -22,14 +22,12 @@
       %v2int = OpTypeVector %int 2
 %_ptr_Private_v2int = OpTypePointer Private %v2int
          %12 = OpVariable %_ptr_Private_v2int Private
- %_struct_14 = OpTypeStruct %float %int
- %_struct_15 = OpTypeStruct %float %float
       %int_0 = OpConstant %int 0
           %1 = OpFunction %void None %9
-         %16 = OpLabel
-         %17 = OpLoad %6 %3
-         %19 = OpImage %5 %17
-         %18 = OpImageQuerySizeLod %v2int %19 %int_0
-               OpStore %12 %18
+         %14 = OpLabel
+         %15 = OpLoad %6 %3
+         %17 = OpImage %5 %15
+         %16 = OpImageQuerySizeLod %v2int %17 %int_0
+               OpStore %12 %16
                OpReturn
                OpFunctionEnd
