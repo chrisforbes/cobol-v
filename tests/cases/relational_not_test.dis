@@ -1,31 +1,26 @@
-; SPIR-V
-; Version: 1.3
-; Generator: Khronos; 0
-; Bound: 20
-; Schema: 0
-               OpCapability Shader
-          %2 = OpExtInstImport "GLSL.std.450"
-               OpMemoryModel Logical GLSL450
-               OpEntryPoint GLCompute %1 "MAIN"
-               OpExecutionMode %1 LocalSize 1 1 1
-       %void = OpTypeVoid
-          %4 = OpTypeFunction %void
-      %float = OpTypeFloat 32
+OpCapability Shader
+%2 = OpExtInstImport "GLSL.std.450"
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %1 "MAIN"
+OpExecutionMode %1 LocalSize 1 1 1
+%void = OpTypeVoid
+%4 = OpTypeFunction %void
+%float = OpTypeFloat 32
 %_ptr_Private_float = OpTypePointer Private %float
-    %float_1 = OpConstant %float 1
-          %6 = OpVariable %_ptr_Private_float Private %float_1
-    %float_2 = OpConstant %float 2
-          %9 = OpVariable %_ptr_Private_float Private %float_2
-       %bool = OpTypeBool
+%float_1 = OpConstant %float 1
+%6 = OpVariable %_ptr_Private_float Private %float_1
+%float_2 = OpConstant %float 2
+%9 = OpVariable %_ptr_Private_float Private %float_2
+%bool = OpTypeBool
 %_ptr_Private_bool = OpTypePointer Private %bool
-         %12 = OpVariable %_ptr_Private_bool Private
-        %int = OpTypeInt 32 1
-          %1 = OpFunction %void None %4
-         %14 = OpLabel
-         %15 = OpLoad %float %6
-         %16 = OpLoad %float %9
-         %18 = OpFOrdEqual %bool %15 %16
-         %19 = OpLogicalNot %bool %18
-               OpStore %12 %19
-               OpReturn
-               OpFunctionEnd
+%12 = OpVariable %_ptr_Private_bool Private
+%int = OpTypeInt 32 1
+%1 = OpFunction %void None %4
+%14 = OpLabel
+%15 = OpLoad %float %6
+%16 = OpLoad %float %9
+%18 = OpFOrdEqual %bool %15 %16
+%19 = OpLogicalNot %bool %18
+OpStore %12 %19
+OpReturn
+OpFunctionEnd

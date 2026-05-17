@@ -36,7 +36,7 @@ struct FDMeta {
 class Emitter {
 public:
     Emitter();
-    std::vector<uint32_t> emit(const ProgramNode& program, const std::set<spirv::Capability>& capabilities = {});
+    std::vector<uint32_t> emit(const ProgramNode& program, const std::set<spirv::Capability>& capabilities = {}, bool debugInfo = false, const std::string& sourceFilename = "");
 
 private:
     uint32_t nextId = 1;
@@ -47,6 +47,7 @@ private:
     std::vector<uint32_t> memoryModelStream;
     std::vector<uint32_t> entryStream;
     std::vector<uint32_t> debugStream;
+    std::vector<uint32_t> nameStream;
     std::vector<uint32_t> annoStream;
     std::vector<uint32_t> typeStream;
     std::vector<uint32_t> bodyStream;
@@ -58,11 +59,27 @@ private:
     void emitOp(spirv::Op op, const std::vector<uint32_t>& operands = {});
     spirv::Op getProjectiveOp(spirv::Op baseOp, bool isProjective);
     void emitOpString(spirv::Op op, uint32_t id, const std::string& str);
+    void emitLine(int line, int col);
+    void emitOpName(uint32_t id, const std::string& name);
+    void emitOpMemberName(uint32_t structTypeId, uint32_t memberIndex, const std::string& memberName);
     
     uint32_t voidTypeId = 0;
     uint32_t voidFuncTypeId = 0;
     uint32_t mainFuncId = 0;
     uint32_t extInstSetId = 0;
+    bool debugInfo = false;
+    uint32_t fileStringId = 0;
+    uint32_t sourceTextId = 0;
+    uint32_t debugSetId = 0;
+    uint32_t debugSourceId = 0;
+    uint32_t debugNoneId = 0;
+    uint32_t uintTypeId = 0;
+    uint32_t compUnitId = 0;
+    uint32_t debugMainFuncId = 0;
+    uint32_t debugMainBlockId = 0;
+    std::map<uint32_t, uint32_t> pointerBaseTypeIds;
+    std::map<uint32_t, uint32_t> debugTypeCache;
+    std::string sourceText;
     bool inFunctionBody = false;
 
     Int3 localSize = {1, 1, 1};
@@ -115,6 +132,7 @@ private:
     uint32_t getOrCreateConstant(const LiteralNode& literal, uint32_t typeId);
     uint32_t getOrCreateConstant(int value, uint32_t typeId);
     uint32_t getOrCreateSampledImageType(uint32_t imageTypeId);
+    uint32_t getOrCreateDebugType(uint32_t typeId);
 
     uint32_t emitExpression(const ExpressionNode& expr, uint32_t targetTypeId = 0, bool wantAddress = false);
     void emitStatement(const StatementNode& stmt);

@@ -75,3 +75,47 @@ PROCEDURE DIVISION.
     // Cleanup
     std::remove(filename.c_str());
 }
+
+TEST(EmitterTest, EmitDebugMinimalShader) {
+    const std::string source = R"(
+IDENTIFICATION DIVISION.
+PROGRAM-ID. DEBUG-TEST.
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 MY-VAR PIC I.
+PROCEDURE DIVISION.
+    MAIN-LOGIC.
+        MOVE 42 TO MY-VAR.
+        GOBACK.
+)";
+    Lexer lexer(source);
+    auto tokens = lexer.tokenize();
+    Parser parser(tokens);
+    auto program = parser.parse();
+
+    Emitter emitter;
+    auto binary = emitter.emit(*program, {}, true, "debug_test.cob");
+
+    // Write binary to temporary file
+    std::string filename = "test_debug_output.spv";
+    std::ofstream out(filename, std::ios::binary);
+    out.write(reinterpret_cast<const char*>(binary.data()), binary.size() * sizeof(uint32_t));
+    out.close();
+
+    // 1. Validate with spirv-val
+    auto valResult = runCommand("spirv-val --target-env vulkan1.1 " + filename);
+    EXPECT_EQ(valResult.exitCode, 0) << "spirv-val failed: " << valResult.output;
+
+    // 2. Disassemble and check content
+    auto disResult = runCommand("spirv-dis " + filename);
+    EXPECT_EQ(disResult.exitCode, 0) << "spirv-dis failed: " << disResult.output;
+    
+    EXPECT_NE(disResult.output.find("OpString \"debug_test.cob\""), std::string::npos);
+    EXPECT_NE(disResult.output.find("NonSemantic.Shader.DebugInfo.100"), std::string::npos);
+    EXPECT_NE(disResult.output.find("DebugSource"), std::string::npos);
+    EXPECT_NE(disResult.output.find("DebugLine"), std::string::npos);
+    EXPECT_NE(disResult.output.find("OpName"), std::string::npos);
+    
+    // Cleanup
+    std::remove(filename.c_str());
+}

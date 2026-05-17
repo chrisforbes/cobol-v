@@ -1,71 +1,66 @@
-; SPIR-V
-; Version: 1.3
-; Generator: Khronos; 0
-; Bound: 43
-; Schema: 0
-               OpCapability Shader
-          %4 = OpExtInstImport "GLSL.std.450"
-               OpMemoryModel Logical GLSL450
-               OpEntryPoint GLCompute %3 "MAIN"
-               OpExecutionMode %3 LocalSize 1 1 1
-       %void = OpTypeVoid
-          %6 = OpTypeFunction %void
-      %float = OpTypeFloat 32
+OpCapability Shader
+%4 = OpExtInstImport "GLSL.std.450"
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %3 "MAIN"
+OpExecutionMode %3 LocalSize 1 1 1
+%void = OpTypeVoid
+%6 = OpTypeFunction %void
+%float = OpTypeFloat 32
 %_ptr_Private_float = OpTypePointer Private %float
-    %float_0 = OpConstant %float 0
-          %8 = OpVariable %_ptr_Private_float Private %float_0
-        %int = OpTypeInt 32 1
+%float_0 = OpConstant %float 0
+%8 = OpVariable %_ptr_Private_float Private %float_0
+%int = OpTypeInt 32 1
 %_ptr_Private_int = OpTypePointer Private %int
-      %int_5 = OpConstant %int 5
-         %12 = OpVariable %_ptr_Private_int Private %int_5
-          %1 = OpVariable %_ptr_Private_int Private
-          %2 = OpVariable %_ptr_Private_int Private
-     %int_10 = OpConstant %int 10
-      %int_0 = OpConstant %int 0
-       %bool = OpTypeBool
-    %float_1 = OpConstant %float 1
-      %int_1 = OpConstant %int 1
-    %float_2 = OpConstant %float 2
-          %3 = OpFunction %void None %6
-         %15 = OpLabel
-               OpStore %1 %int_0
-               OpBranch %18
-         %18 = OpLabel
-               OpLoopMerge %22 %21 None
-               OpBranch %19
-         %19 = OpLabel
-         %23 = OpLoad %int %1
-         %24 = OpSLessThan %bool %23 %int_10
-               OpBranchConditional %24 %20 %22
-         %20 = OpLabel
-         %26 = OpLoad %float %8
-         %28 = OpFAdd %float %26 %float_1
-               OpStore %8 %28
-               OpBranch %21
-         %21 = OpLabel
-         %29 = OpIAdd %int %23 %int_1
-               OpStore %1 %29
-               OpBranch %18
-         %22 = OpLabel
-         %31 = OpLoad %int %12
-               OpStore %2 %int_0
-               OpBranch %32
-         %32 = OpLabel
-               OpLoopMerge %36 %35 None
-               OpBranch %33
-         %33 = OpLabel
-         %37 = OpLoad %int %2
-         %38 = OpSLessThan %bool %37 %31
-               OpBranchConditional %38 %34 %36
-         %34 = OpLabel
-         %39 = OpLoad %float %8
-         %41 = OpFAdd %float %39 %float_2
-               OpStore %8 %41
-               OpBranch %35
-         %35 = OpLabel
-         %42 = OpIAdd %int %37 %int_1
-               OpStore %2 %42
-               OpBranch %32
-         %36 = OpLabel
-               OpReturn
-               OpFunctionEnd
+%int_5 = OpConstant %int 5
+%12 = OpVariable %_ptr_Private_int Private %int_5
+%1 = OpVariable %_ptr_Private_int Private
+%2 = OpVariable %_ptr_Private_int Private
+%int_10 = OpConstant %int 10
+%int_0 = OpConstant %int 0
+%bool = OpTypeBool
+%float_1 = OpConstant %float 1
+%int_1 = OpConstant %int 1
+%float_2 = OpConstant %float 2
+%3 = OpFunction %void None %6
+%15 = OpLabel
+OpStore %1 %int_0
+OpBranch %18
+%18 = OpLabel
+OpLoopMerge %22 %21 None
+OpBranch %19
+%19 = OpLabel
+%23 = OpLoad %int %1
+%24 = OpSLessThan %bool %23 %int_10
+OpBranchConditional %24 %20 %22
+%20 = OpLabel
+%26 = OpLoad %float %8
+%28 = OpFAdd %float %26 %float_1
+OpStore %8 %28
+OpBranch %21
+%21 = OpLabel
+%29 = OpIAdd %int %23 %int_1
+OpStore %1 %29
+OpBranch %18
+%22 = OpLabel
+%31 = OpLoad %int %12
+OpStore %2 %int_0
+OpBranch %32
+%32 = OpLabel
+OpLoopMerge %36 %35 None
+OpBranch %33
+%33 = OpLabel
+%37 = OpLoad %int %2
+%38 = OpSLessThan %bool %37 %31
+OpBranchConditional %38 %34 %36
+%34 = OpLabel
+%39 = OpLoad %float %8
+%41 = OpFAdd %float %39 %float_2
+OpStore %8 %41
+OpBranch %35
+%35 = OpLabel
+%42 = OpIAdd %int %37 %int_1
+OpStore %2 %42
+OpBranch %32
+%36 = OpLabel
+OpReturn
+OpFunctionEnd

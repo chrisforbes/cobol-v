@@ -1,29 +1,24 @@
-; SPIR-V
-; Version: 1.3
-; Generator: Khronos; 0
-; Bound: 14
-; Schema: 0
-               OpCapability Shader
-          %2 = OpExtInstImport "GLSL.std.450"
-               OpMemoryModel Logical GLSL450
-               OpEntryPoint GLCompute %1 "MAIN"
-               OpExecutionMode %1 LocalSize 1 1 1
-               OpDecorate %3 DescriptorSet 0
-               OpDecorate %3 Binding 0
-               OpDecorate %_struct_7 BufferBlock
-               OpMemberDecorate %_struct_7 0 Offset 0
-       %void = OpTypeVoid
-          %5 = OpTypeFunction %void
-        %int = OpTypeInt 32 1
-  %_struct_7 = OpTypeStruct %int
+OpCapability Shader
+%2 = OpExtInstImport "GLSL.std.450"
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %1 "MAIN"
+OpExecutionMode %1 LocalSize 1 1 1
+OpDecorate %3 DescriptorSet 0
+OpDecorate %3 Binding 0
+OpDecorate %_struct_7 BufferBlock
+OpMemberDecorate %_struct_7 0 Offset 0
+%void = OpTypeVoid
+%5 = OpTypeFunction %void
+%int = OpTypeInt 32 1
+%_struct_7 = OpTypeStruct %int
 %_ptr_Uniform__struct_7 = OpTypePointer Uniform %_struct_7
-          %3 = OpVariable %_ptr_Uniform__struct_7 Uniform
-     %int_42 = OpConstant %int 42
-      %int_0 = OpConstant %int 0
+%3 = OpVariable %_ptr_Uniform__struct_7 Uniform
+%int_42 = OpConstant %int 42
+%int_0 = OpConstant %int 0
 %_ptr_Uniform_int = OpTypePointer Uniform %int
-          %1 = OpFunction %void None %5
-          %9 = OpLabel
-         %13 = OpAccessChain %_ptr_Uniform_int %3 %int_0
-               OpStore %13 %int_42
-               OpReturn
-               OpFunctionEnd
+%1 = OpFunction %void None %5
+%9 = OpLabel
+%13 = OpAccessChain %_ptr_Uniform_int %3 %int_0
+OpStore %13 %int_42
+OpReturn
+OpFunctionEnd

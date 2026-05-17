@@ -1,38 +1,33 @@
-; SPIR-V
-; Version: 1.3
-; Generator: Khronos; 0
-; Bound: 24
-; Schema: 0
-               OpCapability Shader
-          %2 = OpExtInstImport "GLSL.std.450"
-               OpMemoryModel Logical GLSL450
-               OpEntryPoint Fragment %1 "MAIN"
-               OpExecutionMode %1 OriginUpperLeft
-               OpDecorate %3 DescriptorSet 0
-               OpDecorate %3 Binding 0
-      %float = OpTypeFloat 32
-          %5 = OpTypeImage %float 2D 0 0 0 1 Unknown
-          %6 = OpTypeSampledImage %5
+OpCapability Shader
+%2 = OpExtInstImport "GLSL.std.450"
+OpMemoryModel Logical GLSL450
+OpEntryPoint Fragment %1 "MAIN"
+OpExecutionMode %1 OriginUpperLeft
+OpDecorate %3 DescriptorSet 0
+OpDecorate %3 Binding 0
+%float = OpTypeFloat 32
+%5 = OpTypeImage %float 2D 0 0 0 1 Unknown
+%6 = OpTypeSampledImage %5
 %_ptr_UniformConstant_6 = OpTypePointer UniformConstant %6
-          %3 = OpVariable %_ptr_UniformConstant_6 UniformConstant
-       %void = OpTypeVoid
-          %9 = OpTypeFunction %void
-    %v3float = OpTypeVector %float 3
+%3 = OpVariable %_ptr_UniformConstant_6 UniformConstant
+%void = OpTypeVoid
+%9 = OpTypeFunction %void
+%v3float = OpTypeVector %float 3
 %_ptr_Private_v3float = OpTypePointer Private %v3float
-         %11 = OpVariable %_ptr_Private_v3float Private
+%11 = OpVariable %_ptr_Private_v3float Private
 %_ptr_Private_float = OpTypePointer Private %float
-         %13 = OpVariable %_ptr_Private_float Private
-    %v4float = OpTypeVector %float 4
+%13 = OpVariable %_ptr_Private_float Private
+%v4float = OpTypeVector %float 4
 %_ptr_Private_v4float = OpTypePointer Private %v4float
-         %16 = OpVariable %_ptr_Private_v4float Private
-    %float_2 = OpConstant %float 2
-          %1 = OpFunction %void None %9
-         %18 = OpLabel
-               OpStore %13 %float_2
-         %20 = OpLoad %v3float %11
-         %21 = OpLoad %6 %3
-         %22 = OpLoad %float %13
-         %23 = OpImageSampleProjExplicitLod %v4float %21 %20 Lod %22
-               OpStore %16 %23
-               OpReturn
-               OpFunctionEnd
+%16 = OpVariable %_ptr_Private_v4float Private
+%float_2 = OpConstant %float 2
+%1 = OpFunction %void None %9
+%18 = OpLabel
+OpStore %13 %float_2
+%20 = OpLoad %v3float %11
+%21 = OpLoad %6 %3
+%22 = OpLoad %float %13
+%23 = OpImageSampleProjExplicitLod %v4float %21 %20 Lod %22
+OpStore %16 %23
+OpReturn
+OpFunctionEnd

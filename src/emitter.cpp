@@ -112,8 +112,20 @@ spirv::Op Emitter::getProjectiveOp(spirv::Op baseOp, bool isProjective) {
     }
 }
 
-std::vector<uint32_t> Emitter::emit(const ProgramNode& program, const std::set<spirv::Capability>& capabilities) {
+std::vector<uint32_t> Emitter::emit(const ProgramNode& program, const std::set<spirv::Capability>& capabilities, bool debugInfoVal, const std::string& sourceFilename) {
     nextId = 1;
+    debugInfo = debugInfoVal;
+    fileStringId = 0;
+    sourceTextId = 0;
+    debugSetId = 0;
+    debugSourceId = 0;
+    debugNoneId = 0;
+    uintTypeId = 0;
+    compUnitId = 0;
+    debugMainFuncId = 0;
+    pointerBaseTypeIds.clear();
+    debugTypeCache.clear();
+    sourceText.clear();
     variableIds.clear();
     variableTypeIds.clear();
     variableDataTypes.clear();
@@ -144,6 +156,7 @@ std::vector<uint32_t> Emitter::emit(const ProgramNode& program, const std::set<s
     memoryModelStream.clear();
     entryStream.clear();
     debugStream.clear();
+    nameStream.clear();
     annoStream.clear();
     typeStream.clear();
     bodyStream.clear();
@@ -185,6 +198,39 @@ std::vector<uint32_t> Emitter::emit(const ProgramNode& program, const std::set<s
 
     // Phase 1: Emit Sections
     mainFuncId = allocateId();
+    if (debugInfo && !sourceFilename.empty()) {
+        std::ifstream f(sourceFilename);
+        if (f.is_open()) {
+            sourceText = std::string((std::istreambuf_iterator<char>(f)), std::istreambuf_iterator<char>());
+        }
+
+        fileStringId = allocateId();
+        std::string normalizedPath = sourceFilename;
+        std::replace(normalizedPath.begin(), normalizedPath.end(), '\\', '/');
+        emitOpString(spirv::OpString, fileStringId, normalizedPath);
+
+        if (!sourceText.empty()) {
+            sourceTextId = allocateId();
+            emitOpString(spirv::OpString, sourceTextId, sourceText);
+        }
+
+        // Emit NonSemantic DebugInfo extension
+        std::vector<uint32_t> extOperands;
+        const char* extStr = "SPV_KHR_non_semantic_info";
+        size_t extLen = strlen(extStr) + 1;
+        for (size_t i = 0; i < extLen; i += 4) {
+            uint32_t word = 0;
+            std::memcpy(&word, extStr + i, std::min((size_t)4, extLen - i));
+            extOperands.push_back(word);
+        }
+        emitOp(spirv::OpExtension, extOperands);
+
+        // Import NonSemantic DebugInfo extended instruction set
+        debugSetId = allocateId();
+        emitOpString(spirv::OpExtInstImport, debugSetId, "NonSemantic.Shader.DebugInfo.100");
+    }
+    emitOpName(mainFuncId, "MAIN");
+
     extInstSetId = allocateId();
     emitOpString(spirv::OpExtInstImport, extInstSetId, "GLSL.std.450");
 
@@ -205,7 +251,18 @@ std::vector<uint32_t> Emitter::emit(const ProgramNode& program, const std::set<s
     // Phase 2: Finalize Assembly
     std::vector<uint32_t> finalSpirv;
     finalSpirv.push_back(spv::MagicNumber);
-    finalSpirv.push_back(0x00010300); // SPIR-V 1.3 (Required for GroupNonUniform)
+    uint32_t spirvVersion = 0x00010000; // Default to SPIR-V 1.0
+    for (auto cap : currentCapabilities) {
+        if (cap == spirv::CapabilityGroupNonUniform || cap == spirv::CapabilityGroupNonUniformBallot ||
+            cap == spirv::CapabilityGroupNonUniformVote || cap == spirv::CapabilityGroupNonUniformArithmetic ||
+            cap == spirv::CapabilityGroupNonUniformClustered || cap == spirv::CapabilityGroupNonUniformShuffle ||
+            cap == spirv::CapabilityGroupNonUniformShuffleRelative || cap == spirv::CapabilityGroupNonUniformQuad ||
+            cap == spirv::CapabilityDrawParameters) {
+            spirvVersion = 0x00010300; // Require SPIR-V 1.3 for Subgroup and DrawParameters operations
+            break;
+        }
+    }
+    finalSpirv.push_back(spirvVersion);
     finalSpirv.push_back(0); // Generator
     finalSpirv.push_back(nextId); // Bound
     finalSpirv.push_back(0); // Reserved
@@ -216,6 +273,7 @@ std::vector<uint32_t> Emitter::emit(const ProgramNode& program, const std::set<s
     finalSpirv.insert(finalSpirv.end(), memoryModelStream.begin(), memoryModelStream.end());
     finalSpirv.insert(finalSpirv.end(), entryStream.begin(), entryStream.end());
     finalSpirv.insert(finalSpirv.end(), debugStream.begin(), debugStream.end());
+    finalSpirv.insert(finalSpirv.end(), nameStream.begin(), nameStream.end());
     finalSpirv.insert(finalSpirv.end(), annoStream.begin(), annoStream.end());
     finalSpirv.insert(finalSpirv.end(), typeStream.begin(), typeStream.end());
     finalSpirv.insert(finalSpirv.end(), bodyStream.begin(), bodyStream.end());
@@ -246,9 +304,11 @@ void Emitter::emitOp(spirv::Op op, const std::vector<uint32_t>& operands) {
             break;
         case spirv::OpString:
         case spirv::OpSource:
+            target = &debugStream;
+            break;
         case spirv::OpName:
         case spirv::OpMemberName:
-            target = &debugStream;
+            target = &nameStream;
             break;
         case spirv::OpDecorate:
         case spirv::OpMemberDecorate:
@@ -280,6 +340,10 @@ void Emitter::emitOp(spirv::Op op, const std::vector<uint32_t>& operands) {
                 target = &typeStream;
             }
             break;
+        case spirv::OpExtInst:
+            if (currentStream) target = currentStream;
+            else target = &typeStream;
+            break;
         default:
             if (currentStream == &bodyStream) target = &bodyStream;
             else target = &typeStream;
@@ -304,6 +368,52 @@ void Emitter::emitOpString(spirv::Op op, uint32_t id, const std::string& str) {
         operands.push_back(word);
     }
     emitOp(op, operands);
+}
+
+void Emitter::emitLine(int line, int col) {
+    if (debugInfo && fileStringId != 0 && line > 0) {
+        if (debugSetId != 0 && debugSourceId != 0 && uintTypeId != 0) {
+            uint32_t lineStartId = getOrCreateConstant(line, uintTypeId);
+            uint32_t lineEndId = lineStartId;
+            uint32_t colStartId = getOrCreateConstant(0, uintTypeId);
+            uint32_t colEndId = getOrCreateConstant(0, uintTypeId);
+
+            uint32_t resultId = allocateId();
+            emitOp(spirv::OpExtInst, {
+                voidTypeId,
+                resultId,
+                debugSetId,
+                103, // 103 = DebugLine
+                debugSourceId,
+                lineStartId,
+                lineEndId,
+                colStartId,
+                colEndId
+            });
+        }
+    }
+}
+
+void Emitter::emitOpName(uint32_t id, const std::string& name) {
+    if (debugInfo && !name.empty()) {
+        emitOpString(spirv::OpName, id, name);
+    }
+}
+
+void Emitter::emitOpMemberName(uint32_t structTypeId, uint32_t memberIndex, const std::string& memberName) {
+    if (debugInfo && !memberName.empty()) {
+        std::vector<uint32_t> operands;
+        operands.push_back(structTypeId);
+        operands.push_back(memberIndex);
+        const char* cstr = memberName.c_str();
+        size_t len = memberName.length() + 1;
+        for (size_t i = 0; i < len; i += 4) {
+            uint32_t word = 0;
+            std::memcpy(&word, cstr + i, std::min((size_t)4, len - i));
+            operands.push_back(word);
+        }
+        emitOp(spirv::OpMemberName, operands);
+    }
 }
 
 void Emitter::emitCapabilities() {
@@ -367,6 +477,7 @@ void Emitter::emitAnnotationsWithAccess(const ProgramNode& program) {
                         if (dataItem->isBuiltIn || dataItem->location != -1) {
                             uint32_t varId = allocateId();
                             variableIds[dataItem->name] = varId;
+                            emitOpName(varId, dataItem->name);
                             
                             if (dataItem->isBuiltIn) {
                                 if (builtInMappings.count(dataItem->name)) {
@@ -424,6 +535,7 @@ void Emitter::emitAnnotationsWithAccess(const ProgramNode& program) {
                             uint32_t bin = std::stoul(match[3].str());
                             uint32_t varId = allocateId();
                             variableIds[sel->name] = varId;
+                            emitOpName(varId, sel->name);
                             // NOTE: prior to SPIRV 1.4, we don't include UniformConstant in OpEntryPoint -- only Input,Output.
                             //entryPointInterfaces.push_back(varId);
                             emitOp(spirv::OpDecorate, {varId, (uint32_t)spirv::DecorationDescriptorSet, ds});
@@ -571,6 +683,7 @@ void Emitter::emitTypesAndConstants(const ProgramNode& program) {
                                     uint32_t z = getOrCreateConstant(localSize.z, uintType);
                                     uint32_t constId = allocateId();
                                     emitOp(spirv::OpConstantComposite, {typeId, constId, x, y, z});
+                                    emitOpName(constId, dataItem->name);
                                     emitOp(spirv::OpDecorate, {constId, (uint32_t)spirv::DecorationBuiltIn, (uint32_t)info.builtInId});
                                     variableIds[dataItem->name] = constId;
                                     variableTypeIds[dataItem->name] = typeId;
@@ -593,7 +706,11 @@ void Emitter::emitTypesAndConstants(const ProgramNode& program) {
                         }
                         uint32_t varId;
                         if (variableIds.count(dataItem->name)) varId = variableIds[dataItem->name];
-                        else { varId = allocateId(); variableIds[dataItem->name] = varId; }
+                        else { 
+                            varId = allocateId(); 
+                            variableIds[dataItem->name] = varId;
+                            emitOpName(varId, dataItem->name);
+                        }
 
                         // Handle BuiltIn arrays: Vulkan requires these to be arrays
                         if (dataItem->isBuiltIn && builtInMappings.count(dataItem->name)) {
@@ -641,8 +758,10 @@ void Emitter::emitTypesAndConstants(const ProgramNode& program) {
     if (!timesCounterIds.empty()) {
         uint32_t intType = getOrCreateBaseType(BaseType::INT);
         uint32_t ptrType = getOrCreatePointerType(intType, spirv::StorageClassPrivate);
+        int index = 0;
         for (auto const& [node, id] : timesCounterIds) {
             emitOp(spirv::OpVariable, {ptrType, id, (uint32_t)spirv::StorageClassPrivate});
+            emitOpName(id, "_loop_counter_" + std::to_string(index++));
         }
     }
 
@@ -727,6 +846,10 @@ void Emitter::emitTypesAndConstants(const ProgramNode& program) {
                                         emitOp(spirv::OpTypeStruct, structOperands);
                                         emitOp(spirv::OpDecorate, {blockTypeId, (uint32_t)blockDec});
                                         blockDecs[blockTypeId] = blockDec;
+                                        emitOpName(blockTypeId, "_" + selName + "Block");
+                                        for (size_t i = 0; i < members.size(); ++i) {
+                                            emitOpMemberName(blockTypeId, (uint32_t)i, members[i].name);
+                                        }
 
                                         uint32_t offset = 0;
                                         UniformBlockInfo info;
@@ -791,7 +914,9 @@ void Emitter::emitTypesAndConstants(const ProgramNode& program) {
                                         
                                         uint32_t ptrId = getOrCreatePointerType(blockTypeId, sc);
                                         emitOp(spirv::OpVariable, {ptrId, varId, (uint32_t)sc});
+                                        emitOpName(varId, selName);
                                         idStorageClasses[varId] = sc;
+                                        variableTypeIds[selName] = blockTypeId;
                                     }
                                 }
                             }
@@ -805,6 +930,147 @@ void Emitter::emitTypesAndConstants(const ProgramNode& program) {
     if (!pushConstantSelectName.empty()) emitBlock(pushConstantSelectName, spirv::StorageClassPushConstant, spirv::DecorationBlock);
     for (const auto& name : uniformSelectNames) emitBlock(name, spirv::StorageClassUniform, spirv::DecorationBlock);
     for (const auto& name : storageSelectNames) emitBlock(name, spirv::StorageClassUniform, spirv::DecorationBufferBlock);
+
+    if (debugInfo && fileStringId != 0 && debugSetId != 0) {
+        auto oldStream = currentStream;
+        currentStream = &typeStream;
+
+        uintTypeId = getOrCreateBaseType(BaseType::UINT);
+
+        debugNoneId = allocateId();
+        emitOp(spirv::OpExtInst, { voidTypeId, debugNoneId, debugSetId, 0 }); // 0 = DebugInfoNone
+
+        debugSourceId = allocateId();
+        if (sourceTextId != 0) {
+            emitOp(spirv::OpExtInst, { voidTypeId, debugSourceId, debugSetId, 35, fileStringId, sourceTextId }); // 35 = DebugSource with embedded source
+        } else {
+            emitOp(spirv::OpExtInst, { voidTypeId, debugSourceId, debugSetId, 35, fileStringId }); // 35 = DebugSource without embedded source
+        }
+
+        uint32_t versionId = getOrCreateConstant(1, uintTypeId);
+        uint32_t dwarfVersionId = getOrCreateConstant(4, uintTypeId);
+        uint32_t languageId = getOrCreateConstant(0, uintTypeId); // 0 = Unknown
+
+        compUnitId = allocateId();
+        emitOp(spirv::OpExtInst, { voidTypeId, compUnitId, debugSetId, 1, versionId, dwarfVersionId, debugSourceId, languageId }); // 1 = DebugCompilationUnit
+
+        // 1. Emit DebugFunction for MAIN entry point
+        int mainFuncLine = 1;
+        for (const auto& div : program.divisions) {
+            if (div->divisionType == TokenType::PROCEDURE) {
+                if (div->line > 0) {
+                    mainFuncLine = div->line;
+                }
+                break;
+            }
+        }
+
+        uint32_t flagsZeroId = getOrCreateConstant(0, uintTypeId);
+
+        uint32_t voidDebugTypeId = getOrCreateDebugType(voidTypeId);
+        uint32_t mainFuncTypeDebugId = allocateId();
+        emitOp(spirv::OpExtInst, { voidTypeId, mainFuncTypeDebugId, debugSetId, 8, flagsZeroId, voidDebugTypeId }); // 8 = DebugTypeFunction
+
+        uint32_t mainFuncNameId = allocateId();
+        emitOpString(spirv::OpString, mainFuncNameId, "MAIN");
+        uint32_t mainFuncLineId = getOrCreateConstant(mainFuncLine, uintTypeId);
+        uint32_t mainFuncColId = getOrCreateConstant(1, uintTypeId);
+
+        uint32_t flagsPublicId = getOrCreateConstant(3, uintTypeId);
+        debugMainFuncId = allocateId();
+        emitOp(spirv::OpExtInst, {
+            voidTypeId, debugMainFuncId, debugSetId, 20, // 20 = DebugFunction
+            mainFuncNameId, mainFuncTypeDebugId, debugSourceId,
+            mainFuncLineId, mainFuncColId, compUnitId, mainFuncNameId,
+            flagsPublicId, mainFuncLineId
+        });
+
+
+
+        uint32_t compilerSigId = allocateId();
+        emitOpString(spirv::OpString, compilerSigId, "cobolv");
+        uint32_t compilerArgsId = allocateId();
+        emitOpString(spirv::OpString, compilerArgsId, "-g");
+
+
+
+        // 2. Emit DebugGlobalVariable for all program variables
+        std::map<std::string, int> variableLines;
+        std::map<std::string, int> variableColumns;
+        for (const auto& div : program.divisions) {
+            if (div->divisionType == TokenType::DATA) {
+                for (const auto& section : div->sections) {
+                    for (const auto& node : section->children) {
+                        if (auto dataItem = dynamic_cast<DataItemNode*>(node.get())) {
+                            variableLines[dataItem->name] = dataItem->line;
+                            variableColumns[dataItem->name] = dataItem->column;
+                        }
+                    }
+                }
+            }
+        }
+
+        for (const auto& [name, varId] : variableIds) {
+            uint32_t spirvTypeId = variableTypeIds.count(name) ? variableTypeIds.at(name) : 0;
+            uint32_t valTypeId = pointerBaseTypeIds.count(spirvTypeId) ? pointerBaseTypeIds.at(spirvTypeId) : spirvTypeId;
+            
+            uint32_t debugTypeId = getOrCreateDebugType(valTypeId);
+            
+            uint32_t varNameId = allocateId();
+            emitOpString(spirv::OpString, varNameId, name);
+            
+            int varLine = variableLines.count(name) ? variableLines.at(name) : 1;
+            int varCol = variableColumns.count(name) ? variableColumns.at(name) : 1;
+            uint32_t varLineId = getOrCreateConstant(varLine, uintTypeId);
+            uint32_t varColId = getOrCreateConstant(varCol, uintTypeId);
+            
+            uint32_t flagsDefinitionId = getOrCreateConstant(8, uintTypeId);
+            uint32_t debugGlobalVarId = allocateId();
+            emitOp(spirv::OpExtInst, {
+                voidTypeId, debugGlobalVarId, debugSetId, 18, // 18 = DebugGlobalVariable
+                varNameId, debugTypeId, debugSourceId, varLineId, varColId,
+                compUnitId, varNameId, varId, flagsDefinitionId
+            });
+        }
+
+        if (pushConstantId != 0 && pushConstantTypeId != 0) {
+            uint32_t debugTypeId = getOrCreateDebugType(pushConstantTypeId);
+            uint32_t varNameId = allocateId();
+            emitOpString(spirv::OpString, varNameId, pushConstantSelectName);
+            
+            uint32_t varLineId = getOrCreateConstant(1, uintTypeId);
+            uint32_t varColId = getOrCreateConstant(1, uintTypeId);
+            uint32_t flagsDefinitionId = getOrCreateConstant(8, uintTypeId);
+            
+            uint32_t debugGlobalVarId = allocateId();
+            emitOp(spirv::OpExtInst, {
+                voidTypeId, debugGlobalVarId, debugSetId, 18, // 18 = DebugGlobalVariable
+                varNameId, debugTypeId, debugSourceId, varLineId, varColId,
+                compUnitId, varNameId, pushConstantId, flagsDefinitionId
+            });
+        }
+
+        for (const auto& [blockName, blockInfo] : uniformBlocks) {
+            if (blockInfo.varId != 0 && blockInfo.typeId != 0) {
+                uint32_t debugTypeId = getOrCreateDebugType(blockInfo.typeId);
+                uint32_t varNameId = allocateId();
+                emitOpString(spirv::OpString, varNameId, blockName);
+                
+                uint32_t varLineId = getOrCreateConstant(1, uintTypeId);
+                uint32_t varColId = getOrCreateConstant(1, uintTypeId);
+                uint32_t flagsDefinitionId = getOrCreateConstant(8, uintTypeId);
+                
+                uint32_t debugGlobalVarId = allocateId();
+                emitOp(spirv::OpExtInst, {
+                    voidTypeId, debugGlobalVarId, debugSetId, 18, // 18 = DebugGlobalVariable
+                    varNameId, debugTypeId, debugSourceId, varLineId, varColId,
+                    compUnitId, varNameId, blockInfo.varId, flagsDefinitionId
+                });
+            }
+        }
+
+        currentStream = oldStream;
+    }
 }
 
 uint32_t Emitter::getOrCreateBaseType(BaseType type) {
@@ -866,7 +1132,82 @@ uint32_t Emitter::getOrCreatePointerType(uint32_t typeId, spirv::StorageClass st
     uint32_t id = allocateId();
     emitOp(spirv::OpTypePointer, {id, (uint32_t)storageClass, typeId});
     typeCache[key] = id;
+    pointerBaseTypeIds[id] = typeId;
     return id;
+}
+
+uint32_t Emitter::getOrCreateDebugType(uint32_t typeId) {
+    if (typeId == 0) return debugNoneId;
+    if (debugTypeCache.count(typeId)) return debugTypeCache[typeId];
+    
+    uint32_t debugTypeId = 0;
+    uint32_t flagsZeroId = getOrCreateConstant(0, uintTypeId);
+    
+    if (typeId == voidTypeId) {
+        return typeId;
+    }
+    
+    if (typeToDataType.count(typeId)) {
+        const auto& dt = typeToDataType.at(typeId);
+        
+        if (dt.vectorSize > 0) {
+            uint32_t baseDebugTypeId = getOrCreateDebugType(getOrCreateBaseType(dt.baseType));
+            uint32_t componentCountId = getOrCreateConstant(dt.vectorSize, uintTypeId);
+            
+            debugTypeId = allocateId();
+            emitOp(spirv::OpExtInst, { voidTypeId, debugTypeId, debugSetId, 6, baseDebugTypeId, componentCountId }); // 6 = DebugTypeVector
+        } else if (dt.matrixRows > 0) {
+            DataType colVecType = {dt.baseType, dt.matrixRows, 0, 0};
+            uint32_t colVecDebugTypeId = getOrCreateDebugType(getOrCreateType(colVecType));
+            uint32_t colCountId = getOrCreateConstant(dt.matrixCols, uintTypeId);
+            uint32_t colMajorId = getOrCreateConstant(1, uintTypeId); // 1 = true
+            
+            debugTypeId = allocateId();
+            emitOp(spirv::OpExtInst, { voidTypeId, debugTypeId, debugSetId, 108, colVecDebugTypeId, colCountId, colMajorId }); // 108 = DebugTypeMatrix
+        } else {
+            uint32_t nameId = allocateId();
+            uint32_t encodingValue = 0;
+            if (dt.baseType == BaseType::INT) {
+                emitOpString(spirv::OpString, nameId, "int");
+                encodingValue = 4; // Signed
+            } else if (dt.baseType == BaseType::UINT) {
+                emitOpString(spirv::OpString, nameId, "uint");
+                encodingValue = 6; // Unsigned
+            } else if (dt.baseType == BaseType::FLOAT) {
+                emitOpString(spirv::OpString, nameId, "float");
+                encodingValue = 3; // Float
+            } else if (dt.baseType == BaseType::BOOL) {
+                emitOpString(spirv::OpString, nameId, "bool");
+                encodingValue = 2; // Boolean
+            } else {
+                emitOpString(spirv::OpString, nameId, "void");
+                encodingValue = 0; // Unspecified
+            }
+            uint32_t sizeId = getOrCreateConstant(32, uintTypeId);
+            uint32_t encodingId = getOrCreateConstant(encodingValue, uintTypeId);
+            
+            debugTypeId = allocateId();
+            emitOp(spirv::OpExtInst, { voidTypeId, debugTypeId, debugSetId, 2, nameId, sizeId, encodingId, flagsZeroId }); // 2 = DebugTypeBasic
+        }
+    }
+    
+    if (debugTypeId == 0) {
+        uint32_t nameId = allocateId();
+        emitOpString(spirv::OpString, nameId, "structure");
+        uint32_t tagId = getOrCreateConstant(1, uintTypeId); // 1 = Structure
+        uint32_t lineId = getOrCreateConstant(1, uintTypeId);
+        uint32_t colId = getOrCreateConstant(1, uintTypeId);
+        uint32_t sizeId = getOrCreateConstant(0, uintTypeId);
+        
+        debugTypeId = allocateId();
+        emitOp(spirv::OpExtInst, {
+            voidTypeId, debugTypeId, debugSetId, 10, // 10 = DebugTypeComposite
+            nameId, tagId, debugSourceId, lineId, colId, compUnitId, nameId, sizeId, flagsZeroId
+        });
+    }
+    
+    debugTypeCache[typeId] = debugTypeId;
+    return debugTypeId;
 }
 
 uint32_t Emitter::getOrCreateSampledImageType(uint32_t imageTypeId) {
@@ -962,6 +1303,34 @@ void Emitter::emitFunctions(const ProgramNode& program) {
     uint32_t labelId = allocateId();
     emitOp(spirv::OpLabel, {labelId});
     
+    if (debugInfo && debugSetId != 0 && debugMainFuncId != 0) {
+        int mainFuncLine = 1;
+        for (const auto& div : program.divisions) {
+            if (div->divisionType == TokenType::PROCEDURE) {
+                if (div->line > 0) {
+                    mainFuncLine = div->line;
+                }
+                break;
+            }
+        }
+        uint32_t activeScopeId = (debugMainBlockId != 0) ? debugMainBlockId : debugMainFuncId;
+        // 1. Emit DebugScope
+        emitOp(spirv::OpExtInst, { voidTypeId, allocateId(), debugSetId, 23, activeScopeId }); // 23 = DebugScope
+        
+        // 2. Emit initial OpLine & DebugLine mapping to function header line
+        uint32_t mainFuncLineConstId = getOrCreateConstant(mainFuncLine, uintTypeId);
+        uint32_t colStartId = getOrCreateConstant(0, uintTypeId);
+        uint32_t colEndId = getOrCreateConstant(0, uintTypeId);
+        
+        emitOp(spirv::OpExtInst, {
+            voidTypeId, allocateId(), debugSetId, 103, // 103 = DebugLine
+            debugSourceId, mainFuncLineConstId, mainFuncLineConstId, colStartId, colEndId
+        });
+        
+        // 3. Emit DebugFunctionDefinition
+        emitOp(spirv::OpExtInst, { voidTypeId, allocateId(), debugSetId, 101, debugMainFuncId, mainFuncId }); // 101 = DebugFunctionDefinition
+    }
+    
     for (const auto& div : program.divisions) {
         if (div->divisionType == TokenType::PROCEDURE) {
             for (const auto& section : div->sections) {
@@ -976,7 +1345,13 @@ void Emitter::emitFunctions(const ProgramNode& program) {
 }
 
 void Emitter::emitStatement(const StatementNode& stmt) {
-    if (auto goback = dynamic_cast<const GoBackNode*>(&stmt)) emitOp(spirv::OpReturn, {});
+    emitLine(stmt.line, stmt.column);
+    if (auto goback = dynamic_cast<const GoBackNode*>(&stmt)) {
+        if (debugInfo && debugSetId != 0) {
+            emitOp(spirv::OpExtInst, { voidTypeId, allocateId(), debugSetId, 24 }); // 24 = DebugNoScope
+        }
+        emitOp(spirv::OpReturn, {});
+    }
     else if (auto ifStmt = dynamic_cast<const IfStatementNode*>(&stmt)) emitIfStatement(*ifStmt);
     else if (auto perf = dynamic_cast<const PerformStatementNode*>(&stmt)) emitPerformStatement(*perf);
     else if (auto move = dynamic_cast<const MoveNode*>(&stmt)) emitMove(move->source.get(), move->destination.get());

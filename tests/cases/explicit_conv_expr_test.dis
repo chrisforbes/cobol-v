@@ -1,78 +1,73 @@
-; SPIR-V
-; Version: 1.3
-; Generator: Khronos; 0
-; Bound: 53
-; Schema: 0
-               OpCapability Shader
-          %2 = OpExtInstImport "GLSL.std.450"
-               OpMemoryModel Logical GLSL450
-               OpEntryPoint GLCompute %1 "MAIN"
-               OpExecutionMode %1 LocalSize 1 1 1
-       %void = OpTypeVoid
-          %4 = OpTypeFunction %void
-      %float = OpTypeFloat 32
+OpCapability Shader
+%2 = OpExtInstImport "GLSL.std.450"
+OpMemoryModel Logical GLSL450
+OpEntryPoint GLCompute %1 "MAIN"
+OpExecutionMode %1 LocalSize 1 1 1
+%void = OpTypeVoid
+%4 = OpTypeFunction %void
+%float = OpTypeFloat 32
 %_ptr_Private_float = OpTypePointer Private %float
-          %6 = OpVariable %_ptr_Private_float Private
-        %int = OpTypeInt 32 1
+%6 = OpVariable %_ptr_Private_float Private
+%int = OpTypeInt 32 1
 %_ptr_Private_int = OpTypePointer Private %int
-          %9 = OpVariable %_ptr_Private_int Private
-       %uint = OpTypeInt 32 0
+%9 = OpVariable %_ptr_Private_int Private
+%uint = OpTypeInt 32 0
 %_ptr_Private_uint = OpTypePointer Private %uint
-         %12 = OpVariable %_ptr_Private_uint Private
-    %v3float = OpTypeVector %float 3
+%12 = OpVariable %_ptr_Private_uint Private
+%v3float = OpTypeVector %float 3
 %_ptr_Private_v3float = OpTypePointer Private %v3float
-         %15 = OpVariable %_ptr_Private_v3float Private
-      %v3int = OpTypeVector %int 3
+%15 = OpVariable %_ptr_Private_v3float Private
+%v3int = OpTypeVector %int 3
 %_ptr_Private_v3int = OpTypePointer Private %v3int
-         %18 = OpVariable %_ptr_Private_v3int Private
+%18 = OpVariable %_ptr_Private_v3int Private
 %float_12_3400002 = OpConstant %float 12.3400002
-     %int_42 = OpConstant %int 42
-    %int_100 = OpConstant %int 100
-  %float_100 = OpConstant %float 100
+%int_42 = OpConstant %int 42
+%int_100 = OpConstant %int 100
+%float_100 = OpConstant %float 100
 %float_1_10000002 = OpConstant %float 1.10000002
 %float_2_20000005 = OpConstant %float 2.20000005
 %float_3_29999995 = OpConstant %float 3.29999995
-     %int_10 = OpConstant %int 10
-     %int_20 = OpConstant %int 20
-     %int_30 = OpConstant %int 30
-      %int_1 = OpConstant %int 1
-          %1 = OpFunction %void None %4
-         %20 = OpLabel
-               OpStore %6 %float_12_3400002
-         %22 = OpLoad %float %6
-         %23 = OpConvertFToS %int %22
-               OpStore %9 %23
-         %24 = OpLoad %float %6
-         %25 = OpConvertFToU %uint %24
-               OpStore %12 %25
-         %27 = OpSNegate %int %int_42
-               OpStore %9 %27
-         %28 = OpLoad %int %9
-         %29 = OpConvertSToF %float %28
-               OpStore %6 %29
-               OpStore %9 %int_100
-         %32 = OpConvertFToU %uint %float_100
-               OpStore %12 %32
-         %33 = OpLoad %uint %12
-         %34 = OpConvertUToF %float %33
-               OpStore %6 %34
-         %38 = OpCompositeConstruct %v3float %float_1_10000002 %float_2_20000005 %float_3_29999995
-               OpStore %15 %38
-         %39 = OpLoad %v3float %15
-         %40 = OpConvertFToS %v3int %39
-               OpStore %18 %40
-         %44 = OpCompositeConstruct %v3int %int_10 %int_20 %int_30
-               OpStore %18 %44
-         %45 = OpLoad %v3int %18
-         %46 = OpConvertSToF %v3float %45
-               OpStore %15 %46
-         %48 = OpSNegate %int %int_1
-               OpStore %9 %48
-         %49 = OpLoad %int %9
-         %50 = OpBitcast %uint %49
-               OpStore %12 %50
-         %51 = OpLoad %uint %12
-         %52 = OpBitcast %int %51
-               OpStore %9 %52
-               OpReturn
-               OpFunctionEnd
+%int_10 = OpConstant %int 10
+%int_20 = OpConstant %int 20
+%int_30 = OpConstant %int 30
+%int_1 = OpConstant %int 1
+%1 = OpFunction %void None %4
+%20 = OpLabel
+OpStore %6 %float_12_3400002
+%22 = OpLoad %float %6
+%23 = OpConvertFToS %int %22
+OpStore %9 %23
+%24 = OpLoad %float %6
+%25 = OpConvertFToU %uint %24
+OpStore %12 %25
+%27 = OpSNegate %int %int_42
+OpStore %9 %27
+%28 = OpLoad %int %9
+%29 = OpConvertSToF %float %28
+OpStore %6 %29
+OpStore %9 %int_100
+%32 = OpConvertFToU %uint %float_100
+OpStore %12 %32
+%33 = OpLoad %uint %12
+%34 = OpConvertUToF %float %33
+OpStore %6 %34
+%38 = OpCompositeConstruct %v3float %float_1_10000002 %float_2_20000005 %float_3_29999995
+OpStore %15 %38
+%39 = OpLoad %v3float %15
+%40 = OpConvertFToS %v3int %39
+OpStore %18 %40
+%44 = OpCompositeConstruct %v3int %int_10 %int_20 %int_30
+OpStore %18 %44
+%45 = OpLoad %v3int %18
+%46 = OpConvertSToF %v3float %45
+OpStore %15 %46
+%48 = OpSNegate %int %int_1
+OpStore %9 %48
+%49 = OpLoad %int %9
+%50 = OpBitcast %uint %49
+OpStore %12 %50
+%51 = OpLoad %uint %12
+%52 = OpBitcast %int %51
+OpStore %9 %52
+OpReturn
+OpFunctionEnd
