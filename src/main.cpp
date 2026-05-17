@@ -14,21 +14,23 @@ int main(int argc, char* argv[]) {
         std::string outFilename = "output.spv";
         bool dumpAst = false;
         bool dumpSymbols = false;
+        bool enableDebug = false;
 
         for (int i = 1; i < argc; ++i) {
             std::string arg = argv[i];
             if (arg == "--dump-ast") dumpAst = true;
             else if (arg == "--dump-symbols") dumpSymbols = true;
+            else if (arg == "-g") enableDebug = true;
             else if (filename.empty()) filename = arg;
             else outFilename = arg;
         }
 
         if (filename.empty()) {
-            std::cerr << "Usage: " << argv[0] << " [--dump-ast] [--dump-symbols] <source.cob> [output.spv]" << std::endl;
+            std::cerr << "Usage: " << argv[0] << " [-g] [--dump-ast] [--dump-symbols] <source.cob> [output.spv]" << std::endl;
             return 1;
         }
 
-        std::ifstream file(filename);
+        std::ifstream file(filename, std::ios::binary);
         if (!file.is_open()) {
             std::cerr << "Could not open file: " << filename << std::endl;
             return 1;
@@ -60,7 +62,7 @@ int main(int argc, char* argv[]) {
         }
 
         cobolv::Emitter emitter;
-        auto binary = emitter.emit(*ast, analyzer.getRequiredCapabilities());
+        auto binary = emitter.emit(*ast, analyzer.getRequiredCapabilities(), enableDebug, filename);
 
         std::ofstream outFile(outFilename, std::ios::binary);
         if (outFile.is_open()) {

@@ -20,6 +20,8 @@ enum class AstNodeType {
 
 class AstNode {
 public:
+    int line = 0;
+    int column = 0;
     virtual ~AstNode() = default;
     virtual AstNodeType getType() const = 0;
 };

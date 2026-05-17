@@ -89,3 +89,6 @@ gtest_discover_tests(test_lexer)
 gtest_discover_tests(test_parser)
 gtest_discover_tests(test_emitter)
 gtest_discover_tests(test_e2e)
+
+add_executable(spirv_debug_dump src/spirv_debug_dump.cpp)
+

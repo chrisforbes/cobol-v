@@ -1,66 +1,61 @@
-; SPIR-V
-; Version: 1.3
-; Generator: Khronos; 0
-; Bound: 44
-; Schema: 0
-               OpCapability Shader
-               OpCapability ClipDistance
-               OpCapability CullDistance
-          %2 = OpExtInstImport "GLSL.std.450"
-               OpMemoryModel Logical GLSL450
-               OpEntryPoint Vertex %1 "MAIN" %3 %gl_Position %gl_ClipDistance %gl_CullDistance
-               OpDecorate %3 Location 0
-               OpDecorate %gl_Position BuiltIn Position
-               OpDecorate %gl_ClipDistance BuiltIn ClipDistance
-               OpDecorate %gl_CullDistance BuiltIn CullDistance
-       %void = OpTypeVoid
-          %8 = OpTypeFunction %void
-      %float = OpTypeFloat 32
-    %v3float = OpTypeVector %float 3
+OpCapability Shader
+OpCapability ClipDistance
+OpCapability CullDistance
+%2 = OpExtInstImport "GLSL.std.450"
+OpMemoryModel Logical GLSL450
+OpEntryPoint Vertex %1 "MAIN" %3 %gl_Position %gl_ClipDistance %gl_CullDistance
+OpDecorate %3 Location 0
+OpDecorate %gl_Position BuiltIn Position
+OpDecorate %gl_ClipDistance BuiltIn ClipDistance
+OpDecorate %gl_CullDistance BuiltIn CullDistance
+%void = OpTypeVoid
+%8 = OpTypeFunction %void
+%float = OpTypeFloat 32
+%v3float = OpTypeVector %float 3
 %_ptr_Input_v3float = OpTypePointer Input %v3float
-          %3 = OpVariable %_ptr_Input_v3float Input
-    %v4float = OpTypeVector %float 4
+%3 = OpVariable %_ptr_Input_v3float Input
+%v4float = OpTypeVector %float 4
 %_ptr_Output_v4float = OpTypePointer Output %v4float
 %gl_Position = OpVariable %_ptr_Output_v4float Output
-       %uint = OpTypeInt 32 0
-     %uint_2 = OpConstant %uint 2
+%uint = OpTypeInt 32 0
+%uint_2 = OpConstant %uint 2
 %_arr_float_uint_2 = OpTypeArray %float %uint_2
 %_ptr_Output__arr_float_uint_2 = OpTypePointer Output %_arr_float_uint_2
 %gl_ClipDistance = OpVariable %_ptr_Output__arr_float_uint_2 Output
-     %uint_1 = OpConstant %uint 1
+%uint_1 = OpConstant %uint 1
 %_arr_float_uint_1 = OpTypeArray %float %uint_1
 %_ptr_Output__arr_float_uint_1 = OpTypePointer Output %_arr_float_uint_1
 %gl_CullDistance = OpVariable %_ptr_Output__arr_float_uint_1 Output
-    %float_1 = OpConstant %float 1
-        %int = OpTypeInt 32 1
-      %int_0 = OpConstant %int 0
+%float_1 = OpConstant %float 1
+%int = OpTypeInt 32 1
+%int_0 = OpConstant %int 0
 %_ptr_Output_float = OpTypePointer Output %float
-  %float_0_5 = OpConstant %float 0.5
-      %int_1 = OpConstant %int 1
-    %float_2 = OpConstant %float 2
-      %int_3 = OpConstant %int 3
-      %int_2 = OpConstant %int 2
-          %1 = OpFunction %void None %8
-         %21 = OpLabel
-         %26 = OpAccessChain %_ptr_Output_float %gl_ClipDistance %int_0
-               OpStore %26 %float_1
-         %29 = OpAccessChain %_ptr_Output_float %gl_ClipDistance %int_1
-               OpStore %29 %float_0_5
-         %31 = OpAccessChain %_ptr_Output_float %gl_CullDistance %int_0
-               OpStore %31 %float_2
-         %33 = OpAccessChain %_ptr_Output_float %gl_Position %int_3
-               OpStore %33 %float_1
-         %34 = OpLoad %v3float %3
-         %35 = OpCompositeExtract %float %34 0
-         %36 = OpAccessChain %_ptr_Output_float %gl_Position %int_0
-               OpStore %36 %35
-         %37 = OpLoad %v3float %3
-         %38 = OpCompositeExtract %float %37 1
-         %39 = OpAccessChain %_ptr_Output_float %gl_Position %int_1
-               OpStore %39 %38
-         %40 = OpLoad %v3float %3
-         %41 = OpCompositeExtract %float %40 2
-         %43 = OpAccessChain %_ptr_Output_float %gl_Position %int_2
-               OpStore %43 %41
-               OpReturn
-               OpFunctionEnd
+%float_0_5 = OpConstant %float 0.5
+%int_1 = OpConstant %int 1
+%float_2 = OpConstant %float 2
+%int_3 = OpConstant %int 3
+%int_2 = OpConstant %int 2
+%1 = OpFunction %void None %8
+%21 = OpLabel
+%26 = OpAccessChain %_ptr_Output_float %gl_ClipDistance %int_0
+OpStore %26 %float_1
+%29 = OpAccessChain %_ptr_Output_float %gl_ClipDistance %int_1
+OpStore %29 %float_0_5
+%31 = OpAccessChain %_ptr_Output_float %gl_CullDistance %int_0
+OpStore %31 %float_2
+%33 = OpAccessChain %_ptr_Output_float %gl_Position %int_3
+OpStore %33 %float_1
+%34 = OpLoad %v3float %3
+%35 = OpCompositeExtract %float %34 0
+%36 = OpAccessChain %_ptr_Output_float %gl_Position %int_0
+OpStore %36 %35
+%37 = OpLoad %v3float %3
+%38 = OpCompositeExtract %float %37 1
+%39 = OpAccessChain %_ptr_Output_float %gl_Position %int_1
+OpStore %39 %38
+%40 = OpLoad %v3float %3
+%41 = OpCompositeExtract %float %40 2
+%43 = OpAccessChain %_ptr_Output_float %gl_Position %int_2
+OpStore %43 %41
+OpReturn
+OpFunctionEnd

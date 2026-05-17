@@ -39,9 +39,10 @@ For more details of the full language supported, see `docs/language_spec.md`.
 
 ## Usage:
 ```bash
-./cobolv [--dump-ast] [--dump-symbols] <input file> [output file]
+./cobolv [-g] [--dump-ast] [--dump-symbols] <input file> [output file]
 ```
 
+- `-g`: Optional. Enables emission of full debug information using the modern `NonSemantic.Shader.DebugInfo.100` instruction set (with embedded source code, compilation units, scopes, and lines) alongside basic reflection names (`OpString`, `OpName`, `OpMemberName`). This allows graphics debuggers (like RenderDoc) to map GPU disassembly back to your original COBOL source code for high-level step-by-step debugging and state inspection.
 - `--dump-ast`: Prints the Abstract Syntax Tree (AST) to standard output after parsing.
 - `--dump-symbols`: Prints the symbol table (variables, resources, and types) to standard output after semantic analysis.
 

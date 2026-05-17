@@ -32,12 +32,14 @@ std::unique_ptr<ProgramNode> Parser::parse() {
 }
 
 std::unique_ptr<DivisionNode> Parser::parseIdentificationDivision(ProgramNode& program) {
+    int startLine = peek().line;
     consume(TokenType::IDENTIFICATION, "Expected IDENTIFICATION");
     consume(TokenType::DIVISION, "Expected DIVISION");
     consume(TokenType::PERIOD, "Expected '.' after IDENTIFICATION DIVISION");
     
     auto div = std::make_unique<DivisionNode>();
     div->divisionType = TokenType::IDENTIFICATION;
+    div->line = startLine;
     
     if (match(TokenType::PROGRAM_ID)) {
         consume(TokenType::PERIOD, "Expected '.' after PROGRAM-ID");
@@ -49,11 +51,13 @@ std::unique_ptr<DivisionNode> Parser::parseIdentificationDivision(ProgramNode& p
 }
 
 std::unique_ptr<DivisionNode> Parser::parseEnvironmentDivision(ProgramNode& program) {
+    int startLine = peek().line;
     consume(TokenType::ENVIRONMENT, "Expected ENVIRONMENT");
     consume(TokenType::DIVISION, "Expected DIVISION");
     consume(TokenType::PERIOD, "Expected '.' after ENVIRONMENT DIVISION");
 
     auto div = std::make_unique<EnvironmentDivisionNode>();
+    div->line = startLine;
     while (!isAtEnd() && !check(TokenType::INPUT_OUTPUT) && !check(TokenType::DATA) && !check(TokenType::PROCEDURE)) {
         if (match(TokenType::CONFIGURATION)) {
             div->sections.push_back(parseConfigurationSection(program));
@@ -199,12 +203,14 @@ std::unique_ptr<AstNode> Parser::parseSelect() {
 }
 
 std::unique_ptr<DivisionNode> Parser::parseDataDivision() {
+    int startLine = peek().line;
     consume(TokenType::DATA, "Expected DATA");
     consume(TokenType::DIVISION, "Expected DIVISION");
     consume(TokenType::PERIOD, "Expected '.' after DATA DIVISION");
     
     auto div = std::make_unique<DivisionNode>();
     div->divisionType = TokenType::DATA;
+    div->line = startLine;
     
     while (!isAtEnd() && !check(TokenType::PROCEDURE)) {
         if (match(TokenType::FILE_SECTION)) {
@@ -378,8 +384,11 @@ std::unique_ptr<SectionNode> Parser::parseOutputSection() {
 }
 
 std::unique_ptr<DataItemNode> Parser::parseDataItem() {
+    Token levelToken = consume(TokenType::NUMBER, "Expected level");
     auto item = std::make_unique<DataItemNode>();
-    item->level = std::stoi(consume(TokenType::NUMBER, "Expected level").lexeme);
+    item->line = levelToken.line;
+    item->column = levelToken.column;
+    item->level = std::stoi(levelToken.lexeme);
     item->name = consumeIdentifier("Expected data name").lexeme;
     
     if (match(TokenType::PIC)) {
@@ -458,12 +467,14 @@ std::unique_ptr<DataItemNode> Parser::parseDataItem() {
 }
 
 std::unique_ptr<DivisionNode> Parser::parseProcedureDivision() {
+    int startLine = peek().line;
     consume(TokenType::PROCEDURE, "Expected PROCEDURE");
     consume(TokenType::DIVISION, "Expected DIVISION");
     consume(TokenType::PERIOD, "Expected '.' after PROCEDURE DIVISION");
     
     auto div = std::make_unique<DivisionNode>();
     div->divisionType = TokenType::PROCEDURE;
+    div->line = startLine;
     
     while (!isAtEnd() && !check(TokenType::DIVISION)) {
         div->sections.push_back(parseSection());
@@ -507,69 +518,64 @@ std::unique_ptr<SectionNode> Parser::parseSection() {
 }
 
 std::unique_ptr<StatementNode> Parser::parseStatement() {
+    int startLine = peek().line;
+    int startCol = peek().column;
+    std::unique_ptr<StatementNode> node;
+
     if (check(TokenType::GOBACK)) {
         consume(TokenType::GOBACK, "Expected GOBACK");
-        return std::make_unique<GoBackNode>();
+        node = std::make_unique<GoBackNode>();
     }
-
-    if (check(TokenType::DISCARD)) {
+    else if (check(TokenType::DISCARD)) {
         consume(TokenType::DISCARD, "Expected DISCARD");
-        return std::make_unique<DiscardNode>();
+        node = std::make_unique<DiscardNode>();
     }
-    
-    if (check(TokenType::MOVE)) {
-        return parseMoveStatement();
+    else if (check(TokenType::MOVE)) {
+        node = parseMoveStatement();
     }
-    
-    if (check(TokenType::COMPUTE)) {
-        return parseComputeStatement();
+    else if (check(TokenType::COMPUTE)) {
+        node = parseComputeStatement();
     }
-
-    if (check(TokenType::IF)) {
-        return parseIfStatement();
+    else if (check(TokenType::IF)) {
+        node = parseIfStatement();
     }
-
-    if (check(TokenType::PERFORM)) {
-        return parsePerformStatement();
+    else if (check(TokenType::PERFORM)) {
+        node = parsePerformStatement();
     }
-
-    if (check(TokenType::READ)) {
-        return parseReadStatement();
+    else if (check(TokenType::READ)) {
+        node = parseReadStatement();
     }
-
-    if (check(TokenType::WRITE)) {
-        return parseWriteStatement();
+    else if (check(TokenType::WRITE)) {
+        node = parseWriteStatement();
     }
-
-    if (check(TokenType::CALL)) {
-        return parseCallStatement();
+    else if (check(TokenType::CALL)) {
+        node = parseCallStatement();
     }
-
-    if (check(TokenType::ATOMIC_ADD) || check(TokenType::ATOMIC_SUB) || 
+    else if (check(TokenType::ATOMIC_ADD) || check(TokenType::ATOMIC_SUB) || 
         check(TokenType::ATOMIC_AND) || check(TokenType::ATOMIC_OR) || 
         check(TokenType::ATOMIC_XOR) || check(TokenType::ATOMIC_MIN) || 
         check(TokenType::ATOMIC_MAX) || check(TokenType::ATOMIC_EXCHANGE) || 
         check(TokenType::ATOMIC_COMPARE_EXCHANGE)) {
-        return parseAtomicOpStatement();
+        node = parseAtomicOpStatement();
     }
-
-    if (check(TokenType::CONSULT)) {
-        return parseCohortOpStatement();
+    else if (check(TokenType::CONSULT)) {
+        node = parseCohortOpStatement();
     }
-
-    if (check(TokenType::INQUIRE)) {
-        return parseInquireStatement();
+    else if (check(TokenType::INQUIRE)) {
+        node = parseInquireStatement();
     }
-
-    if (check(TokenType::SYNC)) {
-        return parseSyncStatement();
+    else if (check(TokenType::SYNC)) {
+        node = parseSyncStatement();
     }
-
-    if (check(TokenType::INTERPOLATE)) {
-        return parseInterpolateStatement();
+    else if (check(TokenType::INTERPOLATE)) {
+        node = parseInterpolateStatement();
     }
     
-    return nullptr;
+    if (node) {
+        node->line = startLine;
+        node->column = startCol;
+    }
+    return node;
 }
 
 std::unique_ptr<StatementNode> Parser::parseMoveStatement() {
